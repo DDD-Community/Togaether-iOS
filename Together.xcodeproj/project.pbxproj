@@ -16,6 +16,10 @@
 		40E9B4DA2931D7B100AC9AF0 /* TogetherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E9B4D92931D7B100AC9AF0 /* TogetherTests.swift */; };
 		40E9B4E42931D7B100AC9AF0 /* TogetherUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E9B4E32931D7B100AC9AF0 /* TogetherUITests.swift */; };
 		40E9B4E62931D7B100AC9AF0 /* TogetherUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E9B4E52931D7B100AC9AF0 /* TogetherUITestsLaunchTests.swift */; };
+		40E9B4F42931E5B700AC9AF0 /* SwiftLayout in Frameworks */ = {isa = PBXBuildFile; productRef = 40E9B4F32931E5B700AC9AF0 /* SwiftLayout */; };
+		40E9B4F62931E5B700AC9AF0 /* SwiftLayoutUtil in Frameworks */ = {isa = PBXBuildFile; productRef = 40E9B4F52931E5B700AC9AF0 /* SwiftLayoutUtil */; };
+		40E9B4F92931E65B00AC9AF0 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 40E9B4F82931E65B00AC9AF0 /* ComposableArchitecture */; };
+		40E9B4FB2931E65B00AC9AF0 /* Dependencies in Frameworks */ = {isa = PBXBuildFile; productRef = 40E9B4FA2931E65B00AC9AF0 /* Dependencies */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,6 +60,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				40E9B4F62931E5B700AC9AF0 /* SwiftLayoutUtil in Frameworks */,
+				40E9B4F42931E5B700AC9AF0 /* SwiftLayout in Frameworks */,
+				40E9B4F92931E65B00AC9AF0 /* ComposableArchitecture in Frameworks */,
+				40E9B4FB2931E65B00AC9AF0 /* Dependencies in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -143,6 +151,12 @@
 			dependencies = (
 			);
 			name = Together;
+			packageProductDependencies = (
+				40E9B4F32931E5B700AC9AF0 /* SwiftLayout */,
+				40E9B4F52931E5B700AC9AF0 /* SwiftLayoutUtil */,
+				40E9B4F82931E65B00AC9AF0 /* ComposableArchitecture */,
+				40E9B4FA2931E65B00AC9AF0 /* Dependencies */,
+			);
 			productName = Together;
 			productReference = 40E9B4BF2931D7AF00AC9AF0 /* Together.app */;
 			productType = "com.apple.product-type.application";
@@ -215,6 +229,10 @@
 				Base,
 			);
 			mainGroup = 40E9B4B62931D7AE00AC9AF0;
+			packageReferences = (
+				40E9B4F22931E5B700AC9AF0 /* XCRemoteSwiftPackageReference "SwiftLayout" */,
+				40E9B4F72931E65B00AC9AF0 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
+			);
 			productRefGroup = 40E9B4C02931D7AF00AC9AF0 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -596,6 +614,48 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		40E9B4F22931E5B700AC9AF0 /* XCRemoteSwiftPackageReference "SwiftLayout" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ioskrew/SwiftLayout";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
+		40E9B4F72931E65B00AC9AF0 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		40E9B4F32931E5B700AC9AF0 /* SwiftLayout */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 40E9B4F22931E5B700AC9AF0 /* XCRemoteSwiftPackageReference "SwiftLayout" */;
+			productName = SwiftLayout;
+		};
+		40E9B4F52931E5B700AC9AF0 /* SwiftLayoutUtil */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 40E9B4F22931E5B700AC9AF0 /* XCRemoteSwiftPackageReference "SwiftLayout" */;
+			productName = SwiftLayoutUtil;
+		};
+		40E9B4F82931E65B00AC9AF0 /* ComposableArchitecture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 40E9B4F72931E65B00AC9AF0 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
+			productName = ComposableArchitecture;
+		};
+		40E9B4FA2931E65B00AC9AF0 /* Dependencies */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 40E9B4F72931E65B00AC9AF0 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
+			productName = Dependencies;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 40E9B4B72931D7AE00AC9AF0 /* Project object */;
 }
