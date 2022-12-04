@@ -15,8 +15,8 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(path: "../TogetherCore"),
-        .package(path: "../TogetherUI"),
+        .package(path: "../Core/TogetherCore"),
+        .package(path: "../UI/TogetherUI"),
     ],
     targets: [
         .target(
