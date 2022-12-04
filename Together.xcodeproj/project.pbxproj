@@ -36,8 +36,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		409E1916293CE058003B8CE4 /* TogetherCore */ = {isa = PBXFileReference; lastKnownFileType = text; path = TogetherCore; sourceTree = SOURCE_ROOT; };
-		409E1917293CE1CB003B8CE4 /* TogetherUI */ = {isa = PBXFileReference; lastKnownFileType = text; path = TogetherUI; sourceTree = SOURCE_ROOT; };
+		4082836D293CE7EF00E8B3AA /* TogetherNetwork */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = TogetherNetwork; path = Together/Sources/Core/TogetherNetwork; sourceTree = SOURCE_ROOT; };
+		4082836E293CE80000E8B3AA /* TogetherFoundation */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = TogetherFoundation; path = Together/Sources/Core/TogetherFoundation; sourceTree = SOURCE_ROOT; };
+		409E1916293CE058003B8CE4 /* TogetherCore */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = TogetherCore; path = Together/Sources/Core/TogetherCore; sourceTree = SOURCE_ROOT; };
+		409E1917293CE1CB003B8CE4 /* TogetherUI */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = TogetherUI; path = Together/Sources/UI/TogetherUI; sourceTree = SOURCE_ROOT; };
 		40BD37A32931FEA800CE3FD7 /* ThirdParty */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = ThirdParty; path = Together/Sources/ThirdParty; sourceTree = SOURCE_ROOT; };
 		40E9B4BF2931D7AF00AC9AF0 /* Together.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Together.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		40E9B4C22931D7AF00AC9AF0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -50,7 +52,7 @@
 		40E9B4DF2931D7B100AC9AF0 /* TogetherUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TogetherUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		40E9B4E32931D7B100AC9AF0 /* TogetherUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TogetherUITests.swift; sourceTree = "<group>"; };
 		40E9B4E52931D7B100AC9AF0 /* TogetherUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TogetherUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		40EBD1362931EE42008143AD /* Login */ = {isa = PBXFileReference; lastKnownFileType = text; path = Login; sourceTree = SOURCE_ROOT; };
+		40EBD1362931EE42008143AD /* Login */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Login; path = Together/Sources/App/Login; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +82,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4082836F293CE80500E8B3AA /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				409E1916293CE058003B8CE4 /* TogetherCore */,
+				4082836D293CE7EF00E8B3AA /* TogetherNetwork */,
+				4082836E293CE80000E8B3AA /* TogetherFoundation */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		40828370293CE85300E8B3AA /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				409E1917293CE1CB003B8CE4 /* TogetherUI */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
 		40E9B4B62931D7AE00AC9AF0 = {
 			isa = PBXGroup;
 			children = (
@@ -132,6 +152,7 @@
 			children = (
 				40E9B4C22931D7AF00AC9AF0 /* AppDelegate.swift */,
 				40E9B4C42931D7AF00AC9AF0 /* SceneDelegate.swift */,
+				40EBD1362931EE42008143AD /* Login */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -150,9 +171,8 @@
 			isa = PBXGroup;
 			children = (
 				40E9B4FD2931ECA000AC9AF0 /* App */,
-				40EBD1362931EE42008143AD /* Login */,
-				409E1916293CE058003B8CE4 /* TogetherCore */,
-				409E1917293CE1CB003B8CE4 /* TogetherUI */,
+				4082836F293CE80500E8B3AA /* Core */,
+				40828370293CE85300E8B3AA /* UI */,
 				40BD37A32931FEA800CE3FD7 /* ThirdParty */,
 			);
 			path = Sources;

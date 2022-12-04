@@ -15,13 +15,15 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(path: "../ThirdParty"),
+        .package(path: "TogetherNetwork"),
+        .package(path: "TogetherFoundation"),
     ],
     targets: [
         .target(
             name: "TogetherCore",
             dependencies: [
-                .product(name: "ThirdParty", package: "ThirdParty"),
+                .product(name: "TogetherNetwork", package: "TogetherNetwork"),
+                .product(name: "TogetherFoundation", package: "TogetherFoundation"),
             ]),
         .testTarget(
             name: "TogetherCoreTests",
