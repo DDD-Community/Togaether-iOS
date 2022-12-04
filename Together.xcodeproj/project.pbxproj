@@ -36,7 +36,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		40BD37A32931FEA800CE3FD7 /* ThirdParty */ = {isa = PBXFileReference; lastKnownFileType = text; path = ThirdParty; sourceTree = SOURCE_ROOT; };
+		409E1916293CE058003B8CE4 /* TogetherCore */ = {isa = PBXFileReference; lastKnownFileType = text; path = TogetherCore; sourceTree = SOURCE_ROOT; };
+		409E1917293CE1CB003B8CE4 /* TogetherUI */ = {isa = PBXFileReference; lastKnownFileType = text; path = TogetherUI; sourceTree = SOURCE_ROOT; };
+		40BD37A32931FEA800CE3FD7 /* ThirdParty */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = ThirdParty; path = Together/Sources/ThirdParty; sourceTree = SOURCE_ROOT; };
 		40E9B4BF2931D7AF00AC9AF0 /* Together.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Together.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		40E9B4C22931D7AF00AC9AF0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		40E9B4C42931D7AF00AC9AF0 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -148,8 +150,10 @@
 			isa = PBXGroup;
 			children = (
 				40E9B4FD2931ECA000AC9AF0 /* App */,
-				40BD37A32931FEA800CE3FD7 /* ThirdParty */,
 				40EBD1362931EE42008143AD /* Login */,
+				409E1916293CE058003B8CE4 /* TogetherCore */,
+				409E1917293CE1CB003B8CE4 /* TogetherUI */,
+				40BD37A32931FEA800CE3FD7 /* ThirdParty */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
