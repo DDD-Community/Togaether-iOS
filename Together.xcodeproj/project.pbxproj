@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		401D17CC2954A8DF003F9270 /* RootReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 401D17CB2954A8DF003F9270 /* RootReducer.swift */; };
+		401D17CE2954A8E3003F9270 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 401D17CD2954A8E3003F9270 /* RootViewController.swift */; };
 		40532F1A29320BEE007AEA75 /* ThirdParty in Frameworks */ = {isa = PBXBuildFile; productRef = 40532F1929320BEE007AEA75 /* ThirdParty */; };
 		40E9B4C32931D7AF00AC9AF0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E9B4C22931D7AF00AC9AF0 /* AppDelegate.swift */; };
 		40E9B4C52931D7AF00AC9AF0 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E9B4C42931D7AF00AC9AF0 /* SceneDelegate.swift */; };
@@ -36,6 +38,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		401D17CB2954A8DF003F9270 /* RootReducer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootReducer.swift; sourceTree = "<group>"; };
+		401D17CD2954A8E3003F9270 /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		4082836D293CE7EF00E8B3AA /* TogetherNetwork */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = TogetherNetwork; path = Together/Sources/Core/TogetherNetwork; sourceTree = SOURCE_ROOT; };
 		4082836E293CE80000E8B3AA /* TogetherFoundation */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = TogetherFoundation; path = Together/Sources/Core/TogetherFoundation; sourceTree = SOURCE_ROOT; };
 		409E1916293CE058003B8CE4 /* TogetherCore */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = TogetherCore; path = Together/Sources/Core/TogetherCore; sourceTree = SOURCE_ROOT; };
@@ -82,6 +86,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		401D17CF2954A8EE003F9270 /* Root */ = {
+			isa = PBXGroup;
+			children = (
+				401D17CB2954A8DF003F9270 /* RootReducer.swift */,
+				401D17CD2954A8E3003F9270 /* RootViewController.swift */,
+			);
+			path = Root;
+			sourceTree = "<group>";
+		};
 		4082836F293CE80500E8B3AA /* Core */ = {
 			isa = PBXGroup;
 			children = (
@@ -152,6 +165,7 @@
 			children = (
 				40E9B4C22931D7AF00AC9AF0 /* AppDelegate.swift */,
 				40E9B4C42931D7AF00AC9AF0 /* SceneDelegate.swift */,
+				401D17CF2954A8EE003F9270 /* Root */,
 				40EBD1362931EE42008143AD /* Login */,
 			);
 			path = App;
@@ -321,7 +335,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				401D17CC2954A8DF003F9270 /* RootReducer.swift in Sources */,
 				40E9B4C32931D7AF00AC9AF0 /* AppDelegate.swift in Sources */,
+				401D17CE2954A8E3003F9270 /* RootViewController.swift in Sources */,
 				40E9B4C52931D7AF00AC9AF0 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

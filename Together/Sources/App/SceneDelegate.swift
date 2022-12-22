@@ -6,7 +6,9 @@
 //
 
 import UIKit
-import Login
+import TogetherCore
+import ThirdParty
+import ComposableArchitecture
 
 final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -19,7 +21,8 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     ) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
-        window?.rootViewController = LoginViewController()
+        let rootStore: StoreOf<Root> = .init(initialState: Root.State(), reducer: Root())
+        window?.rootViewController = RootViewController(store: rootStore)
         window?.makeKeyAndVisible()
     }
 }
