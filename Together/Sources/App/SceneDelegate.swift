@@ -6,8 +6,10 @@
 //
 
 import UIKit
+
 import TogetherCore
 import ThirdParty
+
 import ComposableArchitecture
 
 final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
@@ -26,4 +28,3 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.makeKeyAndVisible()
     }
 }
-

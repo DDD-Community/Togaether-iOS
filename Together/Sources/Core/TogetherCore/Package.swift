@@ -17,6 +17,7 @@ let package = Package(
     dependencies: [
         .package(path: "TogetherNetwork"),
         .package(path: "TogetherFoundation"),
+        .package(path: "../ThirdParty"),
     ],
     targets: [
         .target(
@@ -24,7 +25,9 @@ let package = Package(
             dependencies: [
                 .product(name: "TogetherNetwork", package: "TogetherNetwork"),
                 .product(name: "TogetherFoundation", package: "TogetherFoundation"),
-            ]),
+                .product(name: "ThirdParty", package: "ThirdParty"),
+            ]
+        ),
         .testTarget(
             name: "TogetherCoreTests",
             dependencies: ["TogetherCore"]

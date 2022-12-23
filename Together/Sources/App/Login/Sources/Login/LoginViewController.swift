@@ -15,9 +15,12 @@ import SwiftLayout
 import ComposableArchitecture
 
 public final class LoginViewController: UIViewController {
+    
+    private let store: StoreOf<Login>
+    
     private let subView: UIView = {
         let view: UIView = .init()
-        view.backgroundColor = .yellow
+        view.backgroundColor = .red
         return view
     }()
     
@@ -30,7 +33,8 @@ public final class LoginViewController: UIViewController {
       }
     }
     
-    public init() {
+    public init(store: StoreOf<Login>) {
+        self.store = store
         super.init(nibName: nil, bundle: nil)
         layout.finalActive()
     }

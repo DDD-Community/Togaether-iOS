@@ -22,7 +22,8 @@ let package = Package(
             name: "TogetherUI",
             dependencies: [
                 .product(name: "ThirdParty", package: "ThirdParty"),
-            ]),
+            ]
+        ),
         .testTarget(
             name: "TogetherUITests",
             dependencies: ["TogetherUI"]

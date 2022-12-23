@@ -8,6 +8,7 @@
 import UIKit
 import Combine
 
+import Login
 import TogetherCore
 import TogetherUI
 import ThirdParty
@@ -17,6 +18,7 @@ import ComposableArchitecture
 
 final class RootViewController: UIViewController {
     
+    private let store: StoreOf<Root>
     private let viewStore: ViewStoreOf<Root>
     private var cancellables: Set<AnyCancellable> = .init()
     
@@ -34,6 +36,7 @@ final class RootViewController: UIViewController {
     }
     
     init(store: StoreOf<Root>) {
+        self.store = store
         self.viewStore = ViewStore(store)
         super.init(nibName: nil, bundle: nil)
         layout.finalActive()
@@ -54,6 +57,29 @@ final class RootViewController: UIViewController {
     }
     
     private func bindState() {
-        
+        viewStore.publisher.token
+            .compactMap { $0 }
+            .sink { token in
+                let loginStore: StoreOf<Login> = .init(initialState: Login.State.init(), reducer: Login())
+                let loginViewController: LoginViewController = .init(store: loginStore)
+                UIApplication.shared.appWindow?.rootViewController = loginViewController
+            }
+            .store(in: &cancellables)
+    }
+}
+
+public extension UIApplication {
+    var appWindow: UIWindow? {
+        return (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.window
+    }
+    
+    var keyWindow: UIWindow? {
+        return UIApplication.shared.connectedScenes
+            .filter { $0.activationState == .foregroundActive }
+            .map { $0 as? UIWindowScene }
+            .compactMap { $0 }
+            .first?.windows
+            .filter(\.isKeyWindow)
+            .first
     }
 }
