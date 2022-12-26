@@ -48,21 +48,37 @@ final class RootViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        bindAction()
         bindState()
     }
     
-    private func bindAction() {
-        viewStore.send(.viewDidLoad)
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        viewStore.send(.viewDidAppear)
     }
     
+    /// reducer에서 분기처리 해서 error일 경우랑 token이 있는 경우 랑
+    /// 따로 처리해야할 지 같이 처리해야할지 .... 
     private func bindState() {
-        viewStore.publisher.token
+        viewStore.publisher.tokenResult
             .compactMap { $0 }
-            .sink { token in
-                let loginStore: StoreOf<Login> = .init(initialState: Login.State.init(), reducer: Login())
-                let loginViewController: LoginViewController = .init(store: loginStore)
-                UIApplication.shared.appWindow?.rootViewController = loginViewController
+            .sink { tokenResult in
+                switch tokenResult {
+                case let .success(token):
+                    print("auto login success token: \(token)")
+                    if true {
+                        // tab으로 이동
+                    } else {
+                        // onboarding으로 이동
+                    }
+                    
+                case .failure:
+                    let loginStore: StoreOf<Login> = .init(
+                        initialState: Login.State.init(), 
+                        reducer: Login()
+                    )
+                    let loginViewController: LoginViewController = .init(store: loginStore)
+                    UIApplication.shared.appWindow?.rootViewController = loginViewController
+                }
             }
             .store(in: &cancellables)
     }

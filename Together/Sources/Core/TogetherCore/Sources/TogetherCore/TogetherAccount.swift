@@ -3,9 +3,6 @@ import ComposableArchitecture
 import XCTestDynamicOverlay
 
 public struct TogetherAccount {
-//    public init(token: @Sendable () async throws -> String) {
-//        self.token = token
-//    }
     public var token: @Sendable () async throws -> String
 }
 
@@ -19,7 +16,6 @@ extension DependencyValues {
 extension TogetherAccount: DependencyKey {
     public static let liveValue: TogetherAccount = .init(
         token: {
-            try await Task.sleep(for: .seconds(1))
             return "havi"
         }
     )

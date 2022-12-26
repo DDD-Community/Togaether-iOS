@@ -15,11 +15,11 @@ import ComposableArchitecture
 
 struct Root: ReducerProtocol {
     struct State: Equatable {
-        var token: String?
+        var tokenResult: TaskResult<String>?
     }
     
     enum Action: Equatable {
-        case viewDidLoad
+        case viewDidAppear
         case tokenResponse(TaskResult<String>)
     }
     
@@ -28,19 +28,14 @@ struct Root: ReducerProtocol {
     
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
-        case .viewDidLoad:
+        case .viewDidAppear:
             return .task {
                 await .tokenResponse(TaskResult { try await togetherAccount.token() })
             }
             .cancellable(id: TokenCancelID.self)
             
-        case let .tokenResponse(.success(token)):
-            state.token = token
-            print(token)
-            return .none
-            
-        case let .tokenResponse(.failure(error)):
-            print(error)
+        case let .tokenResponse(tokenResult):
+            state.tokenResult = tokenResult
             return .none
         }
     }
