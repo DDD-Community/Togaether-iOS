@@ -10,6 +10,7 @@
 		401D17CC2954A8DF003F9270 /* RootReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 401D17CB2954A8DF003F9270 /* RootReducer.swift */; };
 		401D17CE2954A8E3003F9270 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 401D17CD2954A8E3003F9270 /* RootViewController.swift */; };
 		40532F1A29320BEE007AEA75 /* ThirdParty in Frameworks */ = {isa = PBXBuildFile; productRef = 40532F1929320BEE007AEA75 /* ThirdParty */; };
+		408BEEDD2959B2AB0083DF49 /* Tab in Resources */ = {isa = PBXBuildFile; fileRef = 408BEEDC2959B2AA0083DF49 /* Tab */; };
 		40E9B4C32931D7AF00AC9AF0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E9B4C22931D7AF00AC9AF0 /* AppDelegate.swift */; };
 		40E9B4C52931D7AF00AC9AF0 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E9B4C42931D7AF00AC9AF0 /* SceneDelegate.swift */; };
 		40E9B4CC2931D7B100AC9AF0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 40E9B4CB2931D7B100AC9AF0 /* Assets.xcassets */; };
@@ -42,6 +43,8 @@
 		401D17CD2954A8E3003F9270 /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		4082836D293CE7EF00E8B3AA /* TogetherNetwork */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = TogetherNetwork; path = Together/Sources/Core/TogetherNetwork; sourceTree = SOURCE_ROOT; };
 		4082836E293CE80000E8B3AA /* TogetherFoundation */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = TogetherFoundation; path = Together/Sources/Core/TogetherFoundation; sourceTree = SOURCE_ROOT; };
+		408BEEDC2959B2AA0083DF49 /* Tab */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Tab; sourceTree = "<group>"; };
+		408BEEDE2959B34B0083DF49 /* Home */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Home; path = ../../../../../Homework/Home; sourceTree = "<group>"; };
 		409E1916293CE058003B8CE4 /* TogetherCore */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = TogetherCore; path = Together/Sources/Core/TogetherCore; sourceTree = SOURCE_ROOT; };
 		409E1917293CE1CB003B8CE4 /* TogetherUI */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = TogetherUI; path = Together/Sources/UI/TogetherUI; sourceTree = SOURCE_ROOT; };
 		40BD37A32931FEA800CE3FD7 /* ThirdParty */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = ThirdParty; path = Together/Sources/ThirdParty; sourceTree = SOURCE_ROOT; };
@@ -167,6 +170,8 @@
 				40E9B4C42931D7AF00AC9AF0 /* SceneDelegate.swift */,
 				401D17CF2954A8EE003F9270 /* Root */,
 				40EBD1362931EE42008143AD /* Login */,
+				408BEEDC2959B2AA0083DF49 /* Tab */,
+				408BEEDE2959B34B0083DF49 /* Home */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -309,6 +314,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				408BEEDD2959B2AB0083DF49 /* Tab in Resources */,
 				40E9B4CF2931D7B100AC9AF0 /* LaunchScreen.storyboard in Resources */,
 				40E9B4CC2931D7B100AC9AF0 /* Assets.xcassets in Resources */,
 			);
