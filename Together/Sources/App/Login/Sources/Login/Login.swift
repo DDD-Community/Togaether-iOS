@@ -29,6 +29,10 @@ public struct Login: ReducerProtocol {
     @Dependency(\.togetherAccount) var togetherAccount
     private enum LoginCancelID { }
     
+    public var body: some ReducerProtocol<State, Action> {
+        Reduce(reduce)
+    }
+    
     public func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
         case .loginButtonDidTapped:
@@ -51,8 +55,4 @@ public struct Login: ReducerProtocol {
             return .none
         }
     }
-}
-
-private func temp() async throws -> String {
-    return ""
 }
