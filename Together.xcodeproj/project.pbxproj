@@ -9,8 +9,10 @@
 /* Begin PBXBuildFile section */
 		401D17CC2954A8DF003F9270 /* Root.swift in Sources */ = {isa = PBXBuildFile; fileRef = 401D17CB2954A8DF003F9270 /* Root.swift */; };
 		401D17CE2954A8E3003F9270 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 401D17CD2954A8E3003F9270 /* RootViewController.swift */; };
-		408BEEE3295E18A00083DF49 /* Feature in Resources */ = {isa = PBXBuildFile; fileRef = 408BEEE2295E18A00083DF49 /* Feature */; };
-		408BEEE5295E19240083DF49 /* Feature in Frameworks */ = {isa = PBXBuildFile; productRef = 408BEEE4295E19240083DF49 /* Feature */; };
+		40575784295E24DE00FA3FB6 /* Feature in Resources */ = {isa = PBXBuildFile; fileRef = 40575783295E24DE00FA3FB6 /* Feature */; };
+		40575786295E24EA00FA3FB6 /* Feature in Frameworks */ = {isa = PBXBuildFile; productRef = 40575785295E24EA00FA3FB6 /* Feature */; };
+		40575789295E252400FA3FB6 /* TogetherNetwork in Resources */ = {isa = PBXBuildFile; fileRef = 40575787295E252400FA3FB6 /* TogetherNetwork */; };
+		4057578A295E252400FA3FB6 /* TogetherFoundation in Resources */ = {isa = PBXBuildFile; fileRef = 40575788295E252400FA3FB6 /* TogetherFoundation */; };
 		40E9B4C32931D7AF00AC9AF0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E9B4C22931D7AF00AC9AF0 /* AppDelegate.swift */; };
 		40E9B4C52931D7AF00AC9AF0 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E9B4C42931D7AF00AC9AF0 /* SceneDelegate.swift */; };
 		40E9B4CC2931D7B100AC9AF0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 40E9B4CB2931D7B100AC9AF0 /* Assets.xcassets */; };
@@ -40,11 +42,11 @@
 /* Begin PBXFileReference section */
 		401D17CB2954A8DF003F9270 /* Root.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Root.swift; sourceTree = "<group>"; };
 		401D17CD2954A8E3003F9270 /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
-		4082836D293CE7EF00E8B3AA /* TogetherNetwork */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = TogetherNetwork; path = Together/Sources/Core/TogetherNetwork; sourceTree = SOURCE_ROOT; };
-		4082836E293CE80000E8B3AA /* TogetherFoundation */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = TogetherFoundation; path = Together/Sources/Core/TogetherFoundation; sourceTree = SOURCE_ROOT; };
-		408BEEE2295E18A00083DF49 /* Feature */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Feature; sourceTree = "<group>"; };
+		40575783295E24DE00FA3FB6 /* Feature */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Feature; sourceTree = "<group>"; };
+		40575787295E252400FA3FB6 /* TogetherNetwork */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = TogetherNetwork; sourceTree = "<group>"; };
+		40575788295E252400FA3FB6 /* TogetherFoundation */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = TogetherFoundation; sourceTree = "<group>"; };
 		409E1916293CE058003B8CE4 /* TogetherCore */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = TogetherCore; path = Together/Sources/Core/TogetherCore; sourceTree = SOURCE_ROOT; };
-		409E1917293CE1CB003B8CE4 /* TogetherUI */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = TogetherUI; path = Together/Sources/UI/TogetherUI; sourceTree = SOURCE_ROOT; };
+		409E1917293CE1CB003B8CE4 /* TogetherUI */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = TogetherUI; path = Together/Sources/TogetherUI; sourceTree = SOURCE_ROOT; };
 		40BD37A32931FEA800CE3FD7 /* ThirdParty */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = ThirdParty; path = Together/Sources/ThirdParty; sourceTree = SOURCE_ROOT; };
 		40E9B4BF2931D7AF00AC9AF0 /* Together.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Together.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		40E9B4C22931D7AF00AC9AF0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -64,7 +66,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				408BEEE5295E19240083DF49 /* Feature in Frameworks */,
+				40575786295E24EA00FA3FB6 /* Feature in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -98,18 +100,10 @@
 			isa = PBXGroup;
 			children = (
 				409E1916293CE058003B8CE4 /* TogetherCore */,
-				4082836D293CE7EF00E8B3AA /* TogetherNetwork */,
-				4082836E293CE80000E8B3AA /* TogetherFoundation */,
+				40575788295E252400FA3FB6 /* TogetherFoundation */,
+				40575787295E252400FA3FB6 /* TogetherNetwork */,
 			);
 			path = Core;
-			sourceTree = "<group>";
-		};
-		40828370293CE85300E8B3AA /* UI */ = {
-			isa = PBXGroup;
-			children = (
-				409E1917293CE1CB003B8CE4 /* TogetherUI */,
-			);
-			path = UI;
 			sourceTree = "<group>";
 		};
 		40E9B4B62931D7AE00AC9AF0 = {
@@ -183,9 +177,9 @@
 			isa = PBXGroup;
 			children = (
 				40E9B4FD2931ECA000AC9AF0 /* App */,
-				408BEEE2295E18A00083DF49 /* Feature */,
+				40575783295E24DE00FA3FB6 /* Feature */,
 				4082836F293CE80500E8B3AA /* Core */,
-				40828370293CE85300E8B3AA /* UI */,
+				409E1917293CE1CB003B8CE4 /* TogetherUI */,
 				40BD37A32931FEA800CE3FD7 /* ThirdParty */,
 			);
 			path = Sources;
@@ -215,7 +209,7 @@
 			);
 			name = Together;
 			packageProductDependencies = (
-				408BEEE4295E19240083DF49 /* Feature */,
+				40575785295E24EA00FA3FB6 /* Feature */,
 			);
 			productName = Together;
 			productReference = 40E9B4BF2931D7AF00AC9AF0 /* Together.app */;
@@ -307,9 +301,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				408BEEE3295E18A00083DF49 /* Feature in Resources */,
 				40E9B4CF2931D7B100AC9AF0 /* LaunchScreen.storyboard in Resources */,
+				40575784295E24DE00FA3FB6 /* Feature in Resources */,
 				40E9B4CC2931D7B100AC9AF0 /* Assets.xcassets in Resources */,
+				4057578A295E252400FA3FB6 /* TogetherFoundation in Resources */,
+				40575789295E252400FA3FB6 /* TogetherNetwork in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -671,7 +667,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		408BEEE4295E19240083DF49 /* Feature */ = {
+		40575785295E24EA00FA3FB6 /* Feature */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Feature;
 		};

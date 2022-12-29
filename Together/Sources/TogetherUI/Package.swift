@@ -15,7 +15,7 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(path: "../ThirdParty"),
+        .package(path: "ThirdParty"),
     ],
     targets: [
         .target(
