@@ -17,24 +17,30 @@ import ComposableArchitecture
 public final class LoginViewController: UIViewController {
     
     private let store: StoreOf<Login>
+    private let viewStore: ViewStoreOf<Login>
     
-    private let subView: UIView = {
-        let view: UIView = .init()
-        view.backgroundColor = .red
-        return view
+    private let loginButton: UIButton = {
+        let button: UIButton = .init(frame: .zero)
+        button.setTitle("로그인", for: .init())
+        button.setTitleColor(.black, for: .init())
+        return button
     }()
     
     @LayoutBuilder var layout: some Layout {
       view.sublayout {
-          subView.anchors { 
+          loginButton.anchors { 
               Anchors.centerX.centerY.equalToSuper()
               Anchors.width.height.equalTo(constant: 100)
           }
       }
+        view.config { view in
+            view.backgroundColor = .white
+        }
     }
     
     public init(store: StoreOf<Login>) {
         self.store = store
+        self.viewStore = ViewStore(store)
         super.init(nibName: nil, bundle: nil)
         layout.finalActive()
     }
@@ -45,6 +51,15 @@ public final class LoginViewController: UIViewController {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .red
+        configureUI()
+    }
+    
+    private func configureUI() {
+        loginButton.addTarget(self, action: #selector(loginButtonDidTapped), for: .touchUpInside)
+    }
+    
+    @objc
+    private func loginButtonDidTapped() {
+        viewStore.send(.loginButtonDidTapped)
     }
 }
