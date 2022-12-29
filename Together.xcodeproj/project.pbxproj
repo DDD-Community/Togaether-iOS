@@ -9,9 +9,8 @@
 /* Begin PBXBuildFile section */
 		401D17CC2954A8DF003F9270 /* Root.swift in Sources */ = {isa = PBXBuildFile; fileRef = 401D17CB2954A8DF003F9270 /* Root.swift */; };
 		401D17CE2954A8E3003F9270 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 401D17CD2954A8E3003F9270 /* RootViewController.swift */; };
-		40532F1A29320BEE007AEA75 /* ThirdParty in Frameworks */ = {isa = PBXBuildFile; productRef = 40532F1929320BEE007AEA75 /* ThirdParty */; };
-		408BEEDD2959B2AB0083DF49 /* Tab in Resources */ = {isa = PBXBuildFile; fileRef = 408BEEDC2959B2AA0083DF49 /* Tab */; };
-		408BEEE12959B5710083DF49 /* Tab in Frameworks */ = {isa = PBXBuildFile; productRef = 408BEEE02959B5710083DF49 /* Tab */; };
+		408BEEE3295E18A00083DF49 /* Feature in Resources */ = {isa = PBXBuildFile; fileRef = 408BEEE2295E18A00083DF49 /* Feature */; };
+		408BEEE5295E19240083DF49 /* Feature in Frameworks */ = {isa = PBXBuildFile; productRef = 408BEEE4295E19240083DF49 /* Feature */; };
 		40E9B4C32931D7AF00AC9AF0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E9B4C22931D7AF00AC9AF0 /* AppDelegate.swift */; };
 		40E9B4C52931D7AF00AC9AF0 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E9B4C42931D7AF00AC9AF0 /* SceneDelegate.swift */; };
 		40E9B4CC2931D7B100AC9AF0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 40E9B4CB2931D7B100AC9AF0 /* Assets.xcassets */; };
@@ -19,7 +18,6 @@
 		40E9B4DA2931D7B100AC9AF0 /* TogetherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E9B4D92931D7B100AC9AF0 /* TogetherTests.swift */; };
 		40E9B4E42931D7B100AC9AF0 /* TogetherUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E9B4E32931D7B100AC9AF0 /* TogetherUITests.swift */; };
 		40E9B4E62931D7B100AC9AF0 /* TogetherUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E9B4E52931D7B100AC9AF0 /* TogetherUITestsLaunchTests.swift */; };
-		40EBD1392931EFD1008143AD /* Login in Frameworks */ = {isa = PBXBuildFile; productRef = 40EBD1382931EFD1008143AD /* Login */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,8 +42,7 @@
 		401D17CD2954A8E3003F9270 /* RootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootViewController.swift; sourceTree = "<group>"; };
 		4082836D293CE7EF00E8B3AA /* TogetherNetwork */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = TogetherNetwork; path = Together/Sources/Core/TogetherNetwork; sourceTree = SOURCE_ROOT; };
 		4082836E293CE80000E8B3AA /* TogetherFoundation */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = TogetherFoundation; path = Together/Sources/Core/TogetherFoundation; sourceTree = SOURCE_ROOT; };
-		408BEEDC2959B2AA0083DF49 /* Tab */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Tab; sourceTree = "<group>"; };
-		408BEEDE2959B34B0083DF49 /* Home */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Home; path = ../../../../../Homework/Home; sourceTree = "<group>"; };
+		408BEEE2295E18A00083DF49 /* Feature */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Feature; sourceTree = "<group>"; };
 		409E1916293CE058003B8CE4 /* TogetherCore */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = TogetherCore; path = Together/Sources/Core/TogetherCore; sourceTree = SOURCE_ROOT; };
 		409E1917293CE1CB003B8CE4 /* TogetherUI */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = TogetherUI; path = Together/Sources/UI/TogetherUI; sourceTree = SOURCE_ROOT; };
 		40BD37A32931FEA800CE3FD7 /* ThirdParty */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = ThirdParty; path = Together/Sources/ThirdParty; sourceTree = SOURCE_ROOT; };
@@ -60,7 +57,6 @@
 		40E9B4DF2931D7B100AC9AF0 /* TogetherUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TogetherUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		40E9B4E32931D7B100AC9AF0 /* TogetherUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TogetherUITests.swift; sourceTree = "<group>"; };
 		40E9B4E52931D7B100AC9AF0 /* TogetherUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TogetherUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		40EBD1362931EE42008143AD /* Login */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Login; path = Together/Sources/App/Login; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,9 +64,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				408BEEE12959B5710083DF49 /* Tab in Frameworks */,
-				40EBD1392931EFD1008143AD /* Login in Frameworks */,
-				40532F1A29320BEE007AEA75 /* ThirdParty in Frameworks */,
+				408BEEE5295E19240083DF49 /* Feature in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -171,9 +165,6 @@
 				40E9B4C22931D7AF00AC9AF0 /* AppDelegate.swift */,
 				40E9B4C42931D7AF00AC9AF0 /* SceneDelegate.swift */,
 				401D17CF2954A8EE003F9270 /* Root */,
-				40EBD1362931EE42008143AD /* Login */,
-				408BEEDC2959B2AA0083DF49 /* Tab */,
-				408BEEDE2959B34B0083DF49 /* Home */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -192,6 +183,7 @@
 			isa = PBXGroup;
 			children = (
 				40E9B4FD2931ECA000AC9AF0 /* App */,
+				408BEEE2295E18A00083DF49 /* Feature */,
 				4082836F293CE80500E8B3AA /* Core */,
 				40828370293CE85300E8B3AA /* UI */,
 				40BD37A32931FEA800CE3FD7 /* ThirdParty */,
@@ -223,9 +215,7 @@
 			);
 			name = Together;
 			packageProductDependencies = (
-				40EBD1382931EFD1008143AD /* Login */,
-				40532F1929320BEE007AEA75 /* ThirdParty */,
-				408BEEE02959B5710083DF49 /* Tab */,
+				408BEEE4295E19240083DF49 /* Feature */,
 			);
 			productName = Together;
 			productReference = 40E9B4BF2931D7AF00AC9AF0 /* Together.app */;
@@ -317,7 +307,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				408BEEDD2959B2AB0083DF49 /* Tab in Resources */,
+				408BEEE3295E18A00083DF49 /* Feature in Resources */,
 				40E9B4CF2931D7B100AC9AF0 /* LaunchScreen.storyboard in Resources */,
 				40E9B4CC2931D7B100AC9AF0 /* Assets.xcassets in Resources */,
 			);
@@ -681,17 +671,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		40532F1929320BEE007AEA75 /* ThirdParty */ = {
+		408BEEE4295E19240083DF49 /* Feature */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = ThirdParty;
-		};
-		408BEEE02959B5710083DF49 /* Tab */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Tab;
-		};
-		40EBD1382931EFD1008143AD /* Login */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = Login;
+			productName = Feature;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

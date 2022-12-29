@@ -8,8 +8,7 @@
 import UIKit
 import Combine
 
-import Login
-import Tab
+import Feature
 import TogetherCore
 import TogetherUI
 import ThirdParty

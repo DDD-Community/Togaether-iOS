@@ -7,8 +7,7 @@
 
 import Foundation
 
-import Login
-import Tab
+import Feature
 import TogetherCore
 import TogetherFoundation
 import ThirdParty

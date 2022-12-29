@@ -4,14 +4,14 @@
 import PackageDescription
 
 let package = Package(
-    name: "Tab",
+    name: "Feature",
     platforms: [
         .iOS(.v16),
     ],
     products: [
         .library(
-            name: "Tab",
-            targets: ["Tab"]
+            name: "Feature",
+            targets: ["Feature"]
         ),
     ],
     dependencies: [
@@ -20,15 +20,15 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "Tab",
+            name: "Feature",
             dependencies: [
                 .product(name: "TogetherCore", package: "TogetherCore"),
                 .product(name: "TogetherUI", package: "TogetherUI"),
             ]
         ),
         .testTarget(
-            name: "TabTests",
-            dependencies: ["Tab"]
+            name: "FeatureTests",
+            dependencies: ["Feature"]
         ),
     ]
 )
