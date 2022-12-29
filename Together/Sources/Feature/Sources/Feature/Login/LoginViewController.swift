@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 import TogetherCore
 import TogetherUI
@@ -18,6 +19,7 @@ public final class LoginViewController: UIViewController {
     
     private let store: StoreOf<Login>
     private let viewStore: ViewStoreOf<Login>
+    private var cancellables: Set<AnyCancellable> = .init()
     
     private let loginButton: UIButton = {
         let button: UIButton = .init(frame: .zero)
@@ -52,10 +54,31 @@ public final class LoginViewController: UIViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
+        bindState()
     }
     
     private func configureUI() {
         loginButton.addTarget(self, action: #selector(loginButtonDidTapped), for: .touchUpInside)
+    }
+    
+    private func bindState() {
+        store
+            .scope(state: \.optionalOnboarding, action: Login.Action.optionalOnboarding)
+            .ifLet(
+                then: { store in
+                    UIApplication.shared.keyWindow?.rootViewController = OnboardingViewController(store: store)
+                }
+            )
+            .store(in: &cancellables)
+        
+        store
+            .scope(state: \.optionalTab, action: Login.Action.optionalTab)
+            .ifLet(
+                then: { store in
+                    UIApplication.shared.keyWindow?.rootViewController = TabViewController(store: store)
+                }
+            )
+            .store(in: &cancellables)
     }
     
     @objc
@@ -63,3 +86,16 @@ public final class LoginViewController: UIViewController {
         viewStore.send(.loginButtonDidTapped)
     }
 }
+
+public extension UIApplication {
+    var keyWindow: UIWindow? {
+        return UIApplication.shared.connectedScenes
+            .filter { $0.activationState == .foregroundActive }
+            .map { $0 as? UIWindowScene }
+            .compactMap { $0 }
+            .first?.windows
+            .filter(\.isKeyWindow)
+            .first
+    }
+}
+

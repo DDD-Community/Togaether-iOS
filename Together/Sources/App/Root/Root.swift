@@ -18,13 +18,16 @@ struct Root: ReducerProtocol {
     struct State: Equatable {
         var optionalLogin: Login.State?
         var optionalOnboarding: Onboarding.State?
+        var optionalTab: Tab.State?
     }
     
     enum Action: Equatable {
         case viewDidAppear
         case tokenResponse(TaskResult<String>)
+        
         case optionalLogin(Login.Action)
         case optionalOnboarding(Onboarding.Action)
+        case optionalTab(Tab.Action)
     }
     
     @Dependency(\.togetherAccount) var togetherAccount
@@ -45,10 +48,12 @@ struct Root: ReducerProtocol {
                 if Preferences.shared.onboardingFinished {
                     state.optionalLogin = nil
                     state.optionalOnboarding = nil
+                    state.optionalTab = nil
                 } else {
                     print("\(Self.self): user needs onboarding")
                     state.optionalLogin = nil
                     state.optionalOnboarding = nil
+                    state.optionalTab = nil
                 }
                 
                 return .none
@@ -57,21 +62,16 @@ struct Root: ReducerProtocol {
                 print("\(Self.self): auto login failure error: \(error)")
                 state.optionalLogin = .init()
                 state.optionalOnboarding = nil
+                state.optionalTab = nil
                 return .none
                 
-            case let .optionalLogin(loginAction):
-                switch loginAction {
-                case let .loginResponse(.success(token)):
-                    print("\(Self.self): login success token: \(token)")
-                    state.optionalLogin = nil
-                    state.optionalOnboarding = .init()
-                    return .none
-                    
-                default:
-                    return .none
-                }
+            case .optionalLogin:
+                return .none
                 
             case .optionalOnboarding:
+                return .none
+                
+            case .optionalTab:
                 return .none
             }
         }
@@ -80,6 +80,9 @@ struct Root: ReducerProtocol {
         }
         .ifLet(\.optionalOnboarding, action: /Action.optionalOnboarding) { 
             Onboarding()
+        }
+        .ifLet(\.optionalTab, action: /Action.optionalTab) { 
+            Tab()
         }
     }
 }

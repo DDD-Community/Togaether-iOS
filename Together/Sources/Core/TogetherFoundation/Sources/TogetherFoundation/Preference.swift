@@ -45,6 +45,6 @@ public final class Preferences {
     
     private init() { }
     
-    @ValueProperty(uniqueKey: "Preferences::onboardingFinished", defaultValue: false)
+    @ValueProperty(uniqueKey: "Preferences::onboardingFinished", defaultValue: true)
     public var onboardingFinished: Bool
 }

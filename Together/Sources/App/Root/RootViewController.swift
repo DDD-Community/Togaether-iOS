@@ -56,8 +56,6 @@ final class RootViewController: UIViewController {
         viewStore.send(.viewDidAppear)
     }
     
-    /// reducer에서 분기처리 해서 error일 경우랑 token이 있는 경우 랑
-    /// 따로 처리해야할 지 같이 처리해야할지 .... 
     private func bindState() {
         store
             .scope(state: \.optionalLogin, action: Root.Action.optionalLogin)
@@ -73,6 +71,15 @@ final class RootViewController: UIViewController {
             .ifLet(
                 then: { store in
                     UIApplication.shared.appWindow?.rootViewController = OnboardingViewController(store: store)
+                }
+            )
+            .store(in: &cancellables)
+        
+        store
+            .scope(state: \.optionalTab, action: Root.Action.optionalTab)
+            .ifLet(
+                then: { store in
+                    UIApplication.shared.appWindow?.rootViewController = TabViewController(store: store)
                 }
             )
             .store(in: &cancellables)
