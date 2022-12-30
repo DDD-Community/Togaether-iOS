@@ -13,6 +13,15 @@
 		40575786295E24EA00FA3FB6 /* Feature in Frameworks */ = {isa = PBXBuildFile; productRef = 40575785295E24EA00FA3FB6 /* Feature */; };
 		40575789295E252400FA3FB6 /* TogetherNetwork in Resources */ = {isa = PBXBuildFile; fileRef = 40575787295E252400FA3FB6 /* TogetherNetwork */; };
 		4057578A295E252400FA3FB6 /* TogetherFoundation in Resources */ = {isa = PBXBuildFile; fileRef = 40575788295E252400FA3FB6 /* TogetherFoundation */; };
+		4075CA31295F454100FA23C9 /* Pretendard-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4075CA28295F454000FA23C9 /* Pretendard-Black.ttf */; };
+		4075CA32295F454100FA23C9 /* Pretendard-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4075CA29295F454000FA23C9 /* Pretendard-Light.ttf */; };
+		4075CA33295F454100FA23C9 /* Pretendard-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4075CA2A295F454000FA23C9 /* Pretendard-ExtraBold.ttf */; };
+		4075CA34295F454100FA23C9 /* Pretendard-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4075CA2B295F454000FA23C9 /* Pretendard-SemiBold.ttf */; };
+		4075CA35295F454100FA23C9 /* Pretendard-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4075CA2C295F454000FA23C9 /* Pretendard-ExtraLight.ttf */; };
+		4075CA36295F454100FA23C9 /* Pretendard-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4075CA2D295F454000FA23C9 /* Pretendard-Medium.ttf */; };
+		4075CA37295F454100FA23C9 /* Pretendard-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4075CA2E295F454100FA23C9 /* Pretendard-Regular.ttf */; };
+		4075CA38295F454100FA23C9 /* Pretendard-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4075CA2F295F454100FA23C9 /* Pretendard-Bold.ttf */; };
+		4075CA39295F45ED00FA23C9 /* Pretendard-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4075CA27295F454000FA23C9 /* Pretendard-Thin.ttf */; };
 		40E9B4C32931D7AF00AC9AF0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E9B4C22931D7AF00AC9AF0 /* AppDelegate.swift */; };
 		40E9B4C52931D7AF00AC9AF0 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E9B4C42931D7AF00AC9AF0 /* SceneDelegate.swift */; };
 		40E9B4CC2931D7B100AC9AF0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 40E9B4CB2931D7B100AC9AF0 /* Assets.xcassets */; };
@@ -45,6 +54,15 @@
 		40575783295E24DE00FA3FB6 /* Feature */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Feature; sourceTree = "<group>"; };
 		40575787295E252400FA3FB6 /* TogetherNetwork */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = TogetherNetwork; sourceTree = "<group>"; };
 		40575788295E252400FA3FB6 /* TogetherFoundation */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = TogetherFoundation; sourceTree = "<group>"; };
+		4075CA27295F454000FA23C9 /* Pretendard-Thin.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Thin.ttf"; sourceTree = "<group>"; };
+		4075CA28295F454000FA23C9 /* Pretendard-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Black.ttf"; sourceTree = "<group>"; };
+		4075CA29295F454000FA23C9 /* Pretendard-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Light.ttf"; sourceTree = "<group>"; };
+		4075CA2A295F454000FA23C9 /* Pretendard-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-ExtraBold.ttf"; sourceTree = "<group>"; };
+		4075CA2B295F454000FA23C9 /* Pretendard-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-SemiBold.ttf"; sourceTree = "<group>"; };
+		4075CA2C295F454000FA23C9 /* Pretendard-ExtraLight.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-ExtraLight.ttf"; sourceTree = "<group>"; };
+		4075CA2D295F454000FA23C9 /* Pretendard-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Medium.ttf"; sourceTree = "<group>"; };
+		4075CA2E295F454100FA23C9 /* Pretendard-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Regular.ttf"; sourceTree = "<group>"; };
+		4075CA2F295F454100FA23C9 /* Pretendard-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Bold.ttf"; sourceTree = "<group>"; };
 		409E1916293CE058003B8CE4 /* TogetherCore */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = TogetherCore; path = Together/Sources/Core/TogetherCore; sourceTree = SOURCE_ROOT; };
 		409E1917293CE1CB003B8CE4 /* TogetherUI */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = TogetherUI; path = Together/Sources/TogetherUI; sourceTree = SOURCE_ROOT; };
 		40BD37A32931FEA800CE3FD7 /* ThirdParty */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = ThirdParty; path = Together/Sources/ThirdParty; sourceTree = SOURCE_ROOT; };
@@ -94,6 +112,22 @@
 				401D17CD2954A8E3003F9270 /* RootViewController.swift */,
 			);
 			path = Root;
+			sourceTree = "<group>";
+		};
+		4075CA02295F443700FA23C9 /* Font */ = {
+			isa = PBXGroup;
+			children = (
+				4075CA28295F454000FA23C9 /* Pretendard-Black.ttf */,
+				4075CA2F295F454100FA23C9 /* Pretendard-Bold.ttf */,
+				4075CA2A295F454000FA23C9 /* Pretendard-ExtraBold.ttf */,
+				4075CA2C295F454000FA23C9 /* Pretendard-ExtraLight.ttf */,
+				4075CA29295F454000FA23C9 /* Pretendard-Light.ttf */,
+				4075CA2D295F454000FA23C9 /* Pretendard-Medium.ttf */,
+				4075CA2E295F454100FA23C9 /* Pretendard-Regular.ttf */,
+				4075CA2B295F454000FA23C9 /* Pretendard-SemiBold.ttf */,
+				4075CA27295F454000FA23C9 /* Pretendard-Thin.ttf */,
+			);
+			path = Font;
 			sourceTree = "<group>";
 		};
 		4082836F293CE80500E8B3AA /* Core */ = {
@@ -166,6 +200,7 @@
 		40E9B4FE2931ECA900AC9AF0 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				4075CA02295F443700FA23C9 /* Font */,
 				40E9B4D02931D7B100AC9AF0 /* Info.plist */,
 				40E9B4CB2931D7B100AC9AF0 /* Assets.xcassets */,
 				40E9B4CD2931D7B100AC9AF0 /* LaunchScreen.storyboard */,
@@ -301,11 +336,20 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4075CA33295F454100FA23C9 /* Pretendard-ExtraBold.ttf in Resources */,
+				4075CA31295F454100FA23C9 /* Pretendard-Black.ttf in Resources */,
+				4075CA34295F454100FA23C9 /* Pretendard-SemiBold.ttf in Resources */,
 				40E9B4CF2931D7B100AC9AF0 /* LaunchScreen.storyboard in Resources */,
+				4075CA37295F454100FA23C9 /* Pretendard-Regular.ttf in Resources */,
+				4075CA38295F454100FA23C9 /* Pretendard-Bold.ttf in Resources */,
+				4075CA39295F45ED00FA23C9 /* Pretendard-Thin.ttf in Resources */,
 				40575784295E24DE00FA3FB6 /* Feature in Resources */,
 				40E9B4CC2931D7B100AC9AF0 /* Assets.xcassets in Resources */,
 				4057578A295E252400FA3FB6 /* TogetherFoundation in Resources */,
+				4075CA36295F454100FA23C9 /* Pretendard-Medium.ttf in Resources */,
+				4075CA32295F454100FA23C9 /* Pretendard-Light.ttf in Resources */,
 				40575789295E252400FA3FB6 /* TogetherNetwork in Resources */,
+				4075CA35295F454100FA23C9 /* Pretendard-ExtraLight.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -504,7 +548,6 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Together/Info.plist;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -534,7 +577,6 @@
 				CURRENT_PROJECT_VERSION = 1;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = Together/Info.plist;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
