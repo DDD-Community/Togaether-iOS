@@ -13,19 +13,21 @@ import ComposableArchitecture
 
 public struct Login: ReducerProtocol {
     public struct State: Equatable {
-        var id: String
+        var email: String
         var password: String
         
         var optionalOnboarding: Onboarding.State?
         var optionalTab: Tab.State?
         
-        public init(id: String = "", password: String = "") { 
-            self.id = id
+        public init(email: String = "", password: String = "") { 
+            self.email = email
             self.password = password
         }
     }
     
     public enum Action: Equatable {
+        case emailTextDidChanged(String)
+        case passwordTextDidChanged(String)
         case loginButtonDidTapped
         case loginResponse(TaskResult<String>)
         
@@ -50,12 +52,20 @@ public struct Login: ReducerProtocol {
     
     public func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
+        case let .emailTextDidChanged(emailText):
+            state.email = emailText
+            return .none
+            
+        case let .passwordTextDidChanged(password):
+            state.password = password
+            return .none
+            
         case .loginButtonDidTapped:
             print("\(Self.self): loginButtonDidTapped")
-            return .task { [id = state.id, password = state.password] in
+            return .task { [email = state.email, password = state.password] in
                 await .loginResponse(
                     TaskResult { 
-                        try await togetherAccount.login(id, password) 
+                        try await togetherAccount.login(email, password) 
                     }
                 ) 
             }

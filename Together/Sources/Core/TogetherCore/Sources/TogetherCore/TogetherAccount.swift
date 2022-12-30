@@ -6,7 +6,7 @@ import XCTestDynamicOverlay
 
 public struct TogetherAccount {
     public var token: @Sendable () async throws -> String
-    public var login: @Sendable (_ id: String, _ pw: String) async throws -> String
+    public var login: @Sendable (_ email: String, _ password: String) async throws -> String
 }
 
 extension DependencyValues {
@@ -19,9 +19,12 @@ extension DependencyValues {
 extension TogetherAccount: DependencyKey {
     public static let liveValue: TogetherAccount = .init(
         token: {
+            try await Task.sleep(for: .seconds(1))
             throw NSError(domain: "", code: 1)
         }, 
-        login: { id, pw in
+        login: { email, password in
+//            try validate(email, password)
+            try await Task.sleep(for: .seconds(1))
             return "havi"
         }
     )
