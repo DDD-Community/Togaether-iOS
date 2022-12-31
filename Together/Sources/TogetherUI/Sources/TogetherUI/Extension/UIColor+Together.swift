@@ -40,7 +40,7 @@ public extension UIColor {
 public extension UIColor {
     static var blueGray100: UIColor = hex("F7F7F8")
     static var blueGray150: UIColor = hex("EFEFF0")
-    static var blueGray200: UIColor = hex("E0E0E4")
+    static var blueGray200: UIColor = hex("E0E1E4")
     static var blueGray300: UIColor = hex("C9C9CF")
     static var blueGray400: UIColor = hex("9D9DA8")
     static var blueGray500: UIColor = hex("80808E")
