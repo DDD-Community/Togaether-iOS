@@ -12,10 +12,14 @@ public final class TogetherInputFieldView: UIView {
     
     public let inputTextField: UITextField = {
         let textField: UITextField = .init()
-        textField.layer.borderWidth = 1
-        textField.layer.borderColor = UIColor.black.cgColor
-        textField.layer.cornerRadius = 8
-        textField.layer.masksToBounds = true
+        textField.attributedPlaceholder = .init(string: "", attributes: [
+            .foregroundColor: UIColor.backgroundGray,
+            .font: UIFont.body1 as Any
+        ])
+        textField.borderWidth = 1
+        textField.borderColor = .blueGray200
+        textField.cornerRadius = 8
+        textField.addLeftPadding(inset: 20)
         return textField
     }()
     

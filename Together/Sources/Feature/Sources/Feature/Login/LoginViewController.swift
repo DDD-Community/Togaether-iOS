@@ -31,7 +31,7 @@ public final class LoginViewController: UIViewController {
     
     private let iconView: UIView = {
         let view: UIView = .init()
-        view.backgroundColor = .blue
+        view.backgroundColor = .backgroundIvory100
         return view
     }()
     
@@ -44,6 +44,7 @@ public final class LoginViewController: UIViewController {
     private let emailFieldView: TogetherInputFieldView = {
         let fieldView: TogetherInputFieldView = .init()
         fieldView.titleLabel.text = "이메일(아이디)"
+        fieldView.titleLabel.font = .caption
         fieldView.inputTextField.placeholder = "예) example@togather.co.kr"
         return fieldView
     }()
@@ -51,6 +52,7 @@ public final class LoginViewController: UIViewController {
     private let passwordFieldView: TogetherInputFieldView = {
         let fieldView: TogetherInputFieldView = .init()
         fieldView.titleLabel.text = "비밀번호"
+        fieldView.titleLabel.font = .caption
         fieldView.inputTextField.placeholder = "0자리 ~ 00자리의 영어, 숫자 혹은 특수문자"
         return fieldView
     }()
@@ -58,21 +60,38 @@ public final class LoginViewController: UIViewController {
     private let loginButton: UIButton = {
         let button: UIButton = .init(frame: .zero)
         button.setTitle("로그인", for: .init())
-        button.setTitleColor(.black, for: .init())
-        button.backgroundColor = .red
+        button.setTitleColor(.backgroundWhite, for: .init())
+        button.backgroundColor = .primary500
+        button.cornerRadius = 8
         return button
+    }()
+    
+    private let findContainerView: UIStackView = {
+        let stackView: UIStackView = .init()
+        stackView.axis = .horizontal
+        stackView.distribution = .fill
+        stackView.alignment = .center
+        return stackView
     }()
     
     private let findIDButton: UIButton = {
         let button: UIButton = .init(frame: .zero)
         button.setTitle("아이디 찾기", for: .init())
+        button.titleLabel?.font = .body1
         button.setTitleColor(.black, for: .init())
         return button
+    }()
+    
+    private let dividerView: UIView = {
+        let view: UIView = .init()
+        view.backgroundColor = .hex("D9D9D9")
+        return view
     }()
     
     private let findPasswordButton: UIButton = {
         let button: UIButton = .init(frame: .zero)
         button.setTitle("비밀번호 찾기", for: .init())
+        button.titleLabel?.font = .body1
         button.setTitleColor(.black, for: .init())
         return button
     }()
@@ -83,10 +102,15 @@ public final class LoginViewController: UIViewController {
                 Anchors.horizontal(offset: 24)
                 Anchors.top.equalTo(view.safeAreaLayoutGuide)
             }
+            findContainerView.anchors {
+                Anchors.height.equalTo(constant: 20)
+                Anchors.top.equalTo(contentStackView.bottomAnchor, constant: 26)
+                Anchors.centerX.equalTo(view.centerXAnchor)
+            }
         }
         
         view.config { view in
-            view.backgroundColor = .white
+            view.backgroundColor = .backgroundIvory100
         }
         
         iconView
@@ -103,6 +127,11 @@ public final class LoginViewController: UIViewController {
             Anchors.height.equalTo(constant: 54)
         }
         
+        dividerView.anchors { 
+            Anchors.width.equalTo(constant: 1)
+            Anchors.height.equalTo(constant: 12)
+        }
+        
         contentStackView.config { stackView in
             stackView.addArrangedSubview(iconView)
             stackView.addArrangedSubview(emailFieldView)
@@ -111,6 +140,15 @@ public final class LoginViewController: UIViewController {
             stackView.setCustomSpacing(24, after: passwordFieldView)
             stackView.addArrangedSubview(loginButton)
         }
+        
+        findContainerView.config { stackView in
+                stackView.addArrangedSubview(findIDButton)
+                stackView.setCustomSpacing(20, after: findIDButton)
+                stackView.addArrangedSubview(dividerView)
+                stackView.setCustomSpacing(20, after: dividerView)
+                stackView.addArrangedSubview(findPasswordButton)
+            }
+            
     }
     
     public init(store: StoreOf<Login>) {
