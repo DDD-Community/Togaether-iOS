@@ -26,8 +26,8 @@ public struct Login: ReducerProtocol {
     }
     
     public enum Action: Equatable {
-        case emailTextDidChanged(String)
-        case passwordTextDidChanged(String)
+        case emailDidChanged(String)
+        case passwordDidChanged(String)
         case loginButtonDidTapped
         case loginResponse(TaskResult<String>)
         
@@ -52,11 +52,11 @@ public struct Login: ReducerProtocol {
     
     public func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
-        case let .emailTextDidChanged(emailText):
-            state.email = emailText
+        case let .emailDidChanged(email):
+            state.email = email
             return .none
             
-        case let .passwordTextDidChanged(password):
+        case let .passwordDidChanged(password):
             state.password = password
             return .none
             

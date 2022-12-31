@@ -81,7 +81,7 @@ public final class LoginViewController: UIViewController {
         return button
     }()
     
-    @LayoutBuilder var layout: some Layout {
+    @LayoutBuilder var layout: some SwiftLayout.Layout {
         view.sublayout {
             contentStackView.anchors { 
                 Anchors.horizontal(offset: 24)
@@ -176,15 +176,15 @@ public final class LoginViewController: UIViewController {
     private func bindAction() {
         emailFieldView.inputTextField
             .textPublisher
-            .sink { emailText in
-                print(emailText)
+            .sink { [weak self] email in
+                self?.viewStore.send(.emailDidChanged(email))
             }
             .store(in: &cancellables)
         
         passwordFieldView.inputTextField
             .textPublisher
-            .sink { passwordText in
-                print(passwordText)
+            .sink { [weak self] password in
+                self?.viewStore.send(.passwordDidChanged(password))
             }
             .store(in: &cancellables)
         
@@ -196,3 +196,15 @@ public final class LoginViewController: UIViewController {
             .store(in: &cancellables)
     }
 }
+
+#if canImport(SwiftUI) && DEBUG
+import SwiftUI
+
+struct Login_Previews: PreviewProvider {
+    static var previews: some View {
+        let store: StoreOf<Login> = .init(initialState: .init(), reducer: Login())
+        return LoginViewController(store: store)
+            .showPrieview()
+    }
+}
+#endif

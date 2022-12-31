@@ -99,49 +99,56 @@ final class JoinViewController: UIViewController {
     private func bindAction() {
         emailFieldView.inputTextField
             .textPublisher
-            .sink { email in
-                print(email)
+            .sink { [weak self] email in
+                self?.viewStore.send(.emailDidChanged(email))
             }
             .store(in: &cancellables)
         
         passwordFieldView.inputTextField
             .textPublisher
-            .sink { password in
-                print(password)
+            .sink { [weak self] password in
+                self?.viewStore.send(.passwordDidChanged(password))
             }
             .store(in: &cancellables)
         
         passwordConfirmFieldView.inputTextField
             .textPublisher
-            .sink { passwordConfirm in
-                print(passwordConfirm)
+            .sink { [weak self] passwordConfirm in
+                self?.viewStore.send(.passwordConfirmDidChanged(passwordConfirm))
             }
             .store(in: &cancellables)
         
         nameFieldView.inputTextField
             .textPublisher
-            .sink { name in
-                print(name)
+            .sink { [weak self] name in
+                self?.viewStore.send(.nameDidChanged(name))
             }
             .store(in: &cancellables)
         
         birthFieldView.inputTextField
             .textPublisher
-            .sink { birth in
-                print(birth)
+            .sink { [weak self] birth in
+                self?.viewStore.send(.birthDidChanged(birth))
             }
             .store(in: &cancellables)
         
         phoneNumberFieldView.inputTextField
             .textPublisher
-            .sink { phoneNumber in
-                print(phoneNumber)
+            .sink { [weak self] phoneNumber in
+                self?.viewStore.send(.phoneNumberDidChanged(phoneNumber))
+            }
+            .store(in: &cancellables)
+        
+        confirmButton
+            .publisher(for: .touchUpInside)
+            .sink { [weak self] _ in
+                self?.viewStore.send(.confirmButtonClicked)
             }
             .store(in: &cancellables)
     }
 }
 
-#if DEBUG
+#if canImport(SwiftUI) && DEBUG
 import SwiftUI
 
 struct JoinPreviews: PreviewProvider {
