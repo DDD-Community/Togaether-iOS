@@ -41,30 +41,15 @@ public final class LoginViewController: UIViewController {
         return imageView
     }()
     
-    private let emailFieldView: TogetherInputFieldView = {
-        let fieldView: TogetherInputFieldView = .init()
-        fieldView.titleLabel.text = "이메일(아이디)"
-        fieldView.titleLabel.font = .caption
-        fieldView.inputTextField.placeholder = "예) example@togather.co.kr"
-        return fieldView
-    }()
-    
-    private let passwordFieldView: TogetherInputFieldView = {
-        let fieldView: TogetherInputFieldView = .init()
-        fieldView.titleLabel.text = "비밀번호"
-        fieldView.titleLabel.font = .caption
-        fieldView.inputTextField.placeholder = "0자리 ~ 00자리의 영어, 숫자 혹은 특수문자"
-        return fieldView
-    }()
-    
-    private let loginButton: UIButton = {
-        let button: UIButton = .init(frame: .zero)
-        button.setTitle("로그인", for: .init())
-        button.setTitleColor(.backgroundWhite, for: .init())
-        button.backgroundColor = .primary500
-        button.cornerRadius = 8
-        return button
-    }()
+    private let emailFieldView: TogetherInputFieldView = .init(
+        title: "이메일(아이디)", 
+        placeholder: "예) example@togather.co.kr"
+    ) 
+    private let passwordFieldView: TogetherInputFieldView = .init(
+        title: "비밀번호", 
+        placeholder: "0자리 ~ 00자리의 영어, 숫자 혹은 특수문자"
+    ) 
+    private let loginButton: TogetherRegularButton = .init(title: "로그인") 
     
     private let findContainerView: UIStackView = {
         let stackView: UIStackView = .init()
