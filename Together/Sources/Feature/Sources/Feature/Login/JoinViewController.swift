@@ -100,42 +100,42 @@ final class JoinViewController: UIViewController {
         emailFieldView.inputTextField
             .textPublisher
             .sink { [weak self] email in
-                self?.viewStore.send(.emailDidChanged(email))
+                self?.viewStore.send(.didChangeEmail(email))
             }
             .store(in: &cancellables)
         
         passwordFieldView.inputTextField
             .textPublisher
             .sink { [weak self] password in
-                self?.viewStore.send(.passwordDidChanged(password))
+                self?.viewStore.send(.didChangePassword(password))
             }
             .store(in: &cancellables)
         
         passwordConfirmFieldView.inputTextField
             .textPublisher
             .sink { [weak self] passwordConfirm in
-                self?.viewStore.send(.passwordConfirmDidChanged(passwordConfirm))
+                self?.viewStore.send(.didChangePasswordConfirm(passwordConfirm))
             }
             .store(in: &cancellables)
         
         nameFieldView.inputTextField
             .textPublisher
             .sink { [weak self] name in
-                self?.viewStore.send(.nameDidChanged(name))
+                self?.viewStore.send(.didChangeName(name))
             }
             .store(in: &cancellables)
         
         birthFieldView.inputTextField
             .textPublisher
             .sink { [weak self] birth in
-                self?.viewStore.send(.birthDidChanged(birth))
+                self?.viewStore.send(.didChangeBirth(birth))
             }
             .store(in: &cancellables)
         
         phoneNumberFieldView.inputTextField
             .textPublisher
             .sink { [weak self] phoneNumber in
-                self?.viewStore.send(.phoneNumberDidChanged(phoneNumber))
+                self?.viewStore.send(.didChangePhoneNumber(phoneNumber))
             }
             .store(in: &cancellables)
         

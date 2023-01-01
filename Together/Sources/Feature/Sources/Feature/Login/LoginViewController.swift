@@ -45,10 +45,14 @@ public final class LoginViewController: UIViewController {
         title: "이메일(아이디)", 
         placeholder: "예) example@togather.co.kr"
     ) 
-    private let passwordFieldView: TogetherInputFieldView = .init(
-        title: "비밀번호", 
-        placeholder: "0자리 ~ 00자리의 영어, 숫자 혹은 특수문자"
-    ) 
+    private let passwordFieldView: TogetherInputFieldView = {
+        let fieldView: TogetherInputFieldView = .init(
+            title: "비밀번호", 
+            placeholder: "0자리 ~ 00자리의 영어, 숫자 혹은 특수문자"
+        ) 
+        fieldView.inputTextField.isSecureTextEntry = true
+        return fieldView
+    }()
     private let loginButton: TogetherRegularButton = .init(title: "로그인") 
     
     private let findContainerView: UIStackView = {
@@ -171,27 +175,38 @@ public final class LoginViewController: UIViewController {
                 }
             )
             .store(in: &cancellables)
+        
+        viewStore.publisher.isLoginAvailable
+            .assign(to: \.isEnabled, onWeak: loginButton)
+            .store(in: &cancellables)
     }
     
     private func bindAction() {
         emailFieldView.inputTextField
             .textPublisher
             .sink { [weak self] email in
-                self?.viewStore.send(.emailDidChanged(email))
+                self?.viewStore.send(.didChangeEmail(email))
             }
             .store(in: &cancellables)
         
         passwordFieldView.inputTextField
             .textPublisher
             .sink { [weak self] password in
-                self?.viewStore.send(.passwordDidChanged(password))
+                self?.viewStore.send(.didChangePassword(password))
             }
             .store(in: &cancellables)
         
         loginButton
             .publisher(for: .touchUpInside)
             .sink { [weak self] _ in
-                self?.viewStore.send(.loginButtonDidTapped)        
+                self?.viewStore.send(.didTapLoginButton)        
+            }
+            .store(in: &cancellables)
+        
+        findIDButton
+            .publisher(for: .touchUpInside)
+            .sink { [weak self] _ in
+                self?.viewStore.send(.didTapLoginButton)
             }
             .store(in: &cancellables)
     }

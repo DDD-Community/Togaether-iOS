@@ -19,12 +19,12 @@ struct Join: ReducerProtocol {
     }
     
     enum Action: Equatable {
-        case emailDidChanged(String)
-        case passwordDidChanged(String)
-        case passwordConfirmDidChanged(String)
-        case nameDidChanged(String)
-        case birthDidChanged(String)
-        case phoneNumberDidChanged(String)
+        case didChangeEmail(String)
+        case didChangePassword(String)
+        case didChangePasswordConfirm(String)
+        case didChangeName(String)
+        case didChangeBirth(String)
+        case didChangePhoneNumber(String)
         
         case confirmButtonClicked
     }
@@ -33,27 +33,27 @@ struct Join: ReducerProtocol {
     
     func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
-        case let .emailDidChanged(email):
+        case let .didChangeEmail(email):
             state.email = email
             return .none
             
-        case let .passwordDidChanged(password):
+        case let .didChangePassword(password):
             state.password = password
             return .none
             
-        case let .passwordConfirmDidChanged(passwordConfirm):
+        case let .didChangePasswordConfirm(passwordConfirm):
             state.passwordConfirm = passwordConfirm
             return .none
             
-        case let .nameDidChanged(name):
+        case let .didChangeName(name):
             state.name = name
             return .none
             
-        case let .birthDidChanged(birth):
+        case let .didChangeBirth(birth):
             state.birth = birth
             return .none
             
-        case let .phoneNumberDidChanged(phoneNumber):
+        case let .didChangePhoneNumber(phoneNumber):
             state.phoneNumber = phoneNumber
             return .none
             

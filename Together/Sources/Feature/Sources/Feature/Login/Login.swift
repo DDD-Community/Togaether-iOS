@@ -17,8 +17,11 @@ public struct Login: ReducerProtocol {
     public struct State: Equatable {
         var email: String
         var isEmailValidate: Bool
+        
         var password: String
         var isPasswordValidate: Bool
+        
+        var isLoginAvailable: Bool { isEmailValidate && isPasswordValidate }
         
         var optionalOnboarding: Onboarding.State?
         var optionalTab: TabBar.State?
@@ -37,14 +40,17 @@ public struct Login: ReducerProtocol {
     }
     
     public enum Action: Equatable {
-        case emailDidChanged(String)
+        case didChangeEmail(String)
         case emailValidateResponse(Bool)
         
-        case passwordDidChanged(String)
+        case didChangePassword(String)
         case passwordValidateResponse(Bool)
         
-        case loginButtonDidTapped
+        case didTapLoginButton
         case loginResponse(TaskResult<String>)
+        
+        case didTapFindIDButton
+        case didTapFindPasswordButton
         
         case optionalOnboarding(Onboarding.Action)
         case optionalTab(TabBar.Action)
@@ -69,7 +75,7 @@ public struct Login: ReducerProtocol {
     
     public func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
-        case let .emailDidChanged(email):
+        case let .didChangeEmail(email):
             state.email = email
             return .task { [email = state.email] in
                 let isEmailValidate: Bool = validator.validateEmail(email)
@@ -80,7 +86,7 @@ public struct Login: ReducerProtocol {
             state.isEmailValidate = isEmailValidate
             return .none
             
-        case let .passwordDidChanged(password):
+        case let .didChangePassword(password):
             state.password = password
             return .task { [password = state.password] in
                 let isPasswordValidate: Bool = validator.validatePassword(password)
@@ -91,7 +97,7 @@ public struct Login: ReducerProtocol {
             state.isPasswordValidate = isPasswordValidate
             return .none
             
-        case .loginButtonDidTapped:
+        case .didTapLoginButton:
             return .task { [email = state.email, password = state.password] in
                 await .loginResponse(
                     TaskResult { 
@@ -100,6 +106,12 @@ public struct Login: ReducerProtocol {
                 ) 
             }
             .cancellable(id: LoginCancelID.self)
+            
+        case .didTapFindIDButton:
+            return .none
+            
+        case .didTapFindPasswordButton:
+            return .none
             
         case let .loginResponse(.success(token)):
             if Preferences.shared.onboardingFinished {
