@@ -15,19 +15,20 @@ import ThirdParty
 import ComposableArchitecture
 
 struct Root: ReducerProtocol {
-    struct State: Equatable {
-        var optionalLogin: Login.State?
-        var optionalOnboarding: Onboarding.State?
-        var optionalTab: TabBar.State?
+    enum State: Equatable {
+        case root
+        case login(Login.State)
+        case onboarding(Onboarding.State)
+        case tab(TabBar.State)
     }
     
     enum Action: Equatable {
         case viewDidAppear
         case tokenResponse(TaskResult<String>)
         
-        case optionalLogin(Login.Action)
-        case optionalOnboarding(Onboarding.Action)
-        case optionalTab(TabBar.Action)
+        case login(Login.Action)
+        case onboarding(Onboarding.Action)
+        case tab(TabBar.Action)
     }
     
     @Dependency(\.togetherAccount) var togetherAccount
@@ -44,41 +45,35 @@ struct Root: ReducerProtocol {
                 
             case let .tokenResponse(.success(token)):
                 if Preferences.shared.onboardingFinished {
-                    state.optionalLogin = nil
-                    state.optionalOnboarding = nil
-                    state.optionalTab = .init(home: .init(), setting: .init())
+                    state = .tab(.init(home: .init(), setting: .init()))
                 } else {
-                    state.optionalLogin = nil
-                    state.optionalOnboarding = nil
-                    state.optionalTab = nil
+                    state = .onboarding(.init())
                 }
                 
                 return .none
                 
             case let .tokenResponse(.failure(error)):
-                state.optionalLogin = .init()
-                state.optionalOnboarding = nil
-                state.optionalTab = nil
+                state = .login(.init())
                 return .none
                 
-            case .optionalLogin:
+            case .login:
                 return .none
                 
-            case .optionalOnboarding:
+            case .onboarding:
                 return .none
                 
-            case .optionalTab:
+            case .tab:
                 return .none
             }
         }
         ._printChanges()
-        .ifLet(\.optionalLogin, action: /Action.optionalLogin) { 
+        .ifCaseLet(/State.login, action: /Action.login) { 
             Login()
         }
-        .ifLet(\.optionalOnboarding, action: /Action.optionalOnboarding) { 
+        .ifCaseLet(/State.onboarding, action: /Action.onboarding) { 
             Onboarding()
         }
-        .ifLet(\.optionalTab, action: /Action.optionalTab) { 
+        .ifCaseLet(/State.tab, action: /Action.tab) { 
             TabBar()
         }
     }

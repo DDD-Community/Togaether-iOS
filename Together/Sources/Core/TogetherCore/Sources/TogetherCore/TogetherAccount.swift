@@ -24,7 +24,6 @@ extension TogetherAccount: DependencyKey {
             throw NSError(domain: "", code: 1)
         }, 
         login: { email, password in
-//            try validate(email, password)
             try await Task.sleep(for: .seconds(1))
             return "havi"
         }

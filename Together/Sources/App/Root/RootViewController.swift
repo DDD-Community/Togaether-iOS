@@ -58,89 +58,24 @@ final class RootViewController: UIViewController {
     
     private func bindState() {
         store
-            .scope(state: \.optionalLogin, action: Root.Action.optionalLogin)
-            .ifLet(
-                then: { store in
-                    UIApplication.shared.appWindow?.rootViewController = LoginViewController(store: store)
-                }
-            )
+            .scope(state: /Root.State.login, action: Root.Action.login)
+            .ifLet { store in
+                UIApplication.shared.appKeyWindow?.rootViewController = LoginViewController(store: store)
+            }
             .store(in: &cancellables)
         
         store
-            .scope(state: \.optionalOnboarding, action: Root.Action.optionalOnboarding)
-            .ifLet(
-                then: { store in
-                    UIApplication.shared.appWindow?.rootViewController = OnboardingViewController(store: store)
-                }
-            )
+            .scope(state: /Root.State.onboarding, action: Root.Action.onboarding)
+            .ifLet { store in
+                UIApplication.shared.appKeyWindow?.rootViewController = OnboardingViewController(store: store)
+            }
             .store(in: &cancellables)
         
         store
-            .scope(state: \.optionalTab, action: Root.Action.optionalTab)
-            .ifLet(
-                then: { store in
-                    UIApplication.shared.appWindow?.rootViewController = TabBarController(store: store)
-                }
-            )
+            .scope(state: /Root.State.tab, action: Root.Action.tab)
+            .ifLet { store in
+                UIApplication.shared.appKeyWindow?.rootViewController = TabBarController(store: store)
+            }
             .store(in: &cancellables)
     }
 }
-
-public extension UIApplication {
-    var appWindow: UIWindow? {
-        return (UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate)?.window
-    }
-    
-    var keyWindow: UIWindow? {
-        return UIApplication.shared.connectedScenes
-            .filter { $0.activationState == .foregroundActive }
-            .map { $0 as? UIWindowScene }
-            .compactMap { $0 }
-            .first?.windows
-            .filter(\.isKeyWindow)
-            .first
-    }
-}
-
-
-
-//        viewStore.publisher.destination
-//            .compactMap { $0 }
-//            .sink { [weak self] destination in
-//                guard let self = self else { return }
-//                
-//                switch destination {
-//                case .home:
-//                    let tabController = TabController()
-//                    UIApplication.shared.appWindow?.rootViewController = tabController
-//                
-//                case .login:
-//                    let loginViewController = IfLetStoreController(
-//                        store: self.store.scope(
-//                            state: \.optionalLogin, 
-//                            action: Root.Action.optionalLogin
-//                        )
-//                    ) {
-//                        LoginViewController(store: $0)
-//                    } else: {
-//                        .init()
-//                    }
-//                    
-//                    UIApplication.shared.appWindow?.rootViewController = loginViewController
-//                    
-//                case .onboarding:
-//                    let onboardingViewController = IfLetStoreController(
-//                        store: self.store.scope(
-//                            state: \.optionalOnboarding, 
-//                            action: Root.Action.optionalOnboarding
-//                        )
-//                    ) {
-//                        OnboardingViewController(store: $0)
-//                    } else: {
-//                        .init()
-//                    }
-//                    
-//                    UIApplication.shared.appWindow?.rootViewController = onboardingViewController
-//                }
-//            }
-//            .store(in: &cancellables)
