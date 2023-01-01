@@ -43,14 +43,11 @@ struct Root: ReducerProtocol {
                 .cancellable(id: TokenCancelID.self)
                 
             case let .tokenResponse(.success(token)):
-                print("\(Self.self): auto login success token: \(token)")
-                
                 if Preferences.shared.onboardingFinished {
                     state.optionalLogin = nil
                     state.optionalOnboarding = nil
                     state.optionalTab = .init(home: .init(), setting: .init())
                 } else {
-                    print("\(Self.self): user needs onboarding")
                     state.optionalLogin = nil
                     state.optionalOnboarding = nil
                     state.optionalTab = nil
@@ -59,7 +56,6 @@ struct Root: ReducerProtocol {
                 return .none
                 
             case let .tokenResponse(.failure(error)):
-                print("\(Self.self): auto login failure error: \(error)")
                 state.optionalLogin = .init()
                 state.optionalOnboarding = nil
                 state.optionalTab = nil
@@ -75,6 +71,7 @@ struct Root: ReducerProtocol {
                 return .none
             }
         }
+        ._printChanges()
         .ifLet(\.optionalLogin, action: /Action.optionalLogin) { 
             Login()
         }

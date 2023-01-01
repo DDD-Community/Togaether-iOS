@@ -5,6 +5,8 @@
 //  Created by 한상진 on 2022/12/24.
 //
 
+import Foundation
+
 import TogetherCore
 import TogetherFoundation
 import ThirdParty
@@ -14,20 +16,33 @@ import ComposableArchitecture
 public struct Login: ReducerProtocol {
     public struct State: Equatable {
         var email: String
+        var isEmailValidate: Bool
         var password: String
+        var isPasswordValidate: Bool
         
         var optionalOnboarding: Onboarding.State?
         var optionalTab: TabBar.State?
         
-        public init(email: String = "", password: String = "") { 
+        public init(
+            email: String = "",
+            isEmailValidate: Bool = false,
+            password: String = "",
+            isPasswordValidate: Bool = false
+        ) { 
             self.email = email
+            self.isEmailValidate = isEmailValidate
             self.password = password
+            self.isPasswordValidate = isPasswordValidate
         }
     }
     
     public enum Action: Equatable {
         case emailDidChanged(String)
+        case emailValidateResponse(Bool)
+        
         case passwordDidChanged(String)
+        case passwordValidateResponse(Bool)
+        
         case loginButtonDidTapped
         case loginResponse(TaskResult<String>)
         
@@ -38,10 +53,12 @@ public struct Login: ReducerProtocol {
     public init() { }
     
     @Dependency(\.togetherAccount) var togetherAccount
+    @Dependency(\.validator) var validator
     private enum LoginCancelID { }
     
     public var body: some ReducerProtocol<State, Action> {
         Reduce(reduce)
+            ._printChanges()
             .ifLet(\.optionalOnboarding, action: /Action.optionalOnboarding) { 
                 Onboarding()
             }
@@ -54,14 +71,27 @@ public struct Login: ReducerProtocol {
         switch action {
         case let .emailDidChanged(email):
             state.email = email
+            return .task { [email = state.email] in
+                let isEmailValidate: Bool = validator.validateEmail(email)
+                return .emailValidateResponse(isEmailValidate)
+            }
+            
+        case let .emailValidateResponse(isEmailValidate):
+            state.isEmailValidate = isEmailValidate
             return .none
             
         case let .passwordDidChanged(password):
             state.password = password
+            return .task { [password = state.password] in
+                let isPasswordValidate: Bool = validator.validatePassword(password)
+                return .passwordValidateResponse(isPasswordValidate)
+            }
+            
+        case let .passwordValidateResponse(isPasswordValidate):
+            state.isPasswordValidate = isPasswordValidate
             return .none
             
         case .loginButtonDidTapped:
-            print("\(Self.self): loginButtonDidTapped")
             return .task { [email = state.email, password = state.password] in
                 await .loginResponse(
                     TaskResult { 
@@ -72,14 +102,10 @@ public struct Login: ReducerProtocol {
             .cancellable(id: LoginCancelID.self)
             
         case let .loginResponse(.success(token)):
-            print("\(Self.self): 로그인 성공 token \(token)")
-            
             if Preferences.shared.onboardingFinished {
-                print("\(Self.self): routing to home")
                 state.optionalOnboarding = nil
                 state.optionalTab = .init(home: .init(), setting: .init())
             } else {
-                print("\(Self.self): user needs onboarding")
                 state.optionalOnboarding = .init()
                 state.optionalTab = nil
             }
@@ -87,7 +113,6 @@ public struct Login: ReducerProtocol {
             return .none
              
         case let .loginResponse(.failure(error)):
-            print("\(Self.self): 로그인 실패 error \(error)")
             return .none
             
         case .optionalOnboarding:

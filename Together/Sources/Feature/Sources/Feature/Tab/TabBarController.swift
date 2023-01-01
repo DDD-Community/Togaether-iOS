@@ -21,7 +21,7 @@ public final class TabBarController: UITabBarController {
     private let viewStore: ViewStoreOf<TabBar>
     private var cancellables: Set<AnyCancellable> = .init()
     
-    @LayoutBuilder var layout: some Layout {
+    @LayoutBuilder var layout: some SwiftLayout.Layout {
       view.sublayout {
           UIView()
       }
@@ -106,3 +106,16 @@ extension TabBar.Tab {
         }
     }
 }
+
+#if canImport(SwiftUI) && DEBUG
+import SwiftUI
+
+struct TabBar_Previews: PreviewProvider {
+    static var previews: some View {
+        let store: StoreOf<TabBar> = .init(initialState: .init(home: .init(), setting: .init()), reducer: TabBar())
+        return TabBarController(store: store)
+            .showPrieview()
+    }
+}
+#endif
+
