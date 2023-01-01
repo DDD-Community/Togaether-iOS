@@ -79,7 +79,7 @@ final class RootViewController: UIViewController {
             .scope(state: \.optionalTab, action: Root.Action.optionalTab)
             .ifLet(
                 then: { store in
-                    UIApplication.shared.appWindow?.rootViewController = TabViewController(store: store)
+                    UIApplication.shared.appWindow?.rootViewController = TabBarController(store: store)
                 }
             )
             .store(in: &cancellables)

@@ -167,7 +167,7 @@ public final class LoginViewController: UIViewController {
             .scope(state: \.optionalTab, action: Login.Action.optionalTab)
             .ifLet(
                 then: { store in
-                    UIApplication.shared.appKeyWindow?.rootViewController = TabViewController(store: store)
+                    UIApplication.shared.appKeyWindow?.rootViewController = TabBarController(store: store)
                 }
             )
             .store(in: &cancellables)

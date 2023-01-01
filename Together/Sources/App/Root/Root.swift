@@ -18,7 +18,7 @@ struct Root: ReducerProtocol {
     struct State: Equatable {
         var optionalLogin: Login.State?
         var optionalOnboarding: Onboarding.State?
-        var optionalTab: Tab.State?
+        var optionalTab: TabBar.State?
     }
     
     enum Action: Equatable {
@@ -27,7 +27,7 @@ struct Root: ReducerProtocol {
         
         case optionalLogin(Login.Action)
         case optionalOnboarding(Onboarding.Action)
-        case optionalTab(Tab.Action)
+        case optionalTab(TabBar.Action)
     }
     
     @Dependency(\.togetherAccount) var togetherAccount
@@ -48,7 +48,7 @@ struct Root: ReducerProtocol {
                 if Preferences.shared.onboardingFinished {
                     state.optionalLogin = nil
                     state.optionalOnboarding = nil
-                    state.optionalTab = nil
+                    state.optionalTab = .init(home: .init(), setting: .init())
                 } else {
                     print("\(Self.self): user needs onboarding")
                     state.optionalLogin = nil
@@ -82,7 +82,7 @@ struct Root: ReducerProtocol {
             Onboarding()
         }
         .ifLet(\.optionalTab, action: /Action.optionalTab) { 
-            Tab()
+            TabBar()
         }
     }
 }

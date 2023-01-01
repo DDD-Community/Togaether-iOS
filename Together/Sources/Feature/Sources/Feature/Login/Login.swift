@@ -17,7 +17,7 @@ public struct Login: ReducerProtocol {
         var password: String
         
         var optionalOnboarding: Onboarding.State?
-        var optionalTab: Tab.State?
+        var optionalTab: TabBar.State?
         
         public init(email: String = "", password: String = "") { 
             self.email = email
@@ -32,7 +32,7 @@ public struct Login: ReducerProtocol {
         case loginResponse(TaskResult<String>)
         
         case optionalOnboarding(Onboarding.Action)
-        case optionalTab(Tab.Action)
+        case optionalTab(TabBar.Action)
     }
     
     public init() { }
@@ -46,7 +46,7 @@ public struct Login: ReducerProtocol {
                 Onboarding()
             }
             .ifLet(\.optionalTab, action: /Action.optionalTab) { 
-                Tab()
+                TabBar()
             }
     }
     
