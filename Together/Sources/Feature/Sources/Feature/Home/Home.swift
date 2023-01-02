@@ -5,8 +5,9 @@
 //  Created by 한상진 on 2022/12/30.
 //
 
-import TogetherCore
 import ComposableArchitecture
+import TogetherCore
+import UIKit
 
 public struct Home: ReducerProtocol {
     public struct State: Equatable {
