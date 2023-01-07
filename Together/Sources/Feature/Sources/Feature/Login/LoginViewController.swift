@@ -184,27 +184,18 @@ public final class LoginViewController: UIViewController {
         super.viewDidLoad()
         bindState()
         bindAction()
+        bindNavigation()
+    }
+    
+    public override func viewWillAppear(_ animated: Bool) {
+        navigationController?.isNavigationBarHidden = true
+    }
+    
+    public override func viewWillDisappear(_ animated: Bool) {
+        navigationController?.isNavigationBarHidden = false
     }
     
     private func bindState() {
-        store
-            .scope(state: \.optionalOnboarding, action: Login.Action.optionalOnboarding)
-            .ifLet(
-                then: { store in
-                    UIApplication.shared.appKeyWindow?.rootViewController = OnboardingViewController(store: store)
-                }
-            )
-            .store(in: &cancellables)
-        
-        store
-            .scope(state: \.optionalTab, action: Login.Action.optionalTab)
-            .ifLet(
-                then: { store in
-                    UIApplication.shared.appKeyWindow?.rootViewController = TabBarController(store: store)
-                }
-            )
-            .store(in: &cancellables)
-        
         viewStore.publisher.isEmailValid
             .assign(to: \.isValid, onWeak: emailFieldView)
             .store(in: &cancellables)
@@ -243,8 +234,52 @@ public final class LoginViewController: UIViewController {
         findIDButton
             .publisher(for: .touchUpInside)
             .sink { [weak self] _ in
-                self?.viewStore.send(.didTapLoginButton)
+                self?.viewStore.send(.didTapFindIDButton)
             }
+            .store(in: &cancellables)
+        
+        findPasswordButton
+            .publisher(for: .touchUpInside)
+            .sink { [weak self] _ in
+                self?.viewStore.send(.didTapFindPasswordButton)
+            }
+            .store(in: &cancellables)
+        
+        joinButton
+            .publisher(for: .touchUpInside)
+            .sink { [weak self] _ in
+                self?.viewStore.send(.didTapJoinButton)
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func bindNavigation() {
+        store
+            .scope(state: \.optionalOnboarding, action: Login.Action.optionalOnboarding)
+            .ifLet(
+                then: { store in
+                    UIApplication.shared.appKeyWindow?.rootViewController = OnboardingViewController(store: store)
+                }
+            )
+            .store(in: &cancellables)
+        
+        store
+            .scope(state: \.optionalJoin, action: Login.Action.optionalJoin)
+            .ifLet { [weak self] store in
+                self?.navigationController?.pushViewController(
+                    JoinViewController(store: store), 
+                    animated: true
+                )
+            }
+            .store(in: &cancellables)
+        
+        store
+            .scope(state: \.optionalTab, action: Login.Action.optionalTab)
+            .ifLet(
+                then: { store in
+                    UIApplication.shared.appKeyWindow?.rootViewController = TabBarController(store: store)
+                }
+            )
             .store(in: &cancellables)
     }
 }

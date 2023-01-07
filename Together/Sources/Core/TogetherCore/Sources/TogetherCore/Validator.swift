@@ -15,6 +15,8 @@ import XCTestDynamicOverlay
 public struct Validator {
     public var validateEmail: (String) -> Bool?
     public var validatePassword: (String) -> Bool?
+    public var validateBirth: (String) -> Bool?
+    public var validatePhoneNumber: (String) -> Bool?
 }
 
 public extension DependencyValues {
@@ -37,11 +39,23 @@ extension Validator: DependencyKey {
             let passwordRegex = "^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[!@#$%^&*()_+=-]).{8,50}" // 8자리 ~ 50자리 영어+숫자+특수문자
             let passwordPredicate = NSPredicate(format:"SELF MATCHES %@", passwordRegex)
             return passwordPredicate.evaluate(with: password)
+        },
+        validateBirth: { birth in
+            guard !birth.isEmpty else { return nil }
+            // TODO: regex 추가
+            return true
+        },
+        validatePhoneNumber: { phoneNumber in
+            guard !phoneNumber.isEmpty else { return nil }
+            // TODO: regex 추가
+            return true
         }
     )
     
     public static let testValue: Validator = .init(
         validateEmail: unimplemented("\(Self.self).validateEmail"), 
-        validatePassword: unimplemented("\(Self.self).validatePassword")
+        validatePassword: unimplemented("\(Self.self).validatePassword"),
+        validateBirth: unimplemented("\(Self.self).validateBirth"),
+        validatePhoneNumber: unimplemented("\(Self.self).validatePhoneNumber")
     )
 }

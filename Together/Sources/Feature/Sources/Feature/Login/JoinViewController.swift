@@ -21,7 +21,11 @@ final class JoinViewController: UIViewController {
     private let viewStore: ViewStoreOf<Join>
     private var cancellables: Set<AnyCancellable> = .init()
     
-    private let scrollView: UIScrollView = .init()
+    private let scrollView: UIScrollView = {
+        let scrollView: UIScrollView = .init()
+        scrollView.showsHorizontalScrollIndicator = false
+        return scrollView
+    }()
     
     private let contentStackView: UIStackView = {
         let stackView: UIStackView = .init()
@@ -31,6 +35,14 @@ final class JoinViewController: UIViewController {
         return stackView
     }()
     
+    private let titleLabel: UILabel = {
+        let label: UILabel = .init()
+        label.font = .display1
+        label.textColor = .blueGray900
+        label.text = "서비스 이용을 위해\n정보를 입력해주세요."
+        label.numberOfLines = 2
+        return label
+    }()
     private let emailFieldView: TogetherInputFieldView = .init(title: "이메일(아이디)", placeholder: "예) example@togather.co.kr") 
     private let passwordFieldView: TogetherInputFieldView = .init(title: "비밀번호", placeholder: "0자리 ~ 00자리의 영어, 숫자 혹은 특수문자")
     private let passwordConfirmFieldView: TogetherInputFieldView = .init(title: "비밀번호 확인", placeholder: "비밀번호를 한 번 더 입력해주세요.") 
@@ -42,36 +54,43 @@ final class JoinViewController: UIViewController {
     
     
     @LayoutBuilder var layout: some SwiftLayout.Layout {
-        confirmButton
-            .anchors { 
-                Anchors.height.equalTo(constant: 54)
-            }
-        
         view
             .config { view in
                 view.backgroundColor = .backgroundWhite
             }
             .sublayout {
+                scrollView
+                    .anchors { 
+                        Anchors.horizontal(offset: 24)
+                        Anchors.top.equalTo(view.safeAreaLayoutGuide.topAnchor, constant: 32)
+                        Anchors.bottom.equalTo(view.safeAreaLayoutGuide)
+                    }
+            }
+        
+        scrollView
+            .sublayout {
                 contentStackView
                     .config { stackView in
+                        stackView.addArrangedSubview(titleLabel)
+                        stackView.setCustomSpacing(32, after: titleLabel)
                         stackView.addArrangedSubview(emailFieldView)
-                        stackView.setCustomSpacing(24, after: emailFieldView)
+                        stackView.setCustomSpacing(20, after: emailFieldView)
                         stackView.addArrangedSubview(passwordFieldView)
-                        stackView.setCustomSpacing(24, after: passwordFieldView)
+                        stackView.setCustomSpacing(20, after: passwordFieldView)
                         stackView.addArrangedSubview(passwordConfirmFieldView)
-                        stackView.setCustomSpacing(24, after: passwordConfirmFieldView)
+                        stackView.setCustomSpacing(20, after: passwordConfirmFieldView)
                         stackView.addArrangedSubview(nameFieldView)
-                        stackView.setCustomSpacing(24, after: nameFieldView)
+                        stackView.setCustomSpacing(20, after: nameFieldView)
                         stackView.addArrangedSubview(birthFieldView)
-                        stackView.setCustomSpacing(24, after: birthFieldView)
+                        stackView.setCustomSpacing(20, after: birthFieldView)
                         stackView.addArrangedSubview(phoneNumberFieldView)
-                        stackView.setCustomSpacing(24, after: phoneNumberFieldView)
+                        stackView.setCustomSpacing(20, after: phoneNumberFieldView)
                         
                         stackView.addArrangedSubview(confirmButton)
                     }
                     .anchors { 
-                        Anchors.horizontal(offset: 24)
-                        Anchors.top.equalTo(view.safeAreaLayoutGuide)
+                        Anchors.allSides(scrollView)
+                        Anchors.width.equalTo(scrollView.widthAnchor)
                     }
             }
     }
@@ -94,6 +113,29 @@ final class JoinViewController: UIViewController {
     }
     
     private func bindState() {
+        viewStore.publisher.isEmailValid
+            .assign(to: \.isValid, onWeak: emailFieldView)
+            .store(in: &cancellables)
+        
+        viewStore.publisher.isPasswordValid
+            .assign(to: \.isValid, onWeak: passwordFieldView)
+            .store(in: &cancellables)
+        
+        viewStore.publisher.isPasswordConfirmValid
+            .assign(to: \.isValid, onWeak: passwordConfirmFieldView)
+            .store(in: &cancellables)
+        
+        viewStore.publisher.isBirthValid
+            .assign(to: \.isValid, onWeak: birthFieldView)
+            .store(in: &cancellables)
+        
+        viewStore.publisher.isPhoneNumberValid
+            .assign(to: \.isValid, onWeak: phoneNumberFieldView)
+            .store(in: &cancellables)
+        
+        viewStore.publisher.isJoinAvailable
+            .assign(to: \.isEnabled, onWeak: confirmButton)
+            .store(in: &cancellables)
     }
     
     private func bindAction() {

@@ -60,7 +60,9 @@ final class RootViewController: UIViewController {
         store
             .scope(state: /Root.State.login, action: Root.Action.login)
             .ifLet { store in
-                UIApplication.shared.appKeyWindow?.rootViewController = LoginViewController(store: store)
+                let loginViewController = LoginViewController(store: store)
+                let navigationController = TogetherNavigation(rootViewController: loginViewController)
+                UIApplication.shared.appKeyWindow?.rootViewController = navigationController 
             }
             .store(in: &cancellables)
         
