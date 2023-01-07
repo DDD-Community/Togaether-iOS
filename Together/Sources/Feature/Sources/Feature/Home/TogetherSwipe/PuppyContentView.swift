@@ -24,6 +24,15 @@ public class PuppyContentView: UIView, Layoutable {
         }
     }
 
+    private var statusImageView : UIImageView = UIImageView().config { imageView in
+        imageView.image = UIImage(named: "bg_splash_dog")
+    }
+
+    private var overlayImageView : UIImageView = UIImageView().config { imageView in
+        imageView.alpha = 0
+        imageView.image = UIImage(color: UIColor(red: 0, green: 0, blue: 0, alpha: 0.7))
+    }
+
     private let contentView: UIView = UIView()
     private lazy var likeButton: UIButton = UIButton().config { button in
         button.setImage(UIImage(named: "likeImage"), for: .normal)
@@ -97,6 +106,14 @@ public class PuppyContentView: UIView, Layoutable {
                     Anchors.trailing.equalToSuper(inwardOffset: 20)
                     Anchors.bottom.equalToSuper(inwardOffset: 26)
                 }
+                overlayImageView.anchors {
+                    Anchors.allSides()
+                }.sublayout {
+                    statusImageView.anchors {
+                        Anchors.trailing.bottom.equalToSuper()
+                        Anchors.size(width: 192, height: 320)
+                    }
+                }
             }
         }
     }
@@ -123,5 +140,9 @@ public class PuppyContentView: UIView, Layoutable {
     @objc
     private func onClickLikeButton(_ sender: Any?) {
         likeHandler?()
+    }
+
+    public func updateOverlayAlpha(alpha: CGFloat) {
+        overlayImageView.alpha = alpha
     }
 }
