@@ -10,10 +10,11 @@ import TogetherFoundation
 import TogetherUI
 import UIKit
 
-class PuppyContentView: UIView, Layoutable {
-    var activation: Activation?
+public class PuppyContentView: UIView, Layoutable {
+    public var activation: Activation?
+    public var likeHandler: (() -> Void)?
 
-    var model: PuppyModel? {
+    public var model: PuppyModel? {
         didSet {
             imageView.image = model?.image
             categoryView.text = model?.category
@@ -62,7 +63,7 @@ class PuppyContentView: UIView, Layoutable {
         label.numberOfLines = 2
     }
 
-    @LayoutBuilder var layout: some SwiftLayout.Layout {
+    @LayoutBuilder public var layout: some SwiftLayout.Layout {
         self.sublayout {
             contentView.anchors {
                 Anchors.allSides()
@@ -100,12 +101,12 @@ class PuppyContentView: UIView, Layoutable {
         }
     }
 
-    override init(frame: CGRect) {
+    public override init(frame: CGRect) {
         super.init(frame: frame)
         sl.updateLayout()
     }
 
-    required init?(coder: NSCoder) {
+    public required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -121,6 +122,6 @@ class PuppyContentView: UIView, Layoutable {
 
     @objc
     private func onClickLikeButton(_ sender: Any?) {
-
+        likeHandler?()
     }
 }

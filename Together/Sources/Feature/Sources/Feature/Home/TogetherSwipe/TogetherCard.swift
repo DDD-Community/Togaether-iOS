@@ -79,7 +79,7 @@ public class TogetherCard: UIView {
         statusImageView = UIImageView(frame: CGRect(x: (frame.size.width / 2), y: frame.size.height - 283, width: 209, height: 253))
         containerView.addSubview(statusImageView)
 
-        statusImageView.image = UIImage(named: "petFoot")
+        statusImageView.image = UIImage(named: "bg_splash_dog")
         overlayImageView.image = UIImage(color: UIColor(red: 0, green: 0, blue: 0, alpha: 0.7))
     }
 
@@ -100,10 +100,13 @@ public class TogetherCard: UIView {
         })
     }
 
-    func addContentView(view: UIView?) {
-        if let overlay = view {
-            self.overlay = overlay
-            self.insertSubview(overlay, belowSubview: containerView)
+    func addContentView(view: PuppyContentView?) {
+        if let strongView = view {
+            self.overlay = strongView
+            strongView.likeHandler = {
+                self.didMoveToRight()
+            }
+            self.insertSubview(strongView, belowSubview: containerView)
         }
     }
 
@@ -130,7 +133,7 @@ public class TogetherCard: UIView {
     }
 
     func shakeAnimationCard(completion: @escaping (Bool) -> ()) {
-        statusImageView.image = UIImage(named: "petFoot")
+        statusImageView.image = UIImage(named: "bg_splash_dog")
         overlayImageView.image = UIImage(color: UIColor(red: 0, green: 0, blue: 0, alpha: 0.7))
 
         UIView.animate(withDuration: 0.5,
@@ -143,7 +146,7 @@ public class TogetherCard: UIView {
                            animations: {() -> Void in
                 self.animateCard(to: self.originalPoint)
             }, completion: {(_ complete: Bool) -> Void in
-                self.statusImageView.image = UIImage(named: "petFoot")
+                self.statusImageView.image = UIImage(named: "bg_splash_dog")
                 self.overlayImageView.image = UIImage(color: UIColor(red: 0, green: 0, blue: 0, alpha: 0.7))
                 UIView.animate(withDuration: 0.5,
                                animations: {() -> Void in
@@ -165,7 +168,7 @@ public class TogetherCard: UIView {
         statusImageView.alpha = 0.5
         overlayImageView.alpha = 0.5
 
-        statusImageView.image = UIImage(named: "petFoot")
+        statusImageView.image = UIImage(named: "bg_splash_dog")
         overlayImageView.image = UIImage(color: UIColor(red: 0, green: 0, blue: 0, alpha: 0.7))
     }
 
@@ -239,7 +242,7 @@ extension TogetherCard: UIGestureRecognizerDelegate {
     }
 
     private func updateOverlay(_ distance: CGFloat) {
-        statusImageView.image = UIImage(named: "petFoot")
+        statusImageView.image = UIImage(named: "bg_splash_dog")
         overlayImageView.image = UIImage(color: UIColor(red: 0, green: 0, blue: 0, alpha: 0.7))
         statusImageView.alpha = min(abs(distance) / 100, 0.8)
         overlayImageView.alpha = min(abs(distance) / 100, 0.8)

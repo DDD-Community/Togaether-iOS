@@ -43,7 +43,7 @@ public class TogetherSwipeView: UIView {
     public weak var delegate: TogetherSwipeViewDelegate?
     private let contentView: ContentView?
 
-    public typealias ContentView = (_ index: Int, _ frame: CGRect, _ element: PuppyModel) -> (UIView)
+    public typealias ContentView = (_ index: Int, _ frame: CGRect, _ element: PuppyModel) -> (PuppyContentView)
 
     public init(frame: CGRect,
                 contentView: @escaping ContentView, cardBufferSize : Int = 3) {
@@ -87,11 +87,10 @@ public class TogetherSwipeView: UIView {
     }
 
     private func createTogetherCard(index: Int, element: PuppyModel) -> TogetherCard {
-        print("CGFloat(loadedCards.count): \(CGFloat(loadedCards.count)), index: \(index)")
         let card = TogetherCard(frame: CGRect(x: inset + (CGFloat(loadedCards.count) * self.cardHorizontalInnerSpace),
                                               y: inset - (CGFloat(loadedCards.count) * self.cardVerticalInnerSpace),
                                               width: bounds.width - (inset * 2) - (CGFloat(loadedCards.count) * self.cardHorizontalInnerSpace * 2),
-                                              height: bounds.height - (CGFloat(cardBufferSize) * cardVerticalInnerSpace) - (inset * 2) ))
+                                              height: bounds.height - (CGFloat(cardBufferSize) * cardVerticalInnerSpace) - (inset * 2)))
         card.delegate = self
         card.model = element
         card.index = index

@@ -68,7 +68,7 @@ final class HomeViewController: UIViewController, Layoutable {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let contentView: (Int, CGRect, PuppyModel) -> (UIView) = { (index: Int ,frame: CGRect , puppyModel: PuppyModel) -> (UIView) in
+        let contentView: (Int, CGRect, PuppyModel) -> (PuppyContentView) = { (index: Int ,frame: CGRect , puppyModel: PuppyModel) -> (PuppyContentView) in
             let customView = PuppyContentView(frame: frame)
             customView.model = puppyModel
             return customView
