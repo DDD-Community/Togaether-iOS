@@ -31,13 +31,12 @@ public final class LoginViewController: UIViewController {
     
     private let iconView: UIView = {
         let view: UIView = .init()
-        view.backgroundColor = .backgroundIvory100
+        view.backgroundColor = .backgroundGray
         return view
     }()
     
     private let iconImageView: UIImageView = {
-        let imageView: UIImageView = .init(image: .init(named: "투개더 아이콘"))
-        imageView.backgroundColor = .cyan
+        let imageView: UIImageView = .init(image: .init(named: "img_login", in: .main, with: nil))
         return imageView
     }()
     
@@ -85,6 +84,30 @@ public final class LoginViewController: UIViewController {
         return button
     }()
     
+    private let joinContainerView: UIStackView = {
+        let stackView: UIStackView = .init()
+        stackView.axis = .horizontal
+        stackView.distribution = .fill
+        stackView.alignment = .center
+        return stackView
+    }()
+    
+    private let noAccountLabel: UILabel = {
+        let label: UILabel = .init()
+        label.text = "계정이 없으신가요?"
+        label.font = .caption
+        label.textColor = .blueGray900
+        return label
+    }()
+    
+    private let joinButton: UIButton = {
+        let button: UIButton = .init()
+        button.setTitle("가입하기", for: .init())
+        button.setTitleColor(.primary500, for: .init())
+        button.titleLabel?.font = .caption
+        return button
+    }()
+    
     @LayoutBuilder var layout: some SwiftLayout.Layout {
         view.sublayout {
             contentStackView.anchors { 
@@ -93,28 +116,28 @@ public final class LoginViewController: UIViewController {
             }
             findContainerView.anchors {
                 Anchors.height.equalTo(constant: 20)
-                Anchors.top.equalTo(contentStackView.bottomAnchor, constant: 26)
+                Anchors.top.equalTo(contentStackView.bottomAnchor, constant: 24)
+                Anchors.centerX.equalTo(view.centerXAnchor)
+            }
+            joinContainerView.anchors { 
+                Anchors.bottom.equalTo(view.safeAreaLayoutGuide.bottomAnchor, constant: -14)
                 Anchors.centerX.equalTo(view.centerXAnchor)
             }
         }
         
         view.config { view in
-            view.backgroundColor = .backgroundIvory100
+            view.backgroundColor = .backgroundGray
         }
         
         iconView
             .sublayout { 
                 iconImageView.anchors { 
                     Anchors.center()
-                    Anchors.size(width: 66.78, height: 48.76)
                 }
-            }.anchors {
-                Anchors.height.equalTo(constant: 140)
             }
-        
-        loginButton.anchors { 
-            Anchors.height.equalTo(constant: 54)
-        }
+            .anchors {
+                Anchors.height.equalTo(constant: 186)
+            }
         
         dividerView.anchors { 
             Anchors.width.equalTo(constant: 1)
@@ -124,9 +147,9 @@ public final class LoginViewController: UIViewController {
         contentStackView.config { stackView in
             stackView.addArrangedSubview(iconView)
             stackView.addArrangedSubview(emailFieldView)
-            stackView.setCustomSpacing(24, after: emailFieldView)
+            stackView.setCustomSpacing(20, after: emailFieldView)
             stackView.addArrangedSubview(passwordFieldView)
-            stackView.setCustomSpacing(24, after: passwordFieldView)
+            stackView.setCustomSpacing(20, after: passwordFieldView)
             stackView.addArrangedSubview(loginButton)
         }
         
@@ -137,6 +160,12 @@ public final class LoginViewController: UIViewController {
                 stackView.setCustomSpacing(20, after: dividerView)
                 stackView.addArrangedSubview(findPasswordButton)
             }
+        
+        joinContainerView.config { stackView in
+            stackView.addArrangedSubview(noAccountLabel)
+            stackView.setCustomSpacing(3, after: noAccountLabel)
+            stackView.addArrangedSubview(joinButton)
+        }
             
     }
     
@@ -174,6 +203,14 @@ public final class LoginViewController: UIViewController {
                     UIApplication.shared.appKeyWindow?.rootViewController = TabBarController(store: store)
                 }
             )
+            .store(in: &cancellables)
+        
+        viewStore.publisher.isEmailValid
+            .assign(to: \.isValid, onWeak: emailFieldView)
+            .store(in: &cancellables)
+        
+        viewStore.publisher.isPasswordValid
+            .assign(to: \.isValid, onWeak: passwordFieldView)
             .store(in: &cancellables)
         
         viewStore.publisher.isLoginAvailable

@@ -56,7 +56,7 @@ public extension UIColor {
     static var backgroundWhite: UIColor = hex("FFFFFF")
     static var backgroundGray: UIColor = hex("F9F9FD")
     static var backgroundIvory100: UIColor = hex("FFFBF1")
-    static var backgroundIvory200: UIColor = hex("FFFBF2")
+    static var backgroundIvory200: UIColor = hex("FFF6E1")
 }
 
 // MARK: Border Color

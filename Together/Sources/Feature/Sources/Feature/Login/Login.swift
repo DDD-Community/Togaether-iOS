@@ -16,35 +16,35 @@ import ComposableArchitecture
 public struct Login: ReducerProtocol {
     public struct State: Equatable {
         var email: String
-        var isEmailValidate: Bool
+        var isEmailValid: Bool?
         
         var password: String
-        var isPasswordValidate: Bool
+        var isPasswordValid: Bool?
         
-        var isLoginAvailable: Bool { isEmailValidate && isPasswordValidate }
+        var isLoginAvailable: Bool { isEmailValid == true && isPasswordValid == true }
         
         var optionalOnboarding: Onboarding.State?
         var optionalTab: TabBar.State?
         
         public init(
             email: String = "",
-            isEmailValidate: Bool = false,
+            isEmailValid: Bool? = nil,
             password: String = "",
-            isPasswordValidate: Bool = false
+            isPasswordValid: Bool? = nil
         ) { 
             self.email = email
-            self.isEmailValidate = isEmailValidate
+            self.isEmailValid = isEmailValid
             self.password = password
-            self.isPasswordValidate = isPasswordValidate
+            self.isPasswordValid = isPasswordValid
         }
     }
     
     public enum Action: Equatable {
         case didChangeEmail(String)
-        case emailValidateResponse(Bool)
+        case emailValidateResponse(Bool?)
         
         case didChangePassword(String)
-        case passwordValidateResponse(Bool)
+        case passwordValidateResponse(Bool?)
         
         case didTapLoginButton
         case loginResponse(TaskResult<String>)
@@ -78,23 +78,23 @@ public struct Login: ReducerProtocol {
         case let .didChangeEmail(email):
             state.email = email
             return .task { [email = state.email] in
-                let isEmailValidate: Bool = validator.validateEmail(email)
-                return .emailValidateResponse(isEmailValidate)
+                let isEmailValid: Bool? = validator.validateEmail(email)
+                return .emailValidateResponse(isEmailValid)
             }
             
-        case let .emailValidateResponse(isEmailValidate):
-            state.isEmailValidate = isEmailValidate
+        case let .emailValidateResponse(isEmailValid):
+            state.isEmailValid = isEmailValid
             return .none
             
         case let .didChangePassword(password):
             state.password = password
             return .task { [password = state.password] in
-                let isPasswordValidate: Bool = validator.validatePassword(password)
-                return .passwordValidateResponse(isPasswordValidate)
+                let isPasswordValid: Bool? = validator.validatePassword(password)
+                return .passwordValidateResponse(isPasswordValid)
             }
             
-        case let .passwordValidateResponse(isPasswordValidate):
-            state.isPasswordValidate = isPasswordValidate
+        case let .passwordValidateResponse(isPasswordValid):
+            state.isPasswordValid = isPasswordValid
             return .none
             
         case .didTapLoginButton:

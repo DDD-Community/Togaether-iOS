@@ -12,13 +12,20 @@ open class TogetherRegularButton: UIButton {
         title: String, 
         titleColor: UIColor = .backgroundWhite,
         backgroundColor: UIColor = .primary500,
-        cornerRadius: CGFloat = 8
+        disabledBackgroundColor: UIColor = .blueGray300,
+        height: CGFloat = 52,
+        cornerRadius: CGFloat = 26
     ) {
         super.init(frame: .zero)
         self.setTitle(title, for: .init())
         self.setTitleColor(titleColor, for: .init())
-        self.backgroundColor = backgroundColor
+        self.setBackgroundImage(.init(color: disabledBackgroundColor), for: .disabled)
+        self.setBackgroundImage(.init(color: backgroundColor), for: .normal)
         self.cornerRadius = cornerRadius
+        NSLayoutConstraint.activate([
+            self.heightAnchor.constraint(equalToConstant: height)
+        ])
+        self.layer.masksToBounds = true
     }
     
     public required init?(coder: NSCoder) {
