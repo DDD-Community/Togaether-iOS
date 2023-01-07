@@ -43,7 +43,7 @@ final class HomeViewController: UIViewController, Layoutable {
     let puppyModels : [PuppyModel] =  {
         let categories: [String] = ["골든리트리버", "시츄", "치와와", "진돗개", "풍산개", "보더콜리", "요크셔테리어", "푸들", "말티즈", "사모예드"]
         var model : [PuppyModel] = []
-        for n in 0..<30 {
+        for n in 0..<10 {
             let tempModel = PuppyModel(image: UIImage(named: "puppySample"),
                                        name: "샘플이름\(n)",
                                        category: categories[n % categories.count],

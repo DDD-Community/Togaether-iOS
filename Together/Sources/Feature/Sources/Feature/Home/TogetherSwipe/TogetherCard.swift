@@ -33,7 +33,8 @@ public class TogetherCard: UIView {
         imageView.alpha = 0
     }
 
-    public var index: Int!
+    public var index: Int?
+    public var isFirstCard: Bool = false
 
     private var overlay: UIView?
     private var containerView : UIView!
@@ -77,6 +78,26 @@ public class TogetherCard: UIView {
 
         statusImageView = UIImageView(frame: CGRect(x: (frame.size.width / 2), y: frame.size.height - 283, width: 209, height: 253))
         containerView.addSubview(statusImageView)
+
+        statusImageView.image = UIImage(named: "petFoot")
+        overlayImageView.image = UIImage(color: UIColor(red: 0, green: 0, blue: 0, alpha: 0.7))
+    }
+
+    func updateContentsFrame() {
+        UIView.animate(withDuration: 0.5, animations: {
+            self.overlay?.frame = self.bounds
+            self.containerView.frame = self.bounds
+            self.overlayImageView.frame = self.bounds
+            self.statusImageView.frame = CGRect(x: self.frame.size.width - 192,
+                                                y: self.frame.size.height - 320,
+                                                width: 192,
+                                                height: 320)
+
+            print("self.isFirstCard: \(self.isFirstCard)")
+            if self.isFirstCard {
+                self.overlay?.layoutIfNeeded()
+            }
+        })
     }
 
     func addContentView(view: UIView?) {

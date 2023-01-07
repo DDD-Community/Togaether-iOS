@@ -30,7 +30,10 @@ public class TogetherSwipeView: UIView {
             cardBufferSize = cardBufferSize > 3 ? 3 : cardBufferSize
         }
     }
-    public var seperatorSpacing: CGFloat = 8
+    public var seperatorSpacing: CGFloat = 12
+    public var cardHorizontalInnerSpace: CGFloat = 12
+    public var cardVerticalInnerSpace: CGFloat = 12
+
     var index = 0
 
     private var allCards = [PuppyModel]()
@@ -84,9 +87,14 @@ public class TogetherSwipeView: UIView {
     }
 
     private func createTogetherCard(index: Int, element: PuppyModel) -> TogetherCard {
-        let card = TogetherCard(frame: CGRect(x: inset, y: inset + (CGFloat(loadedCards.count) * self.seperatorSpacing), width: bounds.width - (inset * 2), height: bounds.height - (CGFloat(cardBufferSize) * seperatorSpacing) - (inset * 2) ))
+        print("CGFloat(loadedCards.count): \(CGFloat(loadedCards.count)), index: \(index)")
+        let card = TogetherCard(frame: CGRect(x: inset + (CGFloat(loadedCards.count) * self.cardHorizontalInnerSpace),
+                                              y: inset - (CGFloat(loadedCards.count) * self.cardVerticalInnerSpace),
+                                              width: bounds.width - (inset * 2) - (CGFloat(loadedCards.count) * self.cardHorizontalInnerSpace * 2),
+                                              height: bounds.height - (CGFloat(cardBufferSize) * cardVerticalInnerSpace) - (inset * 2) ))
         card.delegate = self
         card.model = element
+        card.index = index
         card.addContentView(view: (self.contentView?(index, card.bounds, element)))
         return card
     }
@@ -101,8 +109,15 @@ public class TogetherSwipeView: UIView {
             UIView.animate(withDuration: 0.5, animations: {
                 card.isUserInteractionEnabled = index == 0 ? true : false
                 var frame = card.frame
-                frame.origin.y = self.inset + (CGFloat(index) * self.seperatorSpacing)
+                let newWidth = self.bounds.width - (self.inset * 2) - (CGFloat(index) * self.cardHorizontalInnerSpace * 2)
+                let newHeight = self.bounds.height - (CGFloat(self.cardBufferSize) * self.cardVerticalInnerSpace) - (self.inset * 2)
+
+                frame.origin.x = self.inset + (CGFloat(index) * self.cardHorizontalInnerSpace)
+                frame.origin.y = self.inset - (CGFloat(index) * self.cardVerticalInnerSpace)
+                frame.size = CGSize(width: newWidth, height: newHeight)
+
                 card.frame = frame
+                card.updateContentsFrame()
             })
         }
     }
@@ -120,9 +135,14 @@ public class TogetherSwipeView: UIView {
 
     private func removeCardAndAddNewCard() {
         index += 1
-        let card = loadedCards.first!
-        card.index = index
-        loadedCards.remove(at: 0)
+        if let card = loadedCards.first {
+            card.index = index
+            loadedCards.remove(at: 0)
+        }
+
+        if let card = loadedCards.first {
+            card.isFirstCard = true
+        }
 
         if (index + loadedCards.count) < allCards.count {
             let tinderCard = createTogetherCard(index: index + loadedCards.count, element: allCards[index + loadedCards.count])

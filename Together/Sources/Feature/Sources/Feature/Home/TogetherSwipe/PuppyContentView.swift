@@ -24,6 +24,14 @@ class PuppyContentView: UIView, Layoutable {
     }
 
     private let contentView: UIView = UIView()
+    private lazy var likeButton: UIButton = UIButton().config { button in
+        button.setImage(UIImage(named: "likeImage"), for: .normal)
+        button.setBackgroundImage(UIImage(color: .primary500), for: .normal)
+        button.addTarget(self, action: #selector(onClickLikeButton), for: .touchUpInside)
+        button.layer.cornerRadius = 30
+        button.clipsToBounds = true
+    }
+
     private let imageView: UIImageView = UIImageView()
     private lazy var overlayView: GradientView = GradientView().config { gradientView in
         gradientView.topColor = .clear
@@ -67,7 +75,7 @@ class PuppyContentView: UIView, Layoutable {
                 }
 
                 descriptionLabel.anchors {
-                    Anchors.leading.trailing.equalToSuper(inwardOffset: 20)
+                    Anchors.leading.equalToSuper(inwardOffset: 20)
                     Anchors.bottom.equalToSuper(inwardOffset: 30)
                 }
                 nameLabel.anchors {
@@ -81,6 +89,12 @@ class PuppyContentView: UIView, Layoutable {
                     categoryView
                     genderView
                     UIView()
+                }
+                likeButton.anchors {
+                    Anchors.size(width: 60, height: 60)
+                    Anchors.leading.equalTo(descriptionLabel, attribute: .trailing, constant: 20)
+                    Anchors.trailing.equalToSuper(inwardOffset: 20)
+                    Anchors.bottom.equalToSuper(inwardOffset: 26)
                 }
             }
         }
@@ -105,4 +119,8 @@ class PuppyContentView: UIView, Layoutable {
         overlayView.layer.addSublayer(gradient)
     }
 
+    @objc
+    private func onClickLikeButton(_ sender: Any?) {
+
+    }
 }
