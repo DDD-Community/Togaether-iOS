@@ -24,7 +24,7 @@ public struct Login: ReducerProtocol {
         var isLoginAvailable: Bool { isEmailValid == true && isPasswordValid == true }
         
         var optionalOnboarding: Onboarding.State?
-        var optionalJoin: Join.State?
+        var optionalTerms: Terms.State?
         var optionalTab: TabBar.State?
         
         public init(
@@ -55,7 +55,7 @@ public struct Login: ReducerProtocol {
         case didTapJoinButton
         
         case optionalOnboarding(Onboarding.Action)
-        case optionalJoin(Join.Action)
+        case optionalTerms(Terms.Action)
         case optionalTab(TabBar.Action)
     }
     
@@ -67,12 +67,12 @@ public struct Login: ReducerProtocol {
     
     public var body: some ReducerProtocol<State, Action> {
         Reduce(reduce)
-            ._printChanges()
+//            ._printChanges()
             .ifLet(\.optionalOnboarding, action: /Action.optionalOnboarding) { 
                 Onboarding()
             }
-            .ifLet(\.optionalJoin, action: /Action.optionalJoin) {
-                Join()
+            .ifLet(\.optionalTerms, action: /Action.optionalTerms) {
+                Terms()
             }
             .ifLet(\.optionalTab, action: /Action.optionalTab) { 
                 TabBar()
@@ -120,7 +120,7 @@ public struct Login: ReducerProtocol {
             return .none
             
         case .didTapJoinButton:
-            state.optionalJoin = .init()
+            state.optionalTerms = .init()
             return .none
             
         case let .loginResponse(.success(token)):
@@ -138,7 +138,7 @@ public struct Login: ReducerProtocol {
         case .optionalOnboarding:
             return .none
             
-        case .optionalJoin:
+        case .optionalTerms:
             // TODO: 회원가입 완료
             return .none
             

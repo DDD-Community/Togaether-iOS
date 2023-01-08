@@ -55,6 +55,8 @@ public struct Join: ReducerProtocol {
         case phoneNumberValidateResponse(Bool?)
         
         case confirmButtonClicked
+//        
+//        case setNavigation(isActive: Bool)
     }
     
     @Dependency(\.validator) var validator

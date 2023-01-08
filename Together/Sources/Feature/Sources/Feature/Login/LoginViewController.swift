@@ -264,10 +264,10 @@ public final class LoginViewController: UIViewController {
             .store(in: &cancellables)
         
         store
-            .scope(state: \.optionalJoin, action: Login.Action.optionalJoin)
+            .scope(state: \.optionalTerms, action: Login.Action.optionalTerms)
             .ifLet { [weak self] store in
                 self?.navigationController?.pushViewController(
-                    JoinViewController(store: store), 
+                    TermsViewController(store: store), 
                     animated: true
                 )
             }

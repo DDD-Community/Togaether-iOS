@@ -17,4 +17,10 @@ public extension UITextField {
         .compactMap { ($0.object as? UITextField)?.text }
         .eraseToAnyPublisher()
     }
+    
+//    var textPublisher: AnyPublisher<String, Never> {
+//        publisher(for: .editingChanged)
+//            .map { self.text ?? "" }
+//            .eraseToAnyPublisher()
+//    }
 }

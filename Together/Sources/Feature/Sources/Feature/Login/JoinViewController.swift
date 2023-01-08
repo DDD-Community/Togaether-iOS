@@ -24,6 +24,7 @@ final class JoinViewController: UIViewController {
     private let scrollView: UIScrollView = {
         let scrollView: UIScrollView = .init()
         scrollView.showsHorizontalScrollIndicator = false
+        scrollView.showsVerticalScrollIndicator = false
         return scrollView
     }()
     
@@ -35,6 +36,7 @@ final class JoinViewController: UIViewController {
         return stackView
     }()
     
+    private let emptyView: UIView = .init()
     private let titleLabel: UILabel = {
         let label: UILabel = .init()
         label.font = .display1
@@ -50,27 +52,33 @@ final class JoinViewController: UIViewController {
     private let birthFieldView: TogetherInputFieldView = .init(title: "생년월일", placeholder: "yyyy - mm - dd") 
     private let phoneNumberFieldView: TogetherInputFieldView = .init(title: "휴대폰 번호", placeholder: "예) 01012345678")
     
-    private let confirmButton: TogetherRegularButton = .init(title: "회원가입 완료")
-    
+    private let confirmButton: TogetherRegularButton = .init(title: "완료")
     
     @LayoutBuilder var layout: some SwiftLayout.Layout {
         view
             .config { view in
                 view.backgroundColor = .backgroundWhite
+                view.keyboardLayoutGuide.followsUndockedKeyboard = true
             }
             .sublayout {
                 scrollView
                     .anchors { 
                         Anchors.horizontal(offset: 24)
-                        Anchors.top.equalTo(view.safeAreaLayoutGuide.topAnchor, constant: 32)
-                        Anchors.bottom.equalTo(view.safeAreaLayoutGuide)
+                        Anchors.top.equalTo(view.safeAreaLayoutGuide.topAnchor)
+                        Anchors.bottom.equalTo(view.keyboardLayoutGuide.topAnchor, constant: -8)
                     }
+            }
+        
+        emptyView
+            .anchors { 
+                Anchors.height.equalTo(constant: 32)
             }
         
         scrollView
             .sublayout {
                 contentStackView
                     .config { stackView in
+                        stackView.addArrangedSubview(emptyView)
                         stackView.addArrangedSubview(titleLabel)
                         stackView.setCustomSpacing(32, after: titleLabel)
                         stackView.addArrangedSubview(emailFieldView)
@@ -110,6 +118,14 @@ final class JoinViewController: UIViewController {
         super.viewDidLoad()
         bindState()
         bindAction()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+//        if !self.isMovingToParent {
+//          viewStore.send(.setNavigation(isActive: false))
+//        }
     }
     
     private func bindState() {
