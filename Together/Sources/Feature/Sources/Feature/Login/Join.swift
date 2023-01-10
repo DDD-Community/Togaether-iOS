@@ -64,11 +64,11 @@ public struct Join: ReducerProtocol {
     public init() { }
     
     public var body: some ReducerProtocol<State, Action> {
-        Reduce(reduce)
+        Reduce(core)
             ._printChanges()
     }
     
-    public func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
+    public func core(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
         case let .didChangeEmail(email):
             state.email = email

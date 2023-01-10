@@ -66,8 +66,7 @@ public struct Login: ReducerProtocol {
     private enum LoginCancelID { }
     
     public var body: some ReducerProtocol<State, Action> {
-        Reduce(reduce)
-//            ._printChanges()
+        Reduce(core)
             .ifLet(\.optionalOnboarding, action: /Action.optionalOnboarding) { 
                 Onboarding()
             }
@@ -79,7 +78,7 @@ public struct Login: ReducerProtocol {
             }
     }
     
-    public func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
+    public func core(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
         case let .didChangeEmail(email):
             state.email = email
