@@ -22,6 +22,8 @@ public struct Terms: ReducerProtocol {
                 collectPersonalInformationAgreed = newValue
             }
         }
+        
+        var optionalJoin: Join.State?
     }
     
     public enum Action: Equatable {
@@ -31,13 +33,18 @@ public struct Terms: ReducerProtocol {
         case didTapPersionalInformation
         
         case didTapNext
+        
+        case optionalJoin(Join.Action)
+        case detachChild
     }
     
     public init() { }
     
     public var body: some ReducerProtocol<State, Action> {
         Reduce(core)
-            ._printChanges()
+            .ifLet(\.optionalJoin, action: /Action.optionalJoin) { 
+                Join()
+            }
     }
     
     public func core(into state: inout State, action: Action) -> EffectTask<Action> {
@@ -67,6 +74,17 @@ public struct Terms: ReducerProtocol {
             return .none
             
         case .didTapNext:
+            state.optionalJoin = .init()
+            return .none
+            
+        case .optionalJoin(.joinResponse(.success)):
+            return .none
+            
+        case .optionalJoin:
+            return .none
+            
+        case .detachChild:
+            state.optionalJoin = nil
             return .none
         }
     }

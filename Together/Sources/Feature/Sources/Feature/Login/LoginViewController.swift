@@ -191,6 +191,13 @@ public final class LoginViewController: UIViewController {
         navigationController?.isNavigationBarHidden = true
     }
     
+    public override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if !isMovingToParent {
+            viewStore.send(.detachChild)
+        }
+    }
+    
     public override func viewWillDisappear(_ animated: Bool) {
         navigationController?.isNavigationBarHidden = false
     }

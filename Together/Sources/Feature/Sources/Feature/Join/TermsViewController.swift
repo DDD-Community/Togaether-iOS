@@ -32,7 +32,7 @@ final class TermsViewController: UIViewController {
         return label
     }()
     
-    private let allAgreeToggleView: TermsToggleView = .init(title: "네, 모두 동의합니다.", hasButton: true)
+    private let allAgreeToggleView: TermsToggleView = .init(title: "네, 모두 동의합니다.", hasButton: false)
     private let overFourteenToggleView: TermsToggleView = .init(title: "(필수) 만 14세 이상입니다.", hasButton: false)
     private let termsAndConditionToggleView: TermsToggleView = .init(title: "(필수) 서비스 이용약관에 동의", hasButton: true)
     private let personalInformationToggleView: TermsToggleView = .init(title: "(필수) 개인정보 수집 이용에 동의", hasButton: true)
@@ -112,6 +112,14 @@ final class TermsViewController: UIViewController {
         super.viewDidLoad()
         bindAction()
         bindState()
+        bindNavigation()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if !isMovingToParent {
+            viewStore.send(.detachChild)
+        }
     }
     
     private func bindAction() {
@@ -170,6 +178,16 @@ final class TermsViewController: UIViewController {
         
         viewStore.publisher.collectPersonalInformationAgreed
             .assign(to: \.isEnabled, onWeak: personalInformationToggleView)
+            .store(in: &cancellables)
+    }
+    
+    private func bindNavigation() {
+        store
+            .scope(state: \.optionalJoin, action: Terms.Action.optionalJoin)
+            .ifLet { [weak self] store in
+                let join = JoinViewController(store: store)
+                self?.navigationController?.pushViewController(join, animated: true)
+            }
             .store(in: &cancellables)
     }
 }

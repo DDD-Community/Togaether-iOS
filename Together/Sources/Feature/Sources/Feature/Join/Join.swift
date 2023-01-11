@@ -55,8 +55,7 @@ public struct Join: ReducerProtocol {
         case phoneNumberValidateResponse(Bool?)
         
         case confirmButtonClicked
-//        
-//        case setNavigation(isActive: Bool)
+        case joinResponse(TaskResult<String>)
     }
     
     @Dependency(\.validator) var validator
@@ -65,7 +64,6 @@ public struct Join: ReducerProtocol {
     
     public var body: some ReducerProtocol<State, Action> {
         Reduce(core)
-            ._printChanges()
     }
     
     public func core(into state: inout State, action: Action) -> EffectTask<Action> {
@@ -106,13 +104,13 @@ public struct Join: ReducerProtocol {
             
         case let .didChangeBirth(birth):
             state.birth = birth
-            return .none
-            
-        case let .birthValidateResponse(isBirthValid):
-            state.isBirthValid = isBirthValid
             return .task { [birth = state.birth] in
                 return .birthValidateResponse(validator.validateBirth(birth))
             }
+            
+        case let .birthValidateResponse(isBirthValid):
+            state.isBirthValid = isBirthValid
+            return .none
             
         case let .didChangePhoneNumber(phoneNumber):
             state.phoneNumber = phoneNumber
@@ -125,8 +123,27 @@ public struct Join: ReducerProtocol {
             return .none
             
         case .confirmButtonClicked:
+            return .task { 
+                await .joinResponse(
+                    TaskResult{
+                        try await test() 
+                    }
+                )
+            }
+            
+        case .joinResponse(.success):
+            // 로그인에서 처리
+            return .none
+            
+        case let .joinResponse(.failure(error)):
+            // 화면에 대한 에러 핸들링
+            print(error)
             return .none
         }
     }
     
+}
+
+func test() async throws -> String {
+    return ""
 }

@@ -66,7 +66,6 @@ struct Root: ReducerProtocol {
                 return .none
             }
         }
-        ._printChanges()
         .ifCaseLet(/State.login, action: /Action.login) { 
             Login()
         }

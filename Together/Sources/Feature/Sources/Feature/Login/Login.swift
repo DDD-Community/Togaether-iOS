@@ -57,6 +57,8 @@ public struct Login: ReducerProtocol {
         case optionalOnboarding(Onboarding.Action)
         case optionalTerms(Terms.Action)
         case optionalTab(TabBar.Action)
+        
+        case detachChild
     }
     
     public init() { }
@@ -137,11 +139,24 @@ public struct Login: ReducerProtocol {
         case .optionalOnboarding:
             return .none
             
+        case .optionalTerms(.optionalJoin(.joinResponse(.success))):
+            if Preferences.shared.onboardingFinished {
+                state.optionalTab = .init(home: .init(), setting: .init())
+            } else {
+                state.optionalOnboarding = .init()
+            }
+            return .none
+            
         case .optionalTerms:
-            // TODO: 회원가입 완료
             return .none
             
         case .optionalTab:
+            return .none
+            
+        case .detachChild:
+            state.optionalTab = nil
+            state.optionalTerms = nil
+            state.optionalOnboarding = nil
             return .none
         }
     }
