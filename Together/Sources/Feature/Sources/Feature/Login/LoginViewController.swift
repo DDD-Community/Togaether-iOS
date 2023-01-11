@@ -265,7 +265,7 @@ public final class LoginViewController: UIViewController {
             .scope(state: \.optionalOnboarding, action: Login.Action.optionalOnboarding)
             .ifLet(
                 then: { store in
-                    UIApplication.shared.appKeyWindow?.rootViewController = OnboardingViewController(store: store)
+                    UIApplication.shared.appKeyWindow?.rootViewController = OnboardingInfoViewController(store: store, canSkip: true)
                 }
             )
             .store(in: &cancellables)

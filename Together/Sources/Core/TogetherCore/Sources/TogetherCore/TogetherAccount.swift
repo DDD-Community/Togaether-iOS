@@ -20,7 +20,7 @@ extension TogetherAccount: DependencyKey {
     public static let liveValue: TogetherAccount = .init(
         token: {
             try await Task.sleep(for: .seconds(0.5))
-//            return "havi"
+            return "havi"
             throw NSError(domain: "", code: 1)
         }, 
         login: { email, password in

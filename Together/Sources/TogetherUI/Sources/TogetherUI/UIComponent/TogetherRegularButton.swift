@@ -13,6 +13,8 @@ open class TogetherRegularButton: UIButton {
         titleColor: UIColor = .backgroundWhite,
         backgroundColor: UIColor = .primary500,
         disabledBackgroundColor: UIColor = .blueGray300,
+        borderColor: UIColor? = nil,
+        borderWidth: CGFloat? = nil,
         height: CGFloat = 52,
         cornerRadius: CGFloat = 26
     ) {
@@ -25,6 +27,10 @@ open class TogetherRegularButton: UIButton {
         NSLayoutConstraint.activate([
             self.heightAnchor.constraint(equalToConstant: height)
         ])
+        
+        if let borderColor { self.borderColor = borderColor }
+        if let borderWidth { self.borderWidth = borderWidth }
+        
         self.layer.masksToBounds = true
     }
     
