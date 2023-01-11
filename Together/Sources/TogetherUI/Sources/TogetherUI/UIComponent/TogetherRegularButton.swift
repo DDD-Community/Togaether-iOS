@@ -9,8 +9,9 @@ import UIKit
 
 open class TogetherRegularButton: UIButton {
     public init(
-        title: String, 
+        title: String,
         titleColor: UIColor = .backgroundWhite,
+        font: UIFont? = .subhead3,
         backgroundColor: UIColor = .primary500,
         disabledBackgroundColor: UIColor = .blueGray300,
         borderColor: UIColor? = nil,
@@ -21,6 +22,7 @@ open class TogetherRegularButton: UIButton {
         super.init(frame: .zero)
         self.setTitle(title, for: .init())
         self.setTitleColor(titleColor, for: .init())
+        self.titleLabel?.font = font
         self.setBackgroundImage(.init(color: disabledBackgroundColor), for: .disabled)
         self.setBackgroundImage(.init(color: backgroundColor), for: .normal)
         self.cornerRadius = cornerRadius
