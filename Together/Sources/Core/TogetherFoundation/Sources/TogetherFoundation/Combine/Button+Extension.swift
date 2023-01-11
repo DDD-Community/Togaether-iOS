@@ -133,7 +133,7 @@ extension UIView {
     public var throttleTapGesture: Publishers.Throttle<UITapGestureRecognizer.GesturePublisher<UITapGestureRecognizer>, RunLoop> {
         return UITapGestureRecognizer.GesturePublisher(recognizer: .init(), view: self)
             .throttle(
-                for: .seconds(1),
+                for: .seconds(0.3),
                 scheduler: RunLoop.main,
                 latest: false
             )
