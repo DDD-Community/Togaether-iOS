@@ -6,6 +6,7 @@
 //
 
 import TogetherCore
+import TogetherFoundation
 import ComposableArchitecture
 
 public struct OnboardingInfo: ReducerProtocol {
@@ -18,8 +19,9 @@ public struct OnboardingInfo: ReducerProtocol {
         var name: String = ""
         var gender: Gender?
         var birth: String = ""
+        var isBirthValid: Bool?
         
-        var onboardingSpecies: OnboardingSpecies.State?
+        var canMoveNext: Bool { name.isNotEmpty && gender.isNotNil && isBirthValid.isTrue }
         
         public init() { }
     }
@@ -28,19 +30,20 @@ public struct OnboardingInfo: ReducerProtocol {
         case didChangeName(String)
         case didSelectGender(Gender)
         case didChangeBirth(String)
+        case birthValidateResponse(Bool?)
         
         case didTapSkipButton
         case didTapNextButton
         
-        case onboardingSpecies(OnboardingSpecies.Action)
         case detachChild
     }
+    
+    @Dependency(\.validator) var validator
     
     public init() { }
     
     public var body: some ReducerProtocol<State, Action> {
         Reduce(core)
-            ._printChanges()
     }
     
     public func core(into state: inout State, action: Action) -> EffectTask<Action> {
@@ -55,17 +58,15 @@ public struct OnboardingInfo: ReducerProtocol {
             
         case let .didChangeBirth(birth):
             state.birth = birth
+            return .task { [birth = state.birth] in
+                return .birthValidateResponse(validator.validateBirth(birth))
+            }
+            
+        case let .birthValidateResponse(isBirthValid):
+            state.isBirthValid = isBirthValid
             return .none
             
-        case .didTapSkipButton:
-            return .none
-            
-        case .didTapNextButton:
-            state.onboardingSpecies = .init()
-            return .none
-            
-        case .detachChild:
-            state.onboardingSpecies = nil
+        case .didTapSkipButton, .didTapNextButton, .detachChild: // Onboarding Reducer에서 처리
             return .none
         }
     }

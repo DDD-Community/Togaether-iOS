@@ -23,7 +23,7 @@ public struct Login: ReducerProtocol {
         
         var isLoginAvailable: Bool { isEmailValid == true && isPasswordValid == true }
         
-        var optionalOnboarding: OnboardingInfo.State?
+        var optionalOnboarding: Onboarding.State?
         var optionalTerms: Terms.State?
         var optionalTab: TabBar.State?
         
@@ -54,7 +54,7 @@ public struct Login: ReducerProtocol {
         case didTapFindPasswordButton
         case didTapJoinButton
         
-        case optionalOnboarding(OnboardingInfo.Action)
+        case optionalOnboarding(Onboarding.Action)
         case optionalTerms(Terms.Action)
         case optionalTab(TabBar.Action)
         
@@ -70,7 +70,7 @@ public struct Login: ReducerProtocol {
     public var body: some ReducerProtocol<State, Action> {
         Reduce(core)
             .ifLet(\.optionalOnboarding, action: /Action.optionalOnboarding) { 
-                OnboardingInfo()
+                Onboarding()
             }
             .ifLet(\.optionalTerms, action: /Action.optionalTerms) {
                 Terms()

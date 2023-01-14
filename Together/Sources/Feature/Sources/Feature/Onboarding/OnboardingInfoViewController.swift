@@ -17,8 +17,8 @@ import ComposableArchitecture
 
 public final class OnboardingInfoViewController: UIViewController {
     
-    private let store: StoreOf<OnboardingInfo>
-    private let viewstore: ViewStoreOf<OnboardingInfo>
+    private let store: StoreOf<Onboarding>
+    private let viewStore: ViewStoreOf<Onboarding>
     private let canSkip: Bool
     private var cancellables: Set<AnyCancellable> = .init()
     
@@ -39,9 +39,16 @@ public final class OnboardingInfoViewController: UIViewController {
         return label
     }()
     
-    private let nameFieldView: TogetherInputFieldView = .init(title: "이름", placeholder: "이름을 입력해주세요.")
+    private let nameFieldView: TogetherInputFieldView = .init(
+        title: "이름", 
+        placeholder: "이름을 입력해주세요."
+    )
     private let genderSelectionView: GenderSelectionView = .init()
-    private let birthFieldView: TogetherInputFieldView = .init(title: "생년월일", placeholder: "yyyy - mm - dd")
+    private let birthFieldView: TogetherInputFieldView = .init(
+        title: "생년월일", 
+        placeholder: "yyyy - mm - dd", 
+        keyboardType: .numberPad
+    )
     
     private lazy var skipButton: TogetherRegularButton = {
         let button: TogetherRegularButton = .init(
@@ -107,11 +114,11 @@ public final class OnboardingInfoViewController: UIViewController {
     }
     
     public init(
-        store: StoreOf<OnboardingInfo>,
+        store: StoreOf<Onboarding>,
         canSkip: Bool
     ) {
         self.store = store
-        self.viewstore = ViewStore(store)
+        self.viewStore = ViewStore(store)
         self.canSkip = canSkip
         super.init(nibName: nil, bundle: nil)
         layout.finalActive()
@@ -125,41 +132,89 @@ public final class OnboardingInfoViewController: UIViewController {
         super.viewDidLoad()
         bindAction()
         bindState()
+        bindNavigation()
+    }
+    
+    public override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if !isMovingToParent {
+            viewStore.send(.onboardingInfo(.detachChild))
+        }
     }
     
     private func bindAction() {
         nameFieldView.inputTextField
             .textPublisher
             .sink { [weak self] name in
-                self?.viewstore.send(.didChangeName(name))
+                self?.viewStore.send(.onboardingInfo(.didChangeName(name)))
             }
             .store(in: &cancellables)
         
         genderSelectionView.maleLabel
             .throttleTapGesture
             .sink { [weak self] _ in
-                self?.viewstore.send(.didSelectGender(.male))
+                self?.viewStore.send(.onboardingInfo(.didSelectGender(.male)))
             }
             .store(in: &cancellables)
         
         genderSelectionView.femaleLabel
             .throttleTapGesture
             .sink { [weak self] _ in
-                self?.viewstore.send(.didSelectGender(.female))
+                self?.viewStore.send(.onboardingInfo(.didSelectGender(.female)))
             }
             .store(in: &cancellables)
         
         birthFieldView.inputTextField
             .textPublisher
             .sink { [weak self] birth in
-                self?.viewstore.send(.didChangeBirth(birth))
+                self?.viewStore.send(.onboardingInfo(.didChangeBirth(birth)))
+            }
+            .store(in: &cancellables)
+        
+        skipButton.throttleTap
+            .sink { [weak self] _ in
+                self?.viewStore.send(.onboardingInfo(.didTapSkipButton))
+            }
+            .store(in: &cancellables)
+        
+        nextButton.throttleTap
+            .sink { [weak self] _ in
+                self?.viewStore.send(.onboardingInfo(.didTapNextButton))
             }
             .store(in: &cancellables)
     }
     
     private func bindState() {
-        viewstore.publisher.gender
+        viewStore.publisher.onboardingInfo.gender
             .assign(to: \.selectedGender, onWeak: genderSelectionView)
+            .store(in: &cancellables)
+        
+        viewStore.publisher.onboardingInfo.canMoveNext
+            .assign(to: \.isEnabled, onWeak: nextButton)
+            .store(in: &cancellables)
+        
+        viewStore.publisher.onboardingInfo.isBirthValid
+            .assign(to: \.isValid, onWeak: birthFieldView)
+            .store(in: &cancellables)
+    }
+    
+    private func bindNavigation() {
+        store
+            .scope(state: \.onboardingSpecies)
+            .ifLet { [weak self] species in
+                guard let self = self else { return }
+                self.navigationController?.pushViewController(
+                    OnboardingSpeciesViewController(store: self.store, canSkip: true), 
+                    animated: true
+                )
+            }
+            .store(in: &cancellables)
+        
+        store
+            .scope(state: \.tabBar, action: Onboarding.Action.tabBar)
+            .ifLet { store in
+                UIApplication.shared.appKeyWindow?.rootViewController = TabBarController(store: store)
+            }
             .store(in: &cancellables)
     }
 }
@@ -169,7 +224,7 @@ import SwiftUI
 
 struct OnboardingInfo_Previews: PreviewProvider {
     static var previews: some View {
-        let store: StoreOf<OnboardingInfo> = .init(initialState: .init(), reducer: OnboardingInfo())
+        let store: StoreOf<Onboarding> = .init(initialState: .init(), reducer: Onboarding())
         return OnboardingInfoViewController(store: store, canSkip: true)
             .showPrieview()
     }

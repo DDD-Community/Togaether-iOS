@@ -8,6 +8,7 @@
 import UIKit
 
 import TogetherCore
+import TogetherFoundation
 import ThirdParty
 
 import ComposableArchitecture
@@ -22,6 +23,7 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         options connectionOptions: UIScene.ConnectionOptions
     ) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
+        Preferences.shared.onboardingFinished = false
         window = UIWindow(windowScene: windowScene)
         let rootStore: StoreOf<Root> = .init(initialState: .root, reducer: Root())
         window?.rootViewController = RootViewController(store: rootStore)

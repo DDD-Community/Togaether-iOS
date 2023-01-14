@@ -42,13 +42,15 @@ extension Validator: DependencyKey {
         },
         validateBirth: { birth in
             guard !birth.isEmpty else { return nil }
-            // TODO: regex 추가
-            return true
+            let birthRegex: String = "^[1-2]{1}[0-9]{3}[0-1]{1}[0-9]{1}[0-3]{1}[0-9]{1}$" // 19960103
+            let birthPredicate = NSPredicate(format:"SELF MATCHES %@", birthRegex)
+            return birthPredicate.evaluate(with: birth)
         },
         validatePhoneNumber: { phoneNumber in
             guard !phoneNumber.isEmpty else { return nil }
-            // TODO: regex 추가
-            return true
+            let phoneNumberRegex: String = "^010[0-9]{4}[0-9]{4}"
+            let phoneNumberPredicate = NSPredicate(format:"SELF MATCHES %@", phoneNumberRegex)
+            return phoneNumberPredicate.evaluate(with: phoneNumber)
         }
     )
     

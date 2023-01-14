@@ -18,7 +18,7 @@ struct Root: ReducerProtocol {
     enum State: Equatable {
         case root
         case login(Login.State)
-        case onboarding(OnboardingInfo.State)
+        case onboarding(Onboarding.State)
         case tab(TabBar.State)
     }
     
@@ -27,7 +27,7 @@ struct Root: ReducerProtocol {
         case tokenResponse(TaskResult<String>)
         
         case login(Login.Action)
-        case onboarding(OnboardingInfo.Action)
+        case onboarding(Onboarding.Action)
         case tab(TabBar.Action)
     }
     
@@ -70,7 +70,7 @@ struct Root: ReducerProtocol {
             Login()
         }
         .ifCaseLet(/State.onboarding, action: /Action.onboarding) { 
-            OnboardingInfo()
+            Onboarding()
         }
         .ifCaseLet(/State.tab, action: /Action.tab) { 
             TabBar()

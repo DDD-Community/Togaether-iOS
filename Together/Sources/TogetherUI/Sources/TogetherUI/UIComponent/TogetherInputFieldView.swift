@@ -94,6 +94,7 @@ public final class TogetherInputFieldView: UIView {
     public init(
         title: String, 
         placeholder: String,
+        keyboardType: UIKeyboardType = .default,
         isValid: Bool? = .none
     ) {
         self.title = title
@@ -101,6 +102,7 @@ public final class TogetherInputFieldView: UIView {
         self.isValid = isValid
         super.init(frame: .zero)
         inputTextField.delegate = self
+        inputTextField.keyboardType = keyboardType
         layout.finalActive()
     }
     
