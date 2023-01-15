@@ -67,7 +67,7 @@ public class PuppyContentView: UIView, Layoutable {
     }
 
     private let descriptionLabel: UILabel = UILabel().config { label in
-        label.font = .systemFont(ofSize: 15, weight: .regular)
+        label.font = .body2
         label.textColor = .white
         label.numberOfLines = 2
     }

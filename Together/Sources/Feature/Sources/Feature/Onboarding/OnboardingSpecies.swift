@@ -16,6 +16,9 @@ public struct OnboardingSpecies: ReducerProtocol {
     
     public enum Action: Equatable {
         case viewDidLoad
+        case didTapSkipButton
+        case didTapNextButton
+        case detachChild
     }
     
     public init() { }
@@ -29,6 +32,9 @@ public struct OnboardingSpecies: ReducerProtocol {
         case .viewDidLoad:
             state.species = mockData
             let sections = mockData.sorted()
+            return .none
+            
+        case .didTapSkipButton, .didTapNextButton, .detachChild:
             return .none
         }
     }

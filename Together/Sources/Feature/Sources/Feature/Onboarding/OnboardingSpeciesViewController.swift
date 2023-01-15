@@ -158,7 +158,27 @@ public final class OnboardingSpeciesViewController: UIViewController {
         bindNavigation()
     }
     
+    public override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if !isMovingToParent {
+            viewstore.send(.onboardingSpecies(.detachChild))
+        }
+    }
+    
     private func bindAction() {
+        nextButton
+            .throttleTapGesture
+            .sink { [weak self] _ in
+                self?.viewstore.send(.onboardingSpecies(.didTapNextButton))
+            }
+            .store(in: &cancellables)
+        
+        skipButton
+            .throttleTapGesture
+            .sink { [weak self] _ in
+                self?.viewstore.send(.onboardingSpecies(.didTapSkipButton))
+            }
+            .store(in: &cancellables)
     }
     
     private func bindState() {
@@ -166,6 +186,18 @@ public final class OnboardingSpeciesViewController: UIViewController {
     }
     
     private func bindNavigation() {
+        store
+            .scope(state: \.onboardingRegister, action: Onboarding.Action.onboardingRegister)
+            .ifLet { [weak self] onboardingRegister in
+                guard let self = self else { return }
+                let viewController = OnboardingFeedRegisterViewController(store: onboardingRegister)
+                self.navigationController?.pushViewController(
+                    viewController, 
+                    animated: true
+                )
+            }
+            .store(in: &cancellables)
+        
         store
             .scope(state: \.tabBar, action: Onboarding.Action.tabBar)
             .ifLet { store in

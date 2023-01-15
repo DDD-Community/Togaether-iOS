@@ -40,7 +40,6 @@ public struct OnboardingInfo: ReducerProtocol {
         case binding(BindingAction<State>)
         case didTapSkipButton
         case didTapNextButton
-        
         case detachChild
     }
     
