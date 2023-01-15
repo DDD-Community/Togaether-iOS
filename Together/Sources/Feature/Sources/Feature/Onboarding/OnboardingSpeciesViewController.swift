@@ -38,9 +38,28 @@ public final class OnboardingSpeciesViewController: UIViewController {
         return label
     }()
     
-    private let nameFieldView: TogetherInputFieldView = .init(title: "이름", placeholder: "이름을 입력해주세요.")
-    private let genderSelectionView: UIView = .init()
-    private let birthFieldView: TogetherInputFieldView = .init(title: "생년월일", placeholder: "yyyy - mm - dd")
+    private let searchTextField: UITextField = .init().then { 
+        $0.attributedPlaceholder = .init(
+            string: "검색어를 입력해주세요.", 
+            attributes: [
+                .foregroundColor: UIColor.blueGray300,
+                .font: UIFont.body2 as Any
+            ]
+        )
+    }
+    private let searchButton: UIButton = .init().then {
+        $0.setImage(.init(named: "ic_search"), for: .init())
+    }
+    private let searchDevider: UIView = .init().then {
+        $0.backgroundColor = .borderPrimary
+    }
+    
+    private let searchTableView: OnboardingSpeciesTableView = .init()
+    private lazy var datasource: OnboardingSpeciesDataSource = .init(tableView: searchTableView) { tableView, indexPath, name in
+        let cell = tableView.dequeueReusableCell(withIdentifier: OnboardingSpeciesCell.identifier, for: indexPath) as? OnboardingSpeciesCell
+        cell?.configure(name: name)
+        return cell
+    }
     
     private lazy var skipButton: TogetherRegularButton = {
         let button: TogetherRegularButton = .init(
@@ -59,12 +78,14 @@ public final class OnboardingSpeciesViewController: UIViewController {
         let stackView: UIStackView = .init()
         stackView.axis = .horizontal
         stackView.distribution = .fillEqually
-        stackView.alignment = .fill
+        stackView.alignment = .center
         stackView.spacing = 7
         return stackView
     }()
     
     @LayoutBuilder var layout: some SwiftLayout.Layout {
+        searchDevider.anchors { Anchors.height.equalTo(constant: 2) }
+        
         view
             .config{ view in
                 view.backgroundColor = .backgroundWhite
@@ -78,14 +99,17 @@ public final class OnboardingSpeciesViewController: UIViewController {
                 
                 contentStackView
                     .config { stackView in
-                        stackView.addArrangedSubview(nameFieldView)
-                        stackView.setCustomSpacing(20, after: nameFieldView)
-                        
-                        stackView.addArrangedSubview(genderSelectionView)
-                        stackView.setCustomSpacing(20, after: genderSelectionView)
-                        
-                        stackView.addArrangedSubview(birthFieldView)
-                        stackView.setCustomSpacing(20, after: birthFieldView)
+                        let searchBarStackView: UIStackView = .init().then {
+                            $0.axis = .horizontal
+                            $0.alignment = .fill
+                            $0.distribution = .fill
+                        }
+                        searchBarStackView.addArrangedSubview(searchTextField)
+                        searchBarStackView.setCustomSpacing(16, after: searchTextField)
+                        searchBarStackView.addArrangedSubview(searchButton)
+                        stackView.addArrangedSubview(searchBarStackView)
+                        stackView.setCustomSpacing(6, after: searchBarStackView)
+                        stackView.addArrangedSubview(searchDevider)
                     }
                     .anchors { 
                         Anchors.top.equalTo(titleLabel.bottomAnchor, constant: 32)
@@ -100,7 +124,14 @@ public final class OnboardingSpeciesViewController: UIViewController {
                     .anchors { 
                         Anchors.horizontal(offset: 24)
                         Anchors.bottom.equalTo(view.safeAreaLayoutGuide.bottomAnchor, constant: 8)
-                        Anchors.height.equalTo(constant: 52)
+                        Anchors.height.equalTo(constant: 72)
+                    }
+                
+                searchTableView
+                    .anchors { 
+                        Anchors.top.equalTo(contentStackView.bottomAnchor, constant: 12)
+                        Anchors.bottom.equalTo(buttonContainerStackView.topAnchor)
+                        Anchors.horizontal()
                     }
             }
     }
@@ -144,134 +175,17 @@ public final class OnboardingSpeciesViewController: UIViewController {
     }
 }
 
-//#if canImport(SwiftUI) && DEBUG
-//import SwiftUI
-//
-//struct OnboardingInfo_Previews: PreviewProvider {
-//    static var previews: some View {
-//        let store: StoreOf<Onboarding> = .init(initialState: .init(), reducer: Onboarding())
-//        return OnboardingInfoViewController(store: store, canSkip: true)
-//            .showPrieview()
-//    }
-//}
-//#endif
-//
-//
-//fileprivate final class GenderSelectionView: UIView {
-//    
-//    var selectedGender: OnboardingInfo.Gender? {
-//        willSet {
-//            switch newValue {
-//            case .male:
-//                maleLabel.textColor = .backgroundWhite
-//                maleLabel.backgroundColor = .primary500
-//                
-//                femaleLabel.textColor = .blueGray300
-//                femaleLabel.backgroundColor = .backgroundWhite
-//            case .female:
-//                femaleLabel.textColor = .backgroundWhite
-//                femaleLabel.backgroundColor = .primary500
-//                
-//                maleLabel.textColor = .blueGray300
-//                maleLabel.backgroundColor = .backgroundWhite
-//            case .none:
-//                maleLabel.textColor = .blueGray300
-//                maleLabel.backgroundColor = .backgroundWhite
-//                
-//                femaleLabel.textColor = .blueGray300
-//                femaleLabel.backgroundColor = .backgroundWhite
-//            }
-//        }
-//    }
-//    
-//    private let genderLabel: UILabel = {
-//        let label: UILabel = .init()
-//        label.font = .body1
-//        label.textColor = .blueGray500
-//        label.backgroundColor = .backgroundWhite
-//        label.textAlignment = .left
-//        label.text = "성별"
-//        return label
-//    }()
-//    
-//    let maleLabel: UILabel = {
-//        let label: UILabel = .init()
-//        label.font = .subhead3
-//        label.textColor = .blueGray300
-//        label.backgroundColor = .backgroundWhite
-//        label.textAlignment = .center
-//        label.text = "남자"
-//        label.isUserInteractionEnabled = true
-//        label.cornerRadius = 8
-//        label.clipsToBounds = true
-//        label.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMinXMinYCorner]
-//        return label
-//    }()
-//    
-//    private let dividerView: UIView = {
-//        let view: UIView = .init()
-//        view.backgroundColor = .blueGray300
-//        return view
-//    }()
-//    
-//    let femaleLabel: UILabel = {
-//        let label: UILabel = .init()
-//        label.font = .subhead3
-//        label.textColor = .blueGray300
-//        label.textAlignment = .center
-//        label.text = "여자"
-//        label.isUserInteractionEnabled = true
-//        label.cornerRadius = 8
-//        label.clipsToBounds = true
-//        label.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMaxXMinYCorner] 
-//        return label
-//    }()
-//    
-//    private let genderSelectorView: UIStackView = {
-//        let stackView: UIStackView = .init()
-//        stackView.axis = .horizontal
-//        stackView.alignment = .fill
-//        stackView.distribution = .fillProportionally
-//        stackView.borderWidth = 1
-//        stackView.borderColor = .borderPrimary
-//        stackView.cornerRadius = 8
-//        stackView.backgroundColor = .backgroundWhite
-//        return stackView
-//    }()
-//    
-//    @LayoutBuilder var layout: some SwiftLayout.Layout {
-//        dividerView.anchors { Anchors.width.equalTo(constant: 1) }
-//        
-//        genderSelectorView.config { stackView in
-//            stackView.addArrangedSubview(maleLabel)
-//            stackView.addArrangedSubview(dividerView)
-//            stackView.addArrangedSubview(femaleLabel)
-//        }
-//        
-//        self
-//            .sublayout { 
-//                genderLabel
-//                    .anchors { 
-//                        Anchors.top.equalToSuper()
-//                        Anchors.horizontal()
-//                    }
-//                
-//                genderSelectorView
-//                    .anchors { 
-//                        Anchors.horizontal()
-//                        Anchors.top.equalTo(genderLabel, attribute: .bottom, constant: 6)
-//                        Anchors.height.equalTo(constant: 48)
-//                        Anchors.bottom.equalToSuper()
-//                    }
-//            }
-//    }
-//    
-//    init() {
-//        super.init(frame: .zero)
-//        layout.finalActive()
-//    }
-//    
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
-//}
+#if canImport(SwiftUI) && DEBUG
+import SwiftUI
+
+struct OnboardingSpecies_Previews: PreviewProvider {
+    static var previews: some View {
+        let store: StoreOf<Onboarding> = .init(
+            initialState: .init(onboardingInfo: .init(name: "꼬비꼬비")), 
+            reducer: Onboarding()
+        )
+        return OnboardingSpeciesViewController(store: store, canSkip: true)
+            .showPrieview()
+    }
+}
+#endif
