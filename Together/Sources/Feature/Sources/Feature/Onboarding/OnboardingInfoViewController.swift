@@ -146,28 +146,28 @@ public final class OnboardingInfoViewController: UIViewController {
         nameFieldView.inputTextField
             .textPublisher
             .sink { [weak self] name in
-                self?.viewStore.send(.onboardingInfo(.didChangeName(name)))
+                self?.viewStore.send(.onboardingInfo(.set(\.$name, name)))
             }
             .store(in: &cancellables)
         
         genderSelectionView.maleLabel
             .throttleTapGesture
             .sink { [weak self] _ in
-                self?.viewStore.send(.onboardingInfo(.didSelectGender(.male)))
+                self?.viewStore.send(.onboardingInfo(.set(\.$gender, .male)))
             }
             .store(in: &cancellables)
         
         genderSelectionView.femaleLabel
             .throttleTapGesture
             .sink { [weak self] _ in
-                self?.viewStore.send(.onboardingInfo(.didSelectGender(.female)))
+                self?.viewStore.send(.onboardingInfo(.set(\.$gender, .female)))
             }
             .store(in: &cancellables)
         
         birthFieldView.inputTextField
             .textPublisher
             .sink { [weak self] birth in
-                self?.viewStore.send(.onboardingInfo(.didChangeBirth(birth)))
+                self?.viewStore.send(.onboardingInfo(.set(\.$birth, birth)))
             }
             .store(in: &cancellables)
         
