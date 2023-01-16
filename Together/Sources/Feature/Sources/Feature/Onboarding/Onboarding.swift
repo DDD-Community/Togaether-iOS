@@ -10,7 +10,7 @@ import TogetherFoundation
 import ComposableArchitecture
 
 public struct Onboarding: ReducerProtocol {
-    public struct State: Equatable {
+    public struct State: Equatable, Sendable {
         var onboardingInfo: OnboardingInfo.State
         var onboardingSpecies: OnboardingSpecies.State?
         var onboardingRegister: OnboardingFeedRegister.State?
@@ -28,7 +28,7 @@ public struct Onboarding: ReducerProtocol {
         }
     }
     
-    public enum Action: Equatable {
+    public enum Action: Equatable, Sendable {
         case onboardingInfo(OnboardingInfo.Action)
         case onboardingSpecies(OnboardingSpecies.Action)
         case onboardingRegister(OnboardingFeedRegister.Action)
@@ -37,7 +37,7 @@ public struct Onboarding: ReducerProtocol {
     
     public init() { }
     
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some ReducerProtocolOf<Self> {
         Scope(state: \.onboardingInfo, action: /Action.onboardingInfo) { 
             OnboardingInfo()
         }

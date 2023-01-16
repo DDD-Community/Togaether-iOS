@@ -9,12 +9,12 @@ import TogetherCore
 import ComposableArchitecture
 
 public struct TabBar: ReducerProtocol {
-    public enum Tab: String, CaseIterable { 
+    public enum Tab: String, CaseIterable, Sendable { 
         case home = "홈"
         case setting = "설정"
     }
     
-    public struct State: Equatable {
+    public struct State: Equatable, Sendable {
         var home: Home.State
         var setting: Setting.State
         var currentTab: Tab
@@ -30,7 +30,7 @@ public struct TabBar: ReducerProtocol {
         }
     }
     
-    public enum Action: Equatable {
+    public enum Action: Equatable, Sendable {
         case home(Home.Action)
         case setting(Setting.Action)
         case selectTab(Tab)
@@ -38,7 +38,7 @@ public struct TabBar: ReducerProtocol {
     
     public init() { }
     
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some ReducerProtocolOf<Self> {
         Scope(state: \.home, action: /Action.home) {
             Home()
         }

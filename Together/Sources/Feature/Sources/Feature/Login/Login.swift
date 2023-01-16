@@ -14,7 +14,7 @@ import ThirdParty
 import ComposableArchitecture
 
 public struct Login: ReducerProtocol {
-    public struct State: Equatable {
+    public struct State: Equatable, Sendable {
         var email: String
         var isEmailValid: Bool?
         
@@ -40,7 +40,7 @@ public struct Login: ReducerProtocol {
         }
     }
     
-    public enum Action: Equatable {
+    public enum Action: Equatable, Sendable {
         case didChangeEmail(String)
         case emailValidateResponse(Bool?)
         
@@ -67,7 +67,7 @@ public struct Login: ReducerProtocol {
     @Dependency(\.validator) var validator
     private enum LoginCancelID { }
     
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some ReducerProtocolOf<Self> {
         Reduce(core)
             .ifLet(\.optionalOnboarding, action: /Action.optionalOnboarding) { 
                 Onboarding()

@@ -9,11 +9,11 @@ import TogetherCore
 import ComposableArchitecture
 
 public struct OnboardingFeedRegister: ReducerProtocol {
-    public struct State: Equatable {
+    public struct State: Equatable, Sendable {
         var feedRegister: FeedRegister.State 
     }
     
-    public enum Action: Equatable {
+    public enum Action: Equatable, Sendable {
         case feedRegister(FeedRegister.Action)
         case didTapSkipButton
         case didTapNextButton
@@ -21,7 +21,7 @@ public struct OnboardingFeedRegister: ReducerProtocol {
     
     public init() { }
     
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some ReducerProtocolOf<Self> {
         Scope(state: \.feedRegister, action: /Action.feedRegister) { 
             FeedRegister()
         }

@@ -10,11 +10,11 @@ import TogetherCore
 import UIKit
 
 public struct Home: ReducerProtocol {
-    public struct State: Equatable {
+    public struct State: Equatable, Sendable {
         public init() { }
     }
     
-    public enum Action: Equatable {
+    public enum Action: Equatable, Sendable {
         
     }
     

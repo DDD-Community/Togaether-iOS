@@ -15,14 +15,14 @@ import ThirdParty
 import ComposableArchitecture
 
 struct Root: ReducerProtocol {
-    enum State: Equatable {
+    enum State: Equatable, Sendable {
         case root
         case login(Login.State)
         case onboarding(Onboarding.State)
         case tab(TabBar.State)
     }
     
-    enum Action: Equatable {
+    enum Action: Equatable, Sendable {
         case viewDidAppear
         case tokenResponse(TaskResult<String>)
         

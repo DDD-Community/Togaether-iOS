@@ -9,12 +9,12 @@ import TogetherCore
 import ComposableArchitecture
 
 public struct OnboardingSpecies: ReducerProtocol {
-    public struct State: Equatable {
+    public struct State: Equatable, Sendable {
         var species: [String] = .init()
         var sections: [SpeciesSection] = .init()
     }
     
-    public enum Action: Equatable {
+    public enum Action: Equatable, Sendable {
         case viewDidLoad
         case didTapSkipButton
         case didTapNextButton
@@ -23,7 +23,7 @@ public struct OnboardingSpecies: ReducerProtocol {
     
     public init() { }
     
-    public var body: some ReducerProtocol<State, Action> {
+    public var body: some ReducerProtocolOf<Self> {
         Reduce(core)
     }
     
