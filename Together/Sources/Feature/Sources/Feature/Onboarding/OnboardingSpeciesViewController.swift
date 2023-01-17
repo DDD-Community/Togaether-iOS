@@ -19,6 +19,7 @@ public final class OnboardingSpeciesViewController: UIViewController {
     
     private let store: StoreOf<Onboarding>
     private let viewstore: ViewStoreOf<Onboarding>
+    private let tempViewStore: ViewStoreOf<OnboardingSpecies>
     private let canSkip: Bool
     private var cancellables: Set<AnyCancellable> = .init()
     
@@ -138,11 +139,13 @@ public final class OnboardingSpeciesViewController: UIViewController {
     
     public init(
         store: StoreOf<Onboarding>,
+        speciesStore: StoreOf<OnboardingSpecies>,
         canSkip: Bool
     ) {
         self.store = store
         self.viewstore = ViewStore(store)
         self.canSkip = canSkip
+        self.tempViewStore = ViewStore(speciesStore)
         super.init(nibName: nil, bundle: nil)
         layout.finalActive()
     }
@@ -166,6 +169,8 @@ public final class OnboardingSpeciesViewController: UIViewController {
     }
     
     private func bindAction() {
+        tempViewStore.send(.viewDidLoad)
+        
         nextButton
             .throttleTapGesture
             .sink { [weak self] _ in
@@ -183,6 +188,17 @@ public final class OnboardingSpeciesViewController: UIViewController {
     
     private func bindState() {
         titleLabel.text = "\(viewstore.onboardingInfo.name)는\n어떤 종인가요?"
+        
+        tempViewStore.publisher.species
+            .sink { [weak self] species in
+                var snapshot = SpeciesSnapshot.init()
+                species.forEach { section in
+                    snapshot.appendSections([section.id])
+                    snapshot.appendItems(section.names, toSection: section.id)
+                }
+                self?.datasource.apply(snapshot)
+            }
+            .store(in: &cancellables)
     }
     
     private func bindNavigation() {
@@ -206,18 +222,3 @@ public final class OnboardingSpeciesViewController: UIViewController {
             .store(in: &cancellables)
     }
 }
-
-#if canImport(SwiftUI) && DEBUG
-import SwiftUI
-
-struct OnboardingSpecies_Previews: PreviewProvider {
-    static var previews: some View {
-        let store: StoreOf<Onboarding> = .init(
-            initialState: .init(onboardingInfo: .init(name: "꼬비꼬비")), 
-            reducer: Onboarding()
-        )
-        return OnboardingSpeciesViewController(store: store, canSkip: true)
-            .showPrieview()
-    }
-}
-#endif

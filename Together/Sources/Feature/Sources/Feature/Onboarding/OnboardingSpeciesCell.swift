@@ -16,6 +16,6 @@ import SwiftLayout
 
 final class OnboardingSpeciesCell: UITableViewCell {
     func configure(name: String) {
-        
+        self.textLabel?.text = name
     }
 }

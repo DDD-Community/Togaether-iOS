@@ -200,11 +200,15 @@ public final class OnboardingInfoViewController: UIViewController {
     
     private func bindNavigation() {
         store
-            .scope(state: \.onboardingSpecies)
+            .scope(state: \.onboardingSpecies, action: Onboarding.Action.onboardingSpecies)
             .ifLet { [weak self] species in
                 guard let self = self else { return }
                 self.navigationController?.pushViewController(
-                    OnboardingSpeciesViewController(store: self.store, canSkip: true), 
+                    OnboardingSpeciesViewController(
+                        store: self.store,
+                        speciesStore: species,
+                        canSkip: true
+                    ), 
                     animated: true
                 )
             }

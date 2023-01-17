@@ -10,8 +10,7 @@ import ComposableArchitecture
 
 public struct OnboardingSpecies: ReducerProtocol {
     public struct State: Equatable, Sendable {
-        var species: [String] = .init()
-        var sections: [SpeciesSection] = .init()
+        var species: [SpeciesSection] = .init()
     }
     
     public enum Action: Equatable, Sendable {
@@ -30,8 +29,21 @@ public struct OnboardingSpecies: ReducerProtocol {
     public func core(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
         case .viewDidLoad:
-            state.species = mockData
-            let sections = mockData.sorted()
+            let groupedDictionary = Dictionary(
+                grouping: mockData, 
+                by: { name in 
+                    let firstAlpabet = String(name.prefix(1).decomposedStringWithCompatibilityMapping.unicodeScalars.prefix(1))
+                    return firstAlpabet
+                }
+            )
+            let groupKeys = groupedDictionary.keys.sorted()
+            let species = groupKeys.map { 
+                return SpeciesSection(
+                    id: $0, 
+                    names: groupedDictionary[$0]?.sorted() ?? .init()
+                ) 
+            }
+            state.species = species
             return .none
             
         case .didTapSkipButton, .didTapNextButton, .detachChild:

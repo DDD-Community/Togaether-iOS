@@ -18,7 +18,7 @@ struct SpeciesSection: Identifiable, Hashable, Sendable {
     var names: [String]
 }
 
-typealias SpeciesSnapshot = NSDiffableDataSourceSnapshot<SpeciesSection, String>
+typealias SpeciesSnapshot = NSDiffableDataSourceSnapshot<String, String>
 
 final class OnboardingSpeciesTableView: UITableView {
     init() {
@@ -35,4 +35,4 @@ final class OnboardingSpeciesTableView: UITableView {
     }
 }
 
-final class OnboardingSpeciesDataSource: UITableViewDiffableDataSource<SpeciesSection, String> { }
+final class OnboardingSpeciesDataSource: UITableViewDiffableDataSource<String, String> { }
