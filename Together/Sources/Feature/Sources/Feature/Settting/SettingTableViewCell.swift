@@ -32,7 +32,9 @@ final class SettingTableViewCell: UITableViewCell, Layoutable {
     }
 
     @LayoutBuilder var layout: some SwiftLayout.Layout {
-        contentView.sublayout {
+        contentView.anchors {
+            Anchors.height.equalTo(constant: 52)
+        }.sublayout {
             titleLabel.anchors {
                 Anchors.leading.equalToSuper(inwardOffset: 24)
                 Anchors.centerY.equalToSuper()

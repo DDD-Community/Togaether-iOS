@@ -9,7 +9,7 @@ import TogetherCore
 import ComposableArchitecture
 
 public struct Setting: ReducerProtocol {
-    public enum SettingItem: String, CaseIterable {
+    public enum SettingItem: String, CaseIterable, Sendable {
         case myInfo = "내 정보 설정"
         case petInfo = "강아지 정보 설정"
         case agreement = "이용약관"
@@ -27,14 +27,40 @@ public struct Setting: ReducerProtocol {
     }
     
     public enum Action: Equatable, Sendable {
-        
+        case didTapMyInfo
+        case didTapPetInfo
+        case didTapAgreement
+        case didTapPersonalInfo
+        case didTapVersion
+        case didTapLogout
     }
     
     public init() { }
     
-    public func reduce(into state: inout State, action: Action) -> EffectTask<Action> {
+    public var body: some ReducerProtocolOf<Self> {
+        Reduce(core)
+    }
+
+    public func core(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
-            
+        case .didTapMyInfo:
+            print("MyInfo")
+            return .none
+        case .didTapPetInfo:
+            print("PetInfo")
+            return .none
+        case .didTapAgreement:
+            print("Agreement")
+            return .none
+        case .didTapPersonalInfo:
+            print("PersonalInfo")
+            return .none
+        case .didTapVersion:
+            print("Version")
+            return .none
+        case .didTapLogout:
+            print("Logout")
+            return .none
         }
     }
     
