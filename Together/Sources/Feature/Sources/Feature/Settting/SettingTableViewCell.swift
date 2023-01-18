@@ -47,6 +47,7 @@ final class SettingTableViewCell: UITableViewCell, Layoutable {
                 Anchors.centerY.equalToSuper()
             }
             bottomSeparator.anchors {
+                Anchors.height.equalTo(constant: 1)
                 Anchors.bottom.equalToSuper()
                 Anchors.leading.trailing.equalToSuper(inwardOffset: 24)
             }

@@ -32,6 +32,7 @@ final class SettingViewController: UIViewController, Layoutable {
         tableView.register(SettingTableViewCell.self, forCellReuseIdentifier: SettingTableViewCell.identifier)
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.separatorStyle = .none
     }
 
     @LayoutBuilder var layout: some SwiftLayout.Layout {
@@ -82,6 +83,7 @@ extension SettingViewController: UITableViewDataSource, UITableViewDelegate {
         }
 
         cell.settingItem = viewStore.settingItems[indexPath.row]
+        cell.selectionStyle = .none
 
         if viewStore.settingItems[indexPath.row] == .version {
             cell.subText = "1.0.0"
