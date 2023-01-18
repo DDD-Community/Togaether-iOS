@@ -38,6 +38,7 @@ public extension UIColor {
 // MARK: Blue Gray Color
 
 public extension UIColor {
+    static var blueGray0: UIColor = hex("FFFFFF")
     static var blueGray100: UIColor = hex("F7F7F8")
     static var blueGray150: UIColor = hex("EFEFF0")
     static var blueGray200: UIColor = hex("E0E1E4")

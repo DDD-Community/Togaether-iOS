@@ -1,8 +1,6 @@
 //
-//  File.swift
-//  
+//  UIView+Extension.swift
 //
-//  Created by 한상진 on 2022/12/31.
 //
 
 import UIKit
@@ -53,4 +51,12 @@ public extension UIView {
         get { return self.overrideUserInterfaceStyle != .light }
         set { self.overrideUserInterfaceStyle = newValue ? .unspecified : .light }
     }
+
+    func addBlurEffect() {
+        let blurEffect = UIBlurEffect(style: .dark)
+        let visualEffectView = UIVisualEffectView(effect: blurEffect)
+        visualEffectView.frame = self.frame
+        self.addSubview(visualEffectView)
+    }
+    
 }

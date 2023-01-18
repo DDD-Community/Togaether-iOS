@@ -40,7 +40,8 @@ public final class TabBarController: UITabBarController {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        
+
+        tabBar.tintColor = .blueGray700
         setupViewControllers()
         bindState()
     }
@@ -62,6 +63,7 @@ public final class TabBarController: UITabBarController {
                 let store: StoreOf<Home> = store.scope(state: \.home, action: TabBar.Action.home)
                 let viewController: HomeViewController = .init(store: store) 
                 let navigationController: UINavigationController = .init(rootViewController: viewController)
+                navigationController.isNavigationBarHidden = true
                 navigationController.tabBarItem = tab.tabBarItem
                 return navigationController
                 
@@ -69,6 +71,7 @@ public final class TabBarController: UITabBarController {
                 let store: StoreOf<Setting> = store.scope(state: \.setting, action: TabBar.Action.setting)
                 let viewController: SettingViewController = .init(store: store) 
                 let navigationController: UINavigationController = .init(rootViewController: viewController)
+                navigationController.isNavigationBarHidden = true
                 navigationController.tabBarItem = tab.tabBarItem
                 return navigationController
             } 
@@ -87,14 +90,14 @@ extension TabBar.Tab {
     var tabBarItem: UITabBarItem {
         switch self {
         case .home: return .init(
-            title: "홈",
-            image: UIImage(systemName: "house"), 
-            selectedImage: UIImage(systemName: "house.fill")
+            title: nil,
+            image: UIImage(named: "ic_gnb_main_nor"),
+            selectedImage: UIImage(named: "ic_gnb_main_sel")
         )
         case .setting: return .init(
-            title: "설정",
-            image: UIImage(systemName: "person"), 
-            selectedImage: UIImage(systemName: "person.fill")
+            title: nil,
+            image: UIImage(systemName: "person")?.withRenderingMode(.alwaysTemplate).withTintColor(.blueGray700),
+            selectedImage: UIImage(systemName: "person.fill")?.withRenderingMode(.alwaysTemplate).withTintColor(.blueGray700)
         )    
         }
     }

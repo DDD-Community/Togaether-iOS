@@ -20,11 +20,35 @@ final class HomeViewController: UIViewController, Layoutable {
     private let store: StoreOf<Home>
     private let viewStore: ViewStoreOf<Home>
 
+    private let titleLabel: UILabel = UILabel().config { label in
+        label.numberOfLines = 2
+        label.font = .display1
+        label.text = "댕댕이 자랑\n해보는건 어때요?"
+        label.textColor = .blueGray900
+    }
+
+    private let notificationButton: TogetherImageButton = TogetherImageButton(image: UIImage(named: "ic_notification"))
+
     private let viewContainer: UIView = UIView()
     private var swipeView: TogetherSwipeView! {
         didSet{
             self.swipeView.delegate = self
         }
+    }
+
+    private lazy var guideAnimationView: UIView = UIView().config { view in
+        view.backgroundColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.5)
+        view.cornerRadius = 20
+        view.clipsToBounds = true
+        view.addBlurEffect()
+    }
+
+    private let guideLabel: UILabel = UILabel().config { label in
+        label.font = .subhead1
+        label.textColor = .blueGray0
+        label.text = "우측으로 스와이프 하고\n마음에 드는 강아지를 팔로우 하세요"
+        label.textAlignment = .center
+        label.numberOfLines = 2
     }
     
     @LayoutBuilder var layout: some SwiftLayout.Layout {
@@ -34,8 +58,30 @@ final class HomeViewController: UIViewController, Layoutable {
             viewContainer.anchors {
                 Anchors.leading.trailing.equalToSuper()
                 Anchors.centerX.equalToSuper()
+                Anchors.top.equalTo(titleLabel, attribute: .bottom, inwardOffset: 50)
+                Anchors.bottom.equalTo(view.safeAreaLayoutGuide.bottomAnchor, inwardOffset: 14)
+            }
+
+            guideAnimationView.anchors {
+                Anchors.size(width: 250, height: 250)
+                Anchors.centerX.equalToSuper()
                 Anchors.centerY.equalToSuper()
-                Anchors.height.equalTo(constant: 500)
+            }.sublayout {
+                guideLabel.anchors {
+                    Anchors.centerX.equalToSuper()
+                    Anchors.leading.trailing.equalToSuper(inwardOffset: 5)
+                    Anchors.bottom.equalToSuper(inwardOffset: 35)
+                }
+            }
+
+            titleLabel.anchors {
+                Anchors.top.equalTo(view.safeAreaLayoutGuide.topAnchor, inwardOffset: 26)
+                Anchors.leading.equalToSuper(inwardOffset: 25)
+            }
+
+            notificationButton.anchors {
+                Anchors.top.equalTo(view.safeAreaLayoutGuide.topAnchor, inwardOffset: 26)
+                Anchors.trailing.equalToSuper(inwardOffset: 22)
             }
         }
     }
@@ -74,8 +120,11 @@ final class HomeViewController: UIViewController, Layoutable {
             return customView
         }
 
-        let swipeFrame = CGRect(x: 0, y: 0, width: view.bounds.width, height: 500)
-        swipeView = TogetherSwipeView(frame: swipeFrame, contentView: contentView)
+        let scenes = UIApplication.shared.connectedScenes.first as? UIWindowScene
+        let window = scenes?.windows.first
+
+        let swipeFrame = CGRect(x: 0, y: 0, width: view.bounds.width, height: view.frame.height - UIApplication.shared.statusBarFrame.size.height - (window?.safeAreaInsets.top ?? 0) - (window?.safeAreaInsets.bottom ?? 0) - 108 - 14)
+        swipeView = TogetherSwipeView(inset: 0, frame: swipeFrame, contentView: contentView)
         viewContainer.addSubview(swipeView)
         swipeView.showTogetherCards(with: puppyModels, isDummyShow: true)
     }

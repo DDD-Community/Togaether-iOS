@@ -23,7 +23,7 @@ public protocol TogetherSwipeViewDelegate: AnyObject {
 }
 
 public class TogetherSwipeView: UIView {
-    private let inset: CGFloat = 16
+    private var inset: CGFloat = 14
 
     var cardBufferSize: Int = 3 {
         didSet {
@@ -45,8 +45,10 @@ public class TogetherSwipeView: UIView {
 
     public typealias ContentView = (_ index: Int, _ frame: CGRect, _ element: PuppyModel) -> (PuppyContentView)
 
-    public init(frame: CGRect,
+    public init(inset: CGFloat,
+                frame: CGRect,
                 contentView: @escaping ContentView, cardBufferSize : Int = 3) {
+        self.inset = inset
         self.contentView = contentView
         self.cardBufferSize = cardBufferSize
         super.init(frame: frame)
