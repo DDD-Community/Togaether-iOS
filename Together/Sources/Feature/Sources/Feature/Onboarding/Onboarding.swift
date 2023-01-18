@@ -57,7 +57,7 @@ public struct Onboarding: ReducerProtocol {
                 .onboardingSpecies(.didTapSkipButton),
                 .onboardingRegister(.didTapSkipButton):
             Preferences.shared.onboardingFinished = true
-            state.tabBar = .init(home: .init(), setting: .init())
+            state.tabBar = .init(home: .init(), agora: .init(), today: .init(), setting: .init())
             return .none
             
         case .onboardingInfo(.didTapNextButton):

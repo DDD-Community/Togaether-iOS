@@ -1,8 +1,6 @@
 //
-//  File.swift
-//  
+//  TabBarController.swift
 //
-//  Created by 한상진 on 2022/12/30.
 //
 
 import UIKit
@@ -42,6 +40,8 @@ public final class TabBarController: UITabBarController {
         super.viewDidLoad()
 
         tabBar.tintColor = .blueGray700
+        tabBar.barTintColor = .blueGray700
+        tabBar.unselectedItemTintColor = .blueGray700
         setupViewControllers()
         bindState()
     }
@@ -62,6 +62,22 @@ public final class TabBarController: UITabBarController {
             case .home:
                 let store: StoreOf<Home> = store.scope(state: \.home, action: TabBar.Action.home)
                 let viewController: HomeViewController = .init(store: store) 
+                let navigationController: UINavigationController = .init(rootViewController: viewController)
+                navigationController.isNavigationBarHidden = true
+                navigationController.tabBarItem = tab.tabBarItem
+                return navigationController
+
+            case .agora:
+                let store: StoreOf<Agora> = store.scope(state: \.agora, action: TabBar.Action.agora)
+                let viewController: AgoraViewController = .init(store: store)
+                let navigationController: UINavigationController = .init(rootViewController: viewController)
+                navigationController.isNavigationBarHidden = true
+                navigationController.tabBarItem = tab.tabBarItem
+                return navigationController
+
+            case .today:
+                let store: StoreOf<Today> = store.scope(state: \.today, action: TabBar.Action.today)
+                let viewController: TodayViewController = .init(store: store)
                 let navigationController: UINavigationController = .init(rootViewController: viewController)
                 navigationController.isNavigationBarHidden = true
                 navigationController.tabBarItem = tab.tabBarItem
@@ -94,6 +110,16 @@ extension TabBar.Tab {
             image: UIImage(named: "ic_gnb_main_nor"),
             selectedImage: UIImage(named: "ic_gnb_main_sel")
         )
+        case .agora: return .init(
+            title: nil,
+            image: UIImage(named: "ic_gnb_best_nor"),
+            selectedImage: UIImage(named: "ic_gnb_best_sel")
+        )
+        case .today: return .init(
+            title: nil,
+            image: UIImage(named: "ic_gnb_today_nor"),
+            selectedImage: UIImage(named: "ic_gnb_today_nor") // TODO: Image Change (nor > sel)
+        )
         case .setting: return .init(
             title: nil,
             image: UIImage(systemName: "person")?.withRenderingMode(.alwaysTemplate).withTintColor(.blueGray700),
@@ -105,7 +131,9 @@ extension TabBar.Tab {
     var selectedIndex: Int {
         switch self {
         case .home: return 0
-        case .setting: return 1
+        case .agora: return 1
+        case .today: return 2
+        case .setting: return 3
         }
     }
 }
@@ -115,7 +143,7 @@ import SwiftUI
 
 struct TabBar_Previews: PreviewProvider {
     static var previews: some View {
-        let store: StoreOf<TabBar> = .init(initialState: .init(home: .init(), setting: .init()), reducer: TabBar())
+        let store: StoreOf<TabBar> = .init(initialState: .init(home: .init(), agora: .init(), today: .init(), setting: .init()), reducer: TabBar())
         return TabBarController(store: store)
             .showPrieview()
     }

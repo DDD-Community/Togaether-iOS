@@ -123,7 +123,9 @@ final class HomeViewController: UIViewController, Layoutable {
         let scenes = UIApplication.shared.connectedScenes.first as? UIWindowScene
         let window = scenes?.windows.first
 
-        let swipeFrame = CGRect(x: 0, y: 0, width: view.bounds.width, height: view.frame.height - UIApplication.shared.statusBarFrame.size.height - (window?.safeAreaInsets.top ?? 0) - (window?.safeAreaInsets.bottom ?? 0) - 108 - 14)
+        let swipeFrame = CGRect(x: 0, y: 0, width: view.bounds.width, height: view.frame.height -
+                                UIApplication.shared.statusBarFrame.size.height -
+                                (window?.safeAreaInsets.top ?? 0) - (window?.safeAreaInsets.bottom ?? 0) - 108 - 14)
         swipeView = TogetherSwipeView(inset: 0, frame: swipeFrame, contentView: contentView)
         viewContainer.addSubview(swipeView)
         swipeView.showTogetherCards(with: puppyModels, isDummyShow: true)
