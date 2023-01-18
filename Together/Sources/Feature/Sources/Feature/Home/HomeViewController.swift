@@ -40,7 +40,11 @@ final class HomeViewController: UIViewController, Layoutable {
         view.backgroundColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.5)
         view.cornerRadius = 20
         view.clipsToBounds = true
-        view.addBlurEffect()
+
+        let blurEffect = UIBlurEffect(style: .dark)
+        let visualEffectView = UIVisualEffectView(effect: blurEffect)
+        visualEffectView.frame = self.view.frame
+        view.addSubview(visualEffectView)
     }
 
     private let guideLabel: UILabel = UILabel().config { label in
