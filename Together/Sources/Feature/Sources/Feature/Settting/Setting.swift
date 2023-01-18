@@ -19,7 +19,11 @@ public struct Setting: ReducerProtocol {
     }
     
     public struct State: Equatable, Sendable {
-        public init() { }
+        var settingMyInfo: MyInfo.State?
+
+        public init(settingMyInfo: MyInfo.State? = nil) {
+            self.settingMyInfo = settingMyInfo
+        }
 
         let settingItems: [SettingItem] = [
             .myInfo, .petInfo, .agreement, .personalInfo, .version, .logout
@@ -27,6 +31,10 @@ public struct Setting: ReducerProtocol {
     }
     
     public enum Action: Equatable, Sendable {
+        // MARK: 설정 내부 화면
+        case settingMyInfo(MyInfo.Action)
+        
+        // MARK: 설정 화면 이벤트 처리
         case didTapMyInfo
         case didTapPetInfo
         case didTapAgreement
@@ -39,12 +47,18 @@ public struct Setting: ReducerProtocol {
     
     public var body: some ReducerProtocolOf<Self> {
         Reduce(core)
+            .ifLet(\.settingMyInfo, action: /Action.settingMyInfo) {
+                MyInfo()
+            }
     }
 
     public func core(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
+        case .settingMyInfo(.detachChild):
+            state.settingMyInfo = nil
+            return .none
         case .didTapMyInfo:
-            print("MyInfo")
+            state.settingMyInfo = .init()
             return .none
         case .didTapPetInfo:
             print("PetInfo")

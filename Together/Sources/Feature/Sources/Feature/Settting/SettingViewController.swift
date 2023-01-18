@@ -5,14 +5,13 @@
 //  Created by 한상진 on 2022/12/30.
 //
 
-import UIKit
-
+import Combine
+import ComposableArchitecture
+import SwiftLayout
 import TogetherCore
 import TogetherUI
 import ThirdParty
-
-import SwiftLayout
-import ComposableArchitecture
+import UIKit
 
 final class SettingViewController: UIViewController, Layoutable {
     typealias DataSource = UITableViewDiffableDataSource<Section, Setting.SettingItem>
@@ -26,6 +25,7 @@ final class SettingViewController: UIViewController, Layoutable {
 
     private let store: StoreOf<Setting>
     private let viewStore: ViewStoreOf<Setting>
+    private var cancellables: Set<AnyCancellable> = .init()
 
     var settingDataSource: DataSource!
 
@@ -70,6 +70,7 @@ final class SettingViewController: UIViewController, Layoutable {
         super.init(nibName: nil, bundle: nil)
 
         self.setupSettingDataSource()
+        self.bindNavigation()
         sl.updateLayout()
     }
     
@@ -101,6 +102,25 @@ final class SettingViewController: UIViewController, Layoutable {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: true)
+    }
+
+    private func bindNavigation() {
+        store
+            .scope(state: \.settingMyInfo, action: Setting.Action.settingMyInfo)
+            .ifLet { [weak self] myInfo in
+                guard let self = self else { return }
+                self.navigationController?.pushViewController(
+                    MyInfoViewController(store: self.store,
+                                         myInfoStore: myInfo),
+                    animated: true
+                )
+            }
+            .store(in: &cancellables)
     }
 }
 
