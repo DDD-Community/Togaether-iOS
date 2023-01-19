@@ -62,7 +62,8 @@ public final class TabBarController: UITabBarController {
             case .home:
                 let store: StoreOf<Home> = store.scope(state: \.home, action: TabBar.Action.home)
                 let viewController: HomeViewController = .init(store: store) 
-                let navigationController: UINavigationController = .init(rootViewController: viewController)
+                let navigationController: UINavigationController = .init(navigationBarClass: TogetherNavigationBar.self, toolbarClass: nil)
+                navigationController.viewControllers = [viewController]
                 navigationController.isNavigationBarHidden = true
                 navigationController.tabBarItem = tab.tabBarItem
                 return navigationController
@@ -70,7 +71,8 @@ public final class TabBarController: UITabBarController {
             case .agora:
                 let store: StoreOf<Agora> = store.scope(state: \.agora, action: TabBar.Action.agora)
                 let viewController: AgoraViewController = .init(store: store)
-                let navigationController: UINavigationController = .init(rootViewController: viewController)
+                let navigationController: UINavigationController = .init(navigationBarClass: TogetherNavigationBar.self, toolbarClass: nil)
+                navigationController.viewControllers = [viewController]
                 navigationController.isNavigationBarHidden = true
                 navigationController.tabBarItem = tab.tabBarItem
                 return navigationController
@@ -78,15 +80,17 @@ public final class TabBarController: UITabBarController {
             case .today:
                 let store: StoreOf<Today> = store.scope(state: \.today, action: TabBar.Action.today)
                 let viewController: TodayViewController = .init(store: store)
-                let navigationController: UINavigationController = .init(rootViewController: viewController)
+                let navigationController: UINavigationController = .init(navigationBarClass: TogetherNavigationBar.self, toolbarClass: nil)
+                navigationController.viewControllers = [viewController]
                 navigationController.isNavigationBarHidden = true
                 navigationController.tabBarItem = tab.tabBarItem
                 return navigationController
                 
-            case .setting:
-                let store: StoreOf<Setting> = store.scope(state: \.setting, action: TabBar.Action.setting)
-                let viewController: SettingViewController = .init(store: store) 
-                let navigationController: UINavigationController = .init(rootViewController: viewController)
+            case .mypage:
+                let store: StoreOf<MyPage> = store.scope(state: \.mypage, action: TabBar.Action.mypage)
+                let viewController: MyPageViewController = .init(store: store)
+                let navigationController: UINavigationController = .init(navigationBarClass: TogetherNavigationBar.self, toolbarClass: nil)
+                navigationController.viewControllers = [viewController]
                 navigationController.isNavigationBarHidden = true
                 navigationController.tabBarItem = tab.tabBarItem
                 return navigationController
@@ -120,7 +124,7 @@ extension TabBar.Tab {
             image: UIImage(named: "ic_gnb_today_nor"),
             selectedImage: UIImage(named: "ic_gnb_today_nor") // TODO: Image Change (nor > sel)
         )
-        case .setting: return .init(
+        case .mypage: return .init(
             title: nil,
             image: UIImage(systemName: "person")?.withRenderingMode(.alwaysTemplate).withTintColor(.blueGray700),
             selectedImage: UIImage(systemName: "person.fill")?.withRenderingMode(.alwaysTemplate).withTintColor(.blueGray700)
@@ -133,7 +137,7 @@ extension TabBar.Tab {
         case .home: return 0
         case .agora: return 1
         case .today: return 2
-        case .setting: return 3
+        case .mypage: return 3
         }
     }
 }
@@ -143,7 +147,7 @@ import SwiftUI
 
 struct TabBar_Previews: PreviewProvider {
     static var previews: some View {
-        let store: StoreOf<TabBar> = .init(initialState: .init(home: .init(), agora: .init(), today: .init(), setting: .init()), reducer: TabBar())
+        let store: StoreOf<TabBar> = .init(initialState: .init(home: .init(), agora: .init(), today: .init(), mypage: .init()), reducer: TabBar())
         return TabBarController(store: store)
             .showPrieview()
     }

@@ -10,27 +10,27 @@ public struct TabBar: ReducerProtocol {
         case home = "홈"
         case agora = "광장"
         case today = "투데이"
-        case setting = "설정"
+        case mypage = "MY"
     }
     
     public struct State: Equatable, Sendable {
         var home: Home.State
         var agora: Agora.State
         var today: Today.State
-        var setting: Setting.State
+        var mypage: MyPage.State
         var currentTab: Tab
         
         public init (
             home: Home.State,
             agora: Agora.State,
             today: Today.State,
-            setting: Setting.State,
+            mypage: MyPage.State,
             Tab: Tab = Tab.home
         ) {
             self.home = home
             self.agora = agora
             self.today = today
-            self.setting = setting
+            self.mypage = mypage
             self.currentTab = Tab
         }
     }
@@ -39,7 +39,7 @@ public struct TabBar: ReducerProtocol {
         case home(Home.Action)
         case agora(Agora.Action)
         case today(Today.Action)
-        case setting(Setting.Action)
+        case mypage(MyPage.Action)
         case selectTab(Tab)
     }
     
@@ -58,13 +58,13 @@ public struct TabBar: ReducerProtocol {
             Today()
         }
         
-        Scope(state: \.setting, action: /Action.setting) {
-            Setting()
+        Scope(state: \.mypage, action: /Action.mypage) {
+            MyPage()
         }
         
         Reduce { state, action in
             switch action {
-            case .home, .agora, .today, .setting:
+            case .home, .agora, .today, .mypage:
                 return .none
                 
             case let .selectTab(tab):

@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  PetInfoViewController.swift
 //  
 //
 //  Created by denny on 2023/01/18.
@@ -12,12 +12,12 @@ import TogetherUI
 import ThirdParty
 import UIKit
 
-final class MyInfoViewController: UIViewController, Layoutable {
+final class PetInfoViewController: UIViewController, Layoutable {
     var activation: Activation?
 
     private let store: StoreOf<Setting>
     private let viewStore: ViewStoreOf<Setting>
-    private let tempViewStore: ViewStoreOf<MyInfo>
+    private let tempViewStore: ViewStoreOf<PetInfo>
 
     @LayoutBuilder var layout: some Layout {
         view.config { view in
@@ -29,10 +29,10 @@ final class MyInfoViewController: UIViewController, Layoutable {
         }
     }
 
-    init(store: StoreOf<Setting>, myInfoStore: StoreOf<MyInfo>) {
+    init(store: StoreOf<Setting>, petInfoStore: StoreOf<PetInfo>) {
         self.store = store
         self.viewStore = ViewStore(store)
-        self.tempViewStore = ViewStore(myInfoStore)
+        self.tempViewStore = ViewStore(petInfoStore)
         super.init(nibName: nil, bundle: nil)
         sl.updateLayout()
     }
@@ -43,7 +43,13 @@ final class MyInfoViewController: UIViewController, Layoutable {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "내 정보 설정"
+        
+        if let navBar = navigationController?.navigationBar as? TogetherNavigationBar {
+            navBar.setBackgroundImage(UIImage(color: .blueGray0), for: .default)
+        }
+
+        navigationItem.setLeftBarButtonItem7(.backButtonItem(target: self, action: #selector(onClickBackButton)))
+        navigationItem.title = "강아지 정보 설정"
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -51,10 +57,9 @@ final class MyInfoViewController: UIViewController, Layoutable {
         navigationController?.setNavigationBarHidden(false, animated: true)
     }
 
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        if !isMovingToParent {
-            viewStore.send(.settingMyInfo(.detachChild))
-        }
+    @objc
+    private func onClickBackButton(_ sender: UIBarButtonItem) {
+        navigationController?.popViewController(animated: true)
+        viewStore.send(.settingPetInfo(.detachChild))
     }
 }

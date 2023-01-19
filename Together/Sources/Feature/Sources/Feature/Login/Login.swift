@@ -126,7 +126,7 @@ public struct Login: ReducerProtocol {
             
         case let .loginResponse(.success(token)):
             if Preferences.shared.onboardingFinished {
-                state.optionalTab = .init(home: .init(), agora: .init(), today: .init(), setting: .init())
+                state.optionalTab = .init(home: .init(), agora: .init(), today: .init(), mypage: .init())
             } else {
                 state.optionalOnboarding = .init()
             }
@@ -141,7 +141,7 @@ public struct Login: ReducerProtocol {
             
         case .optionalTerms(.optionalJoin(.joinResponse(.success))):
             if Preferences.shared.onboardingFinished {
-                state.optionalTab = .init(home: .init(), agora: .init(), today: .init(), setting: .init())
+                state.optionalTab = .init(home: .init(), agora: .init(), today: .init(), mypage: .init())
             } else {
                 state.optionalOnboarding = .init()
             }

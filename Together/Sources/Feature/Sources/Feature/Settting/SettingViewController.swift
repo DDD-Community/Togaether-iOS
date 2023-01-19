@@ -23,18 +23,15 @@ final class SettingViewController: UIViewController, Layoutable {
 
     var activation: Activation?
 
-    private let store: StoreOf<Setting>
-    private let viewStore: ViewStoreOf<Setting>
+    private let store: StoreOf<MyPage>
+    private let viewStore: ViewStoreOf<MyPage>
+
+    private let tempStore: StoreOf<Setting>
+    private let tempViewStore: ViewStoreOf<Setting>
+
     private var cancellables: Set<AnyCancellable> = .init()
 
     var settingDataSource: DataSource!
-
-    private let titleLabel: UILabel = UILabel().config { label in
-        label.numberOfLines = 2
-        label.font = .display1
-        label.text = "설정"
-        label.textColor = .blueGray900
-    }
 
     private lazy var settingTableView: UITableView = UITableView().config { tableView in
         tableView.backgroundColor = .blueGray100
@@ -51,22 +48,20 @@ final class SettingViewController: UIViewController, Layoutable {
                 Anchors.allSides()
             }
 
-            titleLabel.anchors {
-                Anchors.top.equalTo(view.safeAreaLayoutGuide.topAnchor, inwardOffset: 26)
-                Anchors.leading.equalToSuper(inwardOffset: 25)
-            }
-
             settingTableView.anchors {
-                Anchors.top.equalTo(titleLabel, attribute: .bottom, inwardOffset: 26)
+                Anchors.top.equalTo(view.safeAreaLayoutGuide.topAnchor, inwardOffset: 14)
                 Anchors.bottom.equalTo(view.safeAreaLayoutGuide.bottomAnchor, inwardOffset: 0)
                 Anchors.leading.trailing.equalToSuper()
             }
         }
     }
     
-    init(store: StoreOf<Setting>) {
+    init(store: StoreOf<MyPage>, settingStore: StoreOf<Setting>) {
         self.store = store
         self.viewStore = ViewStore(store)
+        self.tempStore = settingStore
+        self.tempViewStore = ViewStore(settingStore)
+
         super.init(nibName: nil, bundle: nil)
 
         self.setupSettingDataSource()
@@ -84,10 +79,10 @@ final class SettingViewController: UIViewController, Layoutable {
                 return UITableViewCell()
             }
 
-            cell.settingItem = self.viewStore.settingItems[indexPath.row]
+            cell.settingItem = self.tempViewStore.settingItems[indexPath.row]
             cell.selectionStyle = .none
 
-            if self.viewStore.settingItems[indexPath.row] == .version {
+            if self.tempViewStore.settingItems[indexPath.row] == .version {
                 cell.subText = "1.0.0"
             }
 
@@ -96,27 +91,40 @@ final class SettingViewController: UIViewController, Layoutable {
 
         var snapshot = Snapshot()
         snapshot.appendSections([.main])
-        snapshot.appendItems(viewStore.settingItems)
+        snapshot.appendItems(tempViewStore.settingItems)
         settingDataSource.apply(snapshot, animatingDifferences: false)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        if let navBar = navigationController?.navigationBar as? TogetherNavigationBar {
+            navBar.setBackgroundImage(UIImage(color: .blueGray0), for: .default)
+        }
+
+        navigationItem.setLeftBarButtonItem7(.backButtonItem(target: self, action: #selector(onClickBackButton)))
+        navigationItem.title = "설정"
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.setNavigationBarHidden(true, animated: true)
+        navigationController?.setNavigationBarHidden(false, animated: true)
+    }
+
+    @objc
+    private func onClickBackButton(_ sender: UIBarButtonItem) {
+        navigationController?.popViewController(animated: true)
+        tempViewStore.send(.detachChild)
     }
 
     private func bindNavigation() {
-        store
-            .scope(state: \.settingMyInfo, action: Setting.Action.settingMyInfo)
-            .ifLet { [weak self] myInfo in
+        tempStore
+            .scope(state: \.settingPetInfo, action: Setting.Action.settingPetInfo)
+            .ifLet { [weak self] petInfo in
                 guard let self = self else { return }
                 self.navigationController?.pushViewController(
-                    MyInfoViewController(store: self.store,
-                                         myInfoStore: myInfo),
+                    PetInfoViewController(store: self.tempStore,
+                                         petInfoStore: petInfo),
                     animated: true
                 )
             }
@@ -126,20 +134,18 @@ final class SettingViewController: UIViewController, Layoutable {
 
 extension SettingViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let item = viewStore.settingItems[indexPath.row]
+        let item = tempViewStore.settingItems[indexPath.row]
         switch item {
-        case .myInfo:
-            viewStore.send(.didTapMyInfo)
         case .petInfo:
-            viewStore.send(.didTapPetInfo)
+            tempViewStore.send(.didTapPetInfo)
         case .agreement:
-            viewStore.send(.didTapAgreement)
+            tempViewStore.send(.didTapAgreement)
         case .personalInfo:
-            viewStore.send(.didTapPersonalInfo)
+            tempViewStore.send(.didTapPersonalInfo)
         case .version:
-            viewStore.send(.didTapVersion)
+            tempViewStore.send(.didTapVersion)
         case .logout:
-            viewStore.send(.didTapLogout)
+            tempViewStore.send(.didTapLogout)
         }
     }
 }

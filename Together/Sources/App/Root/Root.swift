@@ -45,7 +45,7 @@ struct Root: ReducerProtocol {
                 
             case let .tokenResponse(.success(token)):
                 if Preferences.shared.onboardingFinished {
-                    state = .tab(.init(home: .init(), agora: .init(), today: .init(), setting: .init()))
+                    state = .tab(.init(home: .init(), agora: .init(), today: .init(), mypage: .init()))
                 } else {
                     state = .onboarding(.init())
                 }

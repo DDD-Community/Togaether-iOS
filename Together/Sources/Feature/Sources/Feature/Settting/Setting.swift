@@ -10,7 +10,6 @@ import ComposableArchitecture
 
 public struct Setting: ReducerProtocol {
     public enum SettingItem: String, CaseIterable, Sendable {
-        case myInfo = "내 정보 설정"
         case petInfo = "강아지 정보 설정"
         case agreement = "이용약관"
         case personalInfo = "개인정보 처리방침"
@@ -19,23 +18,24 @@ public struct Setting: ReducerProtocol {
     }
     
     public struct State: Equatable, Sendable {
-        var settingMyInfo: MyInfo.State?
+        var settingPetInfo: PetInfo.State?
 
-        public init(settingMyInfo: MyInfo.State? = nil) {
-            self.settingMyInfo = settingMyInfo
+        public init(settingPetInfo: PetInfo.State? = nil) {
+            self.settingPetInfo = settingPetInfo
         }
 
         let settingItems: [SettingItem] = [
-            .myInfo, .petInfo, .agreement, .personalInfo, .version, .logout
+            .petInfo, .agreement, .personalInfo, .version, .logout
         ]
     }
     
     public enum Action: Equatable, Sendable {
         // MARK: 설정 내부 화면
-        case settingMyInfo(MyInfo.Action)
+        case settingPetInfo(PetInfo.Action)
         
         // MARK: 설정 화면 이벤트 처리
-        case didTapMyInfo
+        case defaultAction
+        case detachChild
         case didTapPetInfo
         case didTapAgreement
         case didTapPersonalInfo
@@ -47,21 +47,24 @@ public struct Setting: ReducerProtocol {
     
     public var body: some ReducerProtocolOf<Self> {
         Reduce(core)
-            .ifLet(\.settingMyInfo, action: /Action.settingMyInfo) {
-                MyInfo()
+            .ifLet(\.settingPetInfo, action: /Action.settingPetInfo) {
+                PetInfo()
             }
     }
 
     public func core(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
-        case .settingMyInfo(.detachChild):
-            state.settingMyInfo = nil
+        case .settingPetInfo(.detachChild):
+            state.settingPetInfo = nil
             return .none
-        case .didTapMyInfo:
-            state.settingMyInfo = .init()
+        case .detachChild:
+            return .none
+
+
+        case .defaultAction:
             return .none
         case .didTapPetInfo:
-            print("PetInfo")
+            state.settingPetInfo = .init()
             return .none
         case .didTapAgreement:
             print("Agreement")
