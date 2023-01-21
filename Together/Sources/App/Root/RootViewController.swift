@@ -22,15 +22,12 @@ final class RootViewController: UIViewController {
     private let viewStore: ViewStoreOf<Root>
     private var cancellables: Set<AnyCancellable> = .init()
     
-    private let launchScreenImageView: UIImageView = .init()
+    private let launchScreenImageView: UIImageView = .init(image: .init(named: "splash"))
     
     @LayoutBuilder var layout: some Layout {
       view.sublayout {
           launchScreenImageView.anchors { 
               Anchors.allSides()
-          }
-          launchScreenImageView.config { view in
-              view.backgroundColor = .yellow
           }
       }
     }
