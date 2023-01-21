@@ -129,6 +129,29 @@ final class SettingViewController: UIViewController, Layoutable {
                 )
             }
             .store(in: &cancellables)
+
+        tempStore
+            .scope(state: \.settingAgreement, action: Setting.Action.settingAgreement)
+            .ifLet { [weak self] agreement in
+                guard let self = self else { return }
+                self.navigationController?.pushViewController(
+                    AgreementViewController(store: self.tempStore, agreementStore: agreement),
+                    animated: true
+                )
+            }
+            .store(in: &cancellables)
+
+        tempStore
+            .scope(state: \.settingPersonalInfo, action: Setting.Action.settingPersonalInfo)
+            .ifLet { [weak self] personalInfo in
+                guard let self = self else { return }
+                self.navigationController?.pushViewController(
+                    PersonalInfoViewController(store: self.tempStore,
+                                               personalInfoStore: personalInfo),
+                    animated: true
+                )
+            }
+            .store(in: &cancellables)
     }
 }
 

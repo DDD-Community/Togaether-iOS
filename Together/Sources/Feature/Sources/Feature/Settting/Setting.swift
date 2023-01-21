@@ -19,9 +19,15 @@ public struct Setting: ReducerProtocol {
     
     public struct State: Equatable {
         var settingPetInfo: PetInfo.State?
+        var settingAgreement: Agreement.State?
+        var settingPersonalInfo: PersonalInfo.State?
 
-        public init(settingPetInfo: PetInfo.State? = nil) {
+        public init(settingPetInfo: PetInfo.State? = nil,
+                    settingAgreement: Agreement.State? = nil,
+                    settingPersonalInfo: PersonalInfo.State? = nil) {
             self.settingPetInfo = settingPetInfo
+            self.settingAgreement = settingAgreement
+            self.settingPersonalInfo = settingPersonalInfo
         }
 
         let settingItems: [SettingItem] = [
@@ -32,6 +38,8 @@ public struct Setting: ReducerProtocol {
     public enum Action: Equatable {
         // MARK: 설정 내부 화면
         case settingPetInfo(PetInfo.Action)
+        case settingAgreement(Agreement.Action)
+        case settingPersonalInfo(PersonalInfo.Action)
         
         // MARK: 설정 화면 이벤트 처리
         case defaultAction
@@ -50,12 +58,24 @@ public struct Setting: ReducerProtocol {
             .ifLet(\.settingPetInfo, action: /Action.settingPetInfo) {
                 PetInfo()
             }
+            .ifLet(\.settingAgreement, action: /Action.settingAgreement) {
+                Agreement()
+            }
+            .ifLet(\.settingPersonalInfo, action: /Action.settingPersonalInfo) {
+                PersonalInfo()
+            }
     }
 
     public func core(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
         case .settingPetInfo(.detachChild):
             state.settingPetInfo = nil
+            return .none
+        case .settingAgreement(.detachChild):
+            state.settingAgreement = nil
+            return .none
+        case .settingPersonalInfo(.detachChild):
+            state.settingPersonalInfo = nil
             return .none
         case .detachChild:
             return .none
@@ -67,10 +87,10 @@ public struct Setting: ReducerProtocol {
             state.settingPetInfo = .init()
             return .none
         case .didTapAgreement:
-            print("Agreement")
+            state.settingAgreement = .init()
             return .none
         case .didTapPersonalInfo:
-            print("PersonalInfo")
+            state.settingPersonalInfo = .init()
             return .none
         case .didTapVersion:
             print("Version")
