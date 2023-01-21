@@ -17,9 +17,8 @@ import ComposableArchitecture
 
 public final class OnboardingSpeciesViewController: UIViewController {
     
-    private let store: StoreOf<Onboarding>
-    private let viewstore: ViewStoreOf<Onboarding>
-    private let tempViewStore: ViewStoreOf<OnboardingSpecies>
+    private let store: StoreOf<OnboardingSpecies>
+    private let viewStore: ViewStoreOf<OnboardingSpecies>
     private let canSkip: Bool
     private var cancellables: Set<AnyCancellable> = .init()
     
@@ -140,14 +139,12 @@ public final class OnboardingSpeciesViewController: UIViewController {
     }
     
     public init(
-        store: StoreOf<Onboarding>,
-        speciesStore: StoreOf<OnboardingSpecies>,
+        store: StoreOf<OnboardingSpecies>,
         canSkip: Bool
     ) {
         self.store = store
-        self.viewstore = ViewStore(store)
+        self.viewStore = ViewStore(store)
         self.canSkip = canSkip
-        self.tempViewStore = ViewStore(speciesStore)
         super.init(nibName: nil, bundle: nil)
         layout.finalActive()
     }
@@ -166,32 +163,32 @@ public final class OnboardingSpeciesViewController: UIViewController {
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if !isMovingToParent {
-            viewstore.send(.onboardingSpecies(.detachChild))
+            viewStore.send(.detachChild)
         }
     }
     
     private func bindAction() {
-        tempViewStore.send(.viewDidLoad)
+        viewStore.send(.viewDidLoad)
         
         nextButton
             .throttleTapGesture
             .sink { [weak self] _ in
-                self?.viewstore.send(.onboardingSpecies(.didTapNextButton))
+                self?.viewStore.send(.didTapNextButton)
             }
             .store(in: &cancellables)
         
         skipButton
             .throttleTapGesture
             .sink { [weak self] _ in
-                self?.viewstore.send(.onboardingSpecies(.didTapSkipButton))
+                self?.viewStore.send(.didTapSkipButton)
             }
             .store(in: &cancellables)
     }
     
     private func bindState() {
-        titleLabel.text = "\(viewstore.onboardingInfo.name)는\n어떤 종인가요?"
+        titleLabel.text = "\(viewStore.name)는\n어떤 종인가요?"
         
-        tempViewStore.publisher.species
+        viewStore.publisher.species
             .sink { [weak self] species in
                 var snapshot = SpeciesSnapshot.init()
                 species.forEach { section in
@@ -204,29 +201,12 @@ public final class OnboardingSpeciesViewController: UIViewController {
     }
     
     private func bindNavigation() {
-        store
-            .scope(state: \.onboardingRegister, action: Onboarding.Action.onboardingRegister)
-            .ifLet { [weak self] onboardingRegister in
-                guard let self = self else { return }
-                let viewController = OnboardingFeedRegisterViewController(store: onboardingRegister)
-                self.navigationController?.pushViewController(
-                    viewController, 
-                    animated: true
-                )
-            }
-            .store(in: &cancellables)
         
-        store
-            .scope(state: \.tabBar, action: Onboarding.Action.tabBar)
-            .ifLet { store in
-                UIApplication.shared.appKeyWindow?.rootViewController = TabBarController(store: store)
-            }
-            .store(in: &cancellables)
     }
     
     @objc
     private func onClickBackButton(_ sender: UIBarButtonItem) {
         navigationController?.popViewController(animated: true)
-        viewstore.send(.onboardingSpecies(.detachChild))
+        viewStore.send(.detachChild)
     }
 }

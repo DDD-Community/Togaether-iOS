@@ -69,8 +69,7 @@ final class RootViewController: UIViewController {
         store
             .scope(state: /Root.State.onboarding, action: Root.Action.onboarding)
             .ifLet { store in
-                let onboardingInfo = OnboardingInfoViewController(store: store, canSkip: true)
-                let navigationController = TogetherNavigation(rootViewController:onboardingInfo) 
+                let navigationController = OnboardingNavigationViewController(store: store) 
                 UIApplication.shared.appKeyWindow?.rootViewController = navigationController 
             }
             .store(in: &cancellables)

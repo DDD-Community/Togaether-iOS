@@ -10,6 +10,7 @@ import ComposableArchitecture
 
 public struct OnboardingSpecies: ReducerProtocol {
     public struct State: Equatable {
+        let name: String
         var species: [SpeciesSection] = .init()
     }
     

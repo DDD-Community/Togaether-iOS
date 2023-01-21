@@ -17,8 +17,8 @@ import ComposableArchitecture
 
 public final class OnboardingInfoViewController: UIViewController {
     
-    private let store: StoreOf<Onboarding>
-    private let viewStore: ViewStoreOf<Onboarding>
+    private let store: StoreOf<OnboardingInfo>
+    private let viewStore: ViewStoreOf<OnboardingInfo>
     private let canSkip: Bool
     private var cancellables: Set<AnyCancellable> = .init()
     
@@ -76,7 +76,6 @@ public final class OnboardingInfoViewController: UIViewController {
         view
             .config{ view in
                 view.backgroundColor = .backgroundWhite
-                navigationItem.setLeftBarButtonItem7(.backButtonItem(target: self, action: #selector(onClickBackButton)))
                 navigationItem.title = "1/3"
             }
             .sublayout {
@@ -116,7 +115,7 @@ public final class OnboardingInfoViewController: UIViewController {
     }
     
     public init(
-        store: StoreOf<Onboarding>,
+        store: StoreOf<OnboardingInfo>,
         canSkip: Bool
     ) {
         self.store = store
@@ -134,13 +133,12 @@ public final class OnboardingInfoViewController: UIViewController {
         super.viewDidLoad()
         bindAction()
         bindState()
-        bindNavigation()
     }
     
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if !isMovingToParent {
-            viewStore.send(.onboardingInfo(.detachChild))
+            viewStore.send(.detachChild)
         }
     }
     
@@ -148,100 +146,71 @@ public final class OnboardingInfoViewController: UIViewController {
         nameFieldView.inputTextField
             .textPublisher
             .sink { [weak self] name in
-                self?.viewStore.send(.onboardingInfo(.set(\.$name, name)))
+                self?.viewStore.send(.set(\.$name, name))
             }
             .store(in: &cancellables)
         
         genderSelectionView.maleLabel
             .throttleTapGesture
             .sink { [weak self] _ in
-                self?.viewStore.send(.onboardingInfo(.set(\.$gender, .male)))
+                self?.viewStore.send(.set(\.$gender, .male))
             }
             .store(in: &cancellables)
         
         genderSelectionView.femaleLabel
             .throttleTapGesture
             .sink { [weak self] _ in
-                self?.viewStore.send(.onboardingInfo(.set(\.$gender, .female)))
+                self?.viewStore.send(.set(\.$gender, .female))
             }
             .store(in: &cancellables)
         
         birthFieldView.inputTextField
             .textPublisher
             .sink { [weak self] birth in
-                self?.viewStore.send(.onboardingInfo(.set(\.$birth, birth)))
+                self?.viewStore.send(.set(\.$birth, birth))
             }
             .store(in: &cancellables)
         
         skipButton.throttleTap
             .sink { [weak self] _ in
-                self?.viewStore.send(.onboardingInfo(.didTapSkipButton))
+                self?.viewStore.send(.didTapSkipButton)
             }
             .store(in: &cancellables)
         
         nextButton.throttleTap
             .sink { [weak self] _ in
-                self?.viewStore.send(.onboardingInfo(.didTapNextButton))
+                self?.viewStore.send(.didTapNextButton)
             }
             .store(in: &cancellables)
     }
     
     private func bindState() {
-        viewStore.publisher.onboardingInfo.gender
+        viewStore.publisher.gender
             .assign(to: \.selectedGender, onWeak: genderSelectionView)
             .store(in: &cancellables)
         
-        viewStore.publisher.onboardingInfo.canMoveNext
+        viewStore.publisher.canMoveNext
             .assign(to: \.isEnabled, onWeak: nextButton)
             .store(in: &cancellables)
         
-        viewStore.publisher.onboardingInfo.isBirthValid
+        viewStore.publisher.isBirthValid
             .assign(to: \.isValid, onWeak: birthFieldView)
             .store(in: &cancellables)
     }
     
-    private func bindNavigation() {
-        store
-            .scope(state: \.onboardingSpecies, action: Onboarding.Action.onboardingSpecies)
-            .ifLet { [weak self] species in
-                guard let self = self else { return }
-                self.navigationController?.pushViewController(
-                    OnboardingSpeciesViewController(
-                        store: self.store,
-                        speciesStore: species,
-                        canSkip: true
-                    ), 
-                    animated: true
-                )
-            }
-            .store(in: &cancellables)
-        
-        store
-            .scope(state: \.tabBar, action: Onboarding.Action.tabBar)
-            .ifLet { store in
-                UIApplication.shared.appKeyWindow?.rootViewController = TabBarController(store: store)
-            }
-            .store(in: &cancellables)
-    }
-    
-    @objc
-    private func onClickBackButton(_ sender: UIBarButtonItem) {
-        navigationController?.popViewController(animated: true)
-        viewStore.send(.onboardingInfo(.detachChild))
-    }
 }
 
-#if canImport(SwiftUI) && DEBUG
-import SwiftUI
-
-struct OnboardingInfo_Previews: PreviewProvider {
-    static var previews: some View {
-        let store: StoreOf<Onboarding> = .init(initialState: .init(), reducer: Onboarding())
-        return OnboardingInfoViewController(store: store, canSkip: true)
-            .showPrieview()
-    }
-}
-#endif
+//#if canImport(SwiftUI) && DEBUG
+//import SwiftUI
+//
+//struct OnboardingInfo_Previews: PreviewProvider {
+//    static var previews: some View {
+//        let store: StoreOf<Onboarding> = .init(initialState: .init(), reducer: Onboarding())
+//        return OnboardingInfoViewController(store: store, canSkip: true)
+//            .showPrieview()
+//    }
+//}
+//#endif
 
 
 fileprivate final class GenderSelectionView: UIView {
