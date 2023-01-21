@@ -9,11 +9,11 @@ import TogetherCore
 import ComposableArchitecture
 
 public struct FeedRegister: ReducerProtocol {
-    public struct State: Equatable, Sendable {
+    public struct State: Equatable {
         
     }
     
-    public enum Action: Equatable, Sendable {
+    public enum Action: Equatable {
         case didTapPhotoImageView
     }
     

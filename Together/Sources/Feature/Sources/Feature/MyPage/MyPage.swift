@@ -9,7 +9,7 @@ import ComposableArchitecture
 import TogetherCore
 
 public struct MyPage: ReducerProtocol {
-    public struct State: Equatable, Sendable {
+    public struct State: Equatable {
         var myPageSetting: Setting.State?
 
         public init(myPageSetting: Setting.State? = nil) {
@@ -17,7 +17,7 @@ public struct MyPage: ReducerProtocol {
         }
     }
 
-    public enum Action: Equatable, Sendable {
+    public enum Action: Equatable {
         case myPageSetting(Setting.Action)
 
         case didTapSetting

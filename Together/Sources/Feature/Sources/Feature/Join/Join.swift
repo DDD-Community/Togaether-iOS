@@ -9,7 +9,7 @@ import TogetherCore
 import ComposableArchitecture
 
 public struct Join: ReducerProtocol {
-    public struct State: Equatable, Sendable {
+    public struct State: Equatable {
         var email: String = ""
         var isEmailValid: Bool?
         
@@ -36,7 +36,7 @@ public struct Join: ReducerProtocol {
         }
     }
     
-    public enum Action: Equatable, Sendable {
+    public enum Action: Equatable {
         case didChangeEmail(String)
         case emailValidateResponse(Bool?)
         

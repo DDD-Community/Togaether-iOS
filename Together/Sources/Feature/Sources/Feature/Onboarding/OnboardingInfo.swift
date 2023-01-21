@@ -15,7 +15,7 @@ public struct OnboardingInfo: ReducerProtocol {
         case female
     }
     
-    public struct State: Equatable, Sendable {
+    public struct State: Equatable {
         @BindableState var name: String = ""
         @BindableState var gender: Gender?
         @BindableState var birth: String = ""
@@ -36,7 +36,7 @@ public struct OnboardingInfo: ReducerProtocol {
         }
     }
     
-    public enum Action: Equatable, Sendable, BindableAction {
+    public enum Action: Equatable, BindableAction {
         case binding(BindingAction<State>)
         case didTapSkipButton
         case didTapNextButton

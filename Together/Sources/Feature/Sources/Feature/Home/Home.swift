@@ -7,11 +7,11 @@ import ComposableArchitecture
 import TogetherCore
 
 public struct Home: ReducerProtocol {
-    public struct State: Equatable, Sendable {
+    public struct State: Equatable {
         public init() { }
     }
     
-    public enum Action: Equatable, Sendable {
+    public enum Action: Equatable {
         
     }
     

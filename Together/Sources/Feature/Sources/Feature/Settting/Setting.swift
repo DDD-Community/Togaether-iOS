@@ -9,7 +9,7 @@ import TogetherCore
 import ComposableArchitecture
 
 public struct Setting: ReducerProtocol {
-    public enum SettingItem: String, CaseIterable, Sendable {
+    public enum SettingItem: String, CaseIterable {
         case petInfo = "강아지 정보 설정"
         case agreement = "이용약관"
         case personalInfo = "개인정보 처리방침"
@@ -17,7 +17,7 @@ public struct Setting: ReducerProtocol {
         case logout = "로그아웃"
     }
     
-    public struct State: Equatable, Sendable {
+    public struct State: Equatable {
         var settingPetInfo: PetInfo.State?
 
         public init(settingPetInfo: PetInfo.State? = nil) {
@@ -29,7 +29,7 @@ public struct Setting: ReducerProtocol {
         ]
     }
     
-    public enum Action: Equatable, Sendable {
+    public enum Action: Equatable {
         // MARK: 설정 내부 화면
         case settingPetInfo(PetInfo.Action)
         

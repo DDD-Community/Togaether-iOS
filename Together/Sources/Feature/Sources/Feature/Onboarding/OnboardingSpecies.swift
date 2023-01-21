@@ -9,11 +9,11 @@ import TogetherCore
 import ComposableArchitecture
 
 public struct OnboardingSpecies: ReducerProtocol {
-    public struct State: Equatable, Sendable {
+    public struct State: Equatable {
         var species: [SpeciesSection] = .init()
     }
     
-    public enum Action: Equatable, Sendable {
+    public enum Action: Equatable {
         case viewDidLoad
         case didTapSkipButton
         case didTapNextButton

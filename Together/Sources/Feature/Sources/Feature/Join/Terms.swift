@@ -9,7 +9,7 @@ import TogetherCore
 import ComposableArchitecture
 
 public struct Terms: ReducerProtocol {
-    public struct State: Equatable, Sendable {
+    public struct State: Equatable {
         var overFourteen: Bool = false
         var termsAndConditionAgreed: Bool = false
         var collectPersonalInformationAgreed: Bool = false
@@ -26,7 +26,7 @@ public struct Terms: ReducerProtocol {
         var optionalJoin: Join.State?
     }
     
-    public enum Action: Equatable, Sendable {
+    public enum Action: Equatable {
         case didTapAllAgree
         case didTapOverFourteen
         case didTapTermsAndCondition

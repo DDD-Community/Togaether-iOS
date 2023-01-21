@@ -13,7 +13,7 @@ import ThirdParty
 
 import SwiftLayout
 
-struct SpeciesSection: Identifiable, Hashable, Sendable {
+struct SpeciesSection: Identifiable, Hashable {
     var id: String
     var names: [String]
 }
