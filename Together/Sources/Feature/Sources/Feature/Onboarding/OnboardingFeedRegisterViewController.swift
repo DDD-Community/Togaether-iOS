@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import PhotosUI
+import Combine
 
 import TogetherCore
 import TogetherUI
@@ -18,6 +20,7 @@ final class OnboardingFeedRegisterViewController: UIViewController {
     
     private let store: StoreOf<OnboardingFeedRegister>
     private let viewStore: ViewStoreOf<OnboardingFeedRegister>
+    private var cancellables: Set<AnyCancellable> = .init()
     
     private let feedRegisterView: FeedRegisterView
     private let skipButton: TogetherRegularButton = {
@@ -70,13 +73,15 @@ final class OnboardingFeedRegisterViewController: UIViewController {
     }
     
     init(store: StoreOf<OnboardingFeedRegister>) {
-        self.store = store
-        self.viewStore = ViewStore(store)
         let feedRegisterStore: StoreOf<FeedRegister> = store.scope(
             state: \.feedRegister, 
             action: OnboardingFeedRegister.Action.feedRegister
         )
         self.feedRegisterView = .init(store: feedRegisterStore)
+        
+        self.store = store
+        self.viewStore = ViewStore(store)
+        
         super.init(nibName: nil, bundle: nil)
         layout.finalActive()
     }
@@ -87,6 +92,43 @@ final class OnboardingFeedRegisterViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        bindAction()
+        bindState()
+    }
+    
+    private func bindAction() {
+        skipButton.throttleTap
+            .sink { [weak self] _ in
+                self?.viewStore.send(.didTapSkipButton)
+            }
+            .store(in: &cancellables)
+        
+        nextButton.throttleTap
+            .sink { [weak self] _ in
+                self?.viewStore.send(.didTapNextButton)
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func bindState() {
+        viewStore.publisher.configuration
+            .compactMap { $0 }
+            .sink { [weak self] configuration in
+                guard let self = self else { return }
+                let picker = PHPickerViewController(configuration: configuration)
+                picker.presentationController?.delegate = self
+                picker.delegate = self
+                DispatchQueue.main.async {
+                    self.present(picker, animated: true)
+                }
+            }
+            .store(in: &cancellables)
+        
+        
+        viewStore.publisher.feedRegister.canMoveNext
+            .assign(to: \.isEnabled, onWeak: nextButton)
+            .store(in: &cancellables)
+
     }
     
     @objc
@@ -96,3 +138,28 @@ final class OnboardingFeedRegisterViewController: UIViewController {
     }
 }
 
+extension OnboardingFeedRegisterViewController: UIAdaptivePresentationControllerDelegate {
+    func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
+        return true
+    }
+    
+    func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        viewStore.send(.pickerDismissed)
+    }
+}
+
+extension OnboardingFeedRegisterViewController: PHPickerViewControllerDelegate {
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        picker.dismiss(animated: true)
+        let itemProvider = results.first?.itemProvider
+        
+        if let itemProvider = itemProvider,
+           itemProvider.canLoadObject(ofClass: UIImage.self) {
+            itemProvider.loadObject(ofClass: UIImage.self) { (image, error) in
+                DispatchQueue.main.async { [weak self] in
+                    self?.viewStore.send(.feedRegister(.didSelectPhoto(image as? UIImage)))
+                }
+            }
+        }
+    }
+}

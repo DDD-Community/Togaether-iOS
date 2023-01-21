@@ -9,6 +9,7 @@ import UIKit
 import Combine
 
 import TogetherCore
+import TogetherFoundation
 import TogetherUI
 import ThirdParty
 
@@ -30,9 +31,12 @@ final class FeedRegisterView: UIView {
         $0.numberOfLines = 2
     }
     
-    private let emptyImageView: UIImageView = .init(image: .init(named: "ic_regist_photo"))
+    private let emptyImageView: UIImageView = .init(image: .init(named: "ic_regist_photo")).config {
+        $0.isUserInteractionEnabled = false
+    }
     private let photoImageView: UIImageView = .init().then {
         $0.backgroundColor = .backgroundGray
+        $0.isUserInteractionEnabled = true
     }
     
     private let contentTitleLabel: UILabel = .init().then {
@@ -113,7 +117,14 @@ final class FeedRegisterView: UIView {
     }
     
     private func bindState() {
+        viewStore.publisher.selectedImage
+            .assign(to: \.image, onWeak: photoImageView)
+            .store(in: &cancellables)
         
+        viewStore.publisher.selectedImage
+            .map(\.isNotNil)
+            .assign(to: \.isHidden, onWeak: emptyImageView)
+            .store(in: &cancellables)
     }
     
     private func bindNavigation() {
@@ -127,6 +138,10 @@ extension FeedRegisterView: UITextViewDelegate {
             textView.text = nil
             textView.textColor = .blueGray500 // 없어서 달라해야함
         }
+    }
+    
+    func textViewDidChange(_ textView: UITextView) {
+        viewStore.send(.set(\.$text, textView.text))
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {

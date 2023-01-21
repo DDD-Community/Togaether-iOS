@@ -46,6 +46,9 @@ public struct Onboarding: ReducerProtocol {
             .ifLet(\.onboardingSpecies, action: /Action.onboardingSpecies) { 
                 OnboardingSpecies()
             }
+            .ifLet(\.onboardingRegister, action: /Action.onboardingRegister) {
+                OnboardingFeedRegister()
+            }
             .ifLet(\.tabBar, action: /Action.tabBar) { 
                 TabBar()
             }
@@ -64,12 +67,16 @@ public struct Onboarding: ReducerProtocol {
             state.onboardingSpecies = .init(name: state.onboardingInfo.name)
             return .none
             
-        case .onboardingInfo(.detachChild):
-            state.onboardingSpecies = nil
-            return .none
-            
         case .onboardingSpecies(.didTapNextButton):
             state.onboardingRegister = .init(feedRegister: .init())
+            return .none
+            
+        case .onboardingRegister(.didTapNextButton):
+            state.tabBar = .init(home: .init(), agora: .init(), today: .init(), mypage: .init())
+            return .none
+            
+        case .onboardingInfo(.detachChild):
+            state.onboardingSpecies = nil
             return .none
             
         case .onboardingSpecies(.detachChild):
