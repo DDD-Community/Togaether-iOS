@@ -15,6 +15,7 @@ public struct OnboardingFeedRegister: ReducerProtocol {
     
     public enum Action: Equatable {
         case feedRegister(FeedRegister.Action)
+        case detachChild
         case didTapSkipButton
         case didTapNextButton
     }
@@ -34,7 +35,7 @@ public struct OnboardingFeedRegister: ReducerProtocol {
         case .feedRegister:
             return .none
             
-        case .didTapSkipButton, .didTapNextButton:
+        case .didTapSkipButton, .didTapNextButton, .detachChild:
             return .none
         }
     }

@@ -68,9 +68,6 @@ public struct Onboarding: ReducerProtocol {
             state.onboardingSpecies = nil
             return .none
             
-        case .onboardingInfo:
-            return .none
-            
         case .onboardingSpecies(.didTapNextButton):
             state.onboardingRegister = .init(feedRegister: .init())
             return .none
@@ -79,13 +76,10 @@ public struct Onboarding: ReducerProtocol {
             state.onboardingRegister = nil
             return .none
             
-        case .onboardingSpecies:
+        case .onboardingRegister(.detachChild):
             return .none
             
-        case .onboardingRegister:
-            return .none
-            
-        case .tabBar:
+        case .onboardingInfo, .onboardingSpecies, .onboardingRegister, .tabBar:
             return .none
         }
     }

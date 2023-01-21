@@ -76,6 +76,8 @@ public final class OnboardingInfoViewController: UIViewController {
         view
             .config{ view in
                 view.backgroundColor = .backgroundWhite
+                navigationItem.setLeftBarButtonItem7(.backButtonItem(target: self, action: #selector(onClickBackButton)))
+                navigationItem.title = "1/3"
             }
             .sublayout {
                 titleLabel
@@ -220,6 +222,12 @@ public final class OnboardingInfoViewController: UIViewController {
                 UIApplication.shared.appKeyWindow?.rootViewController = TabBarController(store: store)
             }
             .store(in: &cancellables)
+    }
+    
+    @objc
+    private func onClickBackButton(_ sender: UIBarButtonItem) {
+        navigationController?.popViewController(animated: true)
+        viewStore.send(.onboardingInfo(.detachChild))
     }
 }
 

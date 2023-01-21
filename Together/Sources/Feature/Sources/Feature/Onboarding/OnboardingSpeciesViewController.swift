@@ -90,6 +90,8 @@ public final class OnboardingSpeciesViewController: UIViewController {
         view
             .config{ view in
                 view.backgroundColor = .backgroundWhite
+                navigationItem.setLeftBarButtonItem7(.backButtonItem(target: self, action: #selector(onClickBackButton)))
+                navigationItem.title = "2/3"
             }
             .sublayout {
                 titleLabel
@@ -220,5 +222,11 @@ public final class OnboardingSpeciesViewController: UIViewController {
                 UIApplication.shared.appKeyWindow?.rootViewController = TabBarController(store: store)
             }
             .store(in: &cancellables)
+    }
+    
+    @objc
+    private func onClickBackButton(_ sender: UIBarButtonItem) {
+        navigationController?.popViewController(animated: true)
+        viewstore.send(.onboardingSpecies(.detachChild))
     }
 }

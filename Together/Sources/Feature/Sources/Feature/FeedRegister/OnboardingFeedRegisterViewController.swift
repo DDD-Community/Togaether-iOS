@@ -45,6 +45,8 @@ final class OnboardingFeedRegisterViewController: UIViewController {
         view
             .config { view in
                 view.backgroundColor = .backgroundWhite
+                navigationItem.setLeftBarButtonItem7(.backButtonItem(target: self, action: #selector(onClickBackButton)))
+                navigationItem.title = "3/3"
             }
             .sublayout {
             buttonContainerStackView
@@ -85,6 +87,12 @@ final class OnboardingFeedRegisterViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+    }
+    
+    @objc
+    private func onClickBackButton(_ sender: UIBarButtonItem) {
+        viewStore.send(.detachChild)
+        navigationController?.popViewController(animated: true)
     }
 }
 
