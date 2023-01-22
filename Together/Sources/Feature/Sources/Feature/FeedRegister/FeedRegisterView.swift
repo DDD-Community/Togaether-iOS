@@ -136,7 +136,7 @@ extension FeedRegisterView: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == textViewPlaceHolder {
             textView.text = nil
-            textView.textColor = .blueGray500 // 없어서 달라해야함
+            textView.textColor = .blueGray400
         }
     }
     
