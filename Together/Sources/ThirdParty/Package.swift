@@ -22,7 +22,6 @@ let package = Package(
         .target(
             name: "ThirdParty",
             dependencies: [
-                .product(name: "Dependencies", package: "swift-composable-architecture"),
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
                 .product(name: "SwiftLayout", package: "SwiftLayout"),
                 .product(name: "SwiftLayoutUtil", package: "SwiftLayout"),
