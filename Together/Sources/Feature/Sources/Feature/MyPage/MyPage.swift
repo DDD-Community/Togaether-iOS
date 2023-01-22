@@ -21,7 +21,6 @@ public struct MyPage: ReducerProtocol {
     public enum Action: Equatable {
         case myPageSetting(Setting.Action)
         case feedRegister(OnboardingFeedRegister.Action)
-
         case didTapCreate
         case didTapSetting
     }
@@ -42,6 +41,10 @@ public struct MyPage: ReducerProtocol {
         switch action {
         case .myPageSetting(.detachChild):
             state.myPageSetting = nil
+            return .none
+            
+        case .feedRegister(.detachChild):
+            state.feedRegister = nil
             return .none
             
         case .didTapCreate:
