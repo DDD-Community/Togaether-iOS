@@ -55,7 +55,7 @@ public final class OnboardingNavigationViewController: UINavigationController {
         store
             .scope(state: \.onboardingRegister, action: Onboarding.Action.onboardingRegister)
             .ifLet { [weak self] onboardingRegister in
-                let viewController = OnboardingFeedRegisterViewController(store: onboardingRegister)
+                let viewController = OnboardingFeedRegisterViewController(store: onboardingRegister, canSkip: true)
                 self?.pushViewController(viewController, animated: true)
             }
             .store(in: &cancellables)

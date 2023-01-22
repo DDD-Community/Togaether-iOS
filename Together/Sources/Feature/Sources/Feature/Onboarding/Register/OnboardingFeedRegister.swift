@@ -12,6 +12,7 @@ import ComposableArchitecture
 public struct OnboardingFeedRegister: ReducerProtocol {
     public struct State: Equatable {
         var feedRegister: FeedRegister.State 
+        var navigationTitle: String
         var configuration: PHPickerConfiguration?
     }
     

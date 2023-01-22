@@ -68,7 +68,7 @@ public struct Onboarding: ReducerProtocol {
             return .none
             
         case .onboardingSpecies(.didTapNextButton):
-            state.onboardingRegister = .init(feedRegister: .init())
+            state.onboardingRegister = .init(feedRegister: .init(), navigationTitle: "3/3")
             return .none
             
         case .onboardingRegister(.didTapNextButton):

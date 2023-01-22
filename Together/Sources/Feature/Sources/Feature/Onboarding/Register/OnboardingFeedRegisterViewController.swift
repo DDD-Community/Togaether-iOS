@@ -21,6 +21,7 @@ final class OnboardingFeedRegisterViewController: UIViewController {
     private let store: StoreOf<OnboardingFeedRegister>
     private let viewStore: ViewStoreOf<OnboardingFeedRegister>
     private var cancellables: Set<AnyCancellable> = .init()
+    private let canSkip: Bool
     
     private let feedRegisterView: FeedRegisterView
     private let skipButton: TogetherRegularButton = {
@@ -52,7 +53,7 @@ final class OnboardingFeedRegisterViewController: UIViewController {
             .sublayout {
             buttonContainerStackView
                 .config { stackView in
-                    stackView.addArrangedSubview(skipButton)
+                    if canSkip { stackView.addArrangedSubview(skipButton) }
                     stackView.addArrangedSubview(nextButton)
                 }
                 .anchors { 
@@ -70,7 +71,10 @@ final class OnboardingFeedRegisterViewController: UIViewController {
         }
     }
     
-    init(store: StoreOf<OnboardingFeedRegister>) {
+    init(
+        store: StoreOf<OnboardingFeedRegister>,
+        canSkip: Bool
+    ) {
         let feedRegisterStore: StoreOf<FeedRegister> = store.scope(
             state: \.feedRegister, 
             action: OnboardingFeedRegister.Action.feedRegister
@@ -79,6 +83,8 @@ final class OnboardingFeedRegisterViewController: UIViewController {
         
         self.store = store
         self.viewStore = ViewStore(store)
+        
+        self.canSkip = canSkip
         
         super.init(nibName: nil, bundle: nil)
         layout.finalActive()
@@ -97,7 +103,7 @@ final class OnboardingFeedRegisterViewController: UIViewController {
     
     private func setupUI() {
         navigationItem.setLeftBarButtonItem7(.backButtonItem(target: self, action: #selector(onClickBackButton)))
-        navigationItem.title = "3/3"
+        navigationItem.title = viewStore.navigationTitle
     }
     
     private func bindAction() {

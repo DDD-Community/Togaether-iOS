@@ -94,6 +94,18 @@ final class MyPageViewController: UIViewController, Layoutable {
 
     private func bindNavigation() {
         store
+            .scope(state: \.feedRegister, action: MyPage.Action.feedRegister)
+            .ifLet { [weak self] feedRegister in
+                let feedRegisterViewController: OnboardingFeedRegisterViewController = .init(store: feedRegister, canSkip: false)
+                feedRegisterViewController.hidesBottomBarWhenPushed = true
+                self?.navigationController?.pushViewController(
+                    feedRegisterViewController, 
+                    animated: true
+                )
+            }
+            .store(in: &cancellables)
+        
+        store
             .scope(state: \.myPageSetting, action: MyPage.Action.myPageSetting)
             .ifLet { [weak self] setting in
                 guard let self = self else { return }
@@ -107,7 +119,7 @@ final class MyPageViewController: UIViewController, Layoutable {
 
     @objc
     private func onClickCreate(_ sender: UIBarButtonItem) {
-        print("Create")
+        viewStore.send(.didTapCreate)
     }
 
     @objc
