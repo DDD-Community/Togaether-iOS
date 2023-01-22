@@ -17,6 +17,11 @@ import SwiftLayout
 final class OnboardingSpeciesCell: UITableViewCell, Layoutable {
     var activation: Activation?
     
+    override func setSelected(_ selected: Bool, animated: Bool) {
+        super.setSelected(selected, animated: animated)
+        selectedImageView.isHidden = !selected
+    }
+    
     private let nameLabel: UILabel = .init().config { label in
         label.font = .body2
         label.textColor = .blueGray900

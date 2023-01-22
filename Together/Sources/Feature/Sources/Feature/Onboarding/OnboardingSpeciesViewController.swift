@@ -66,7 +66,7 @@ public final class OnboardingSpeciesViewController: UIViewController {
     
     private let cellProvider: UITableViewDiffableDataSource<String, String>.CellProvider = { tableView, indexPath, name in
         let cell = tableView.dequeueReusableCell(withIdentifier: OnboardingSpeciesCell.identifier, for: indexPath) as? OnboardingSpeciesCell
-        cell?.selectionStyle = .none
+        cell?.selectedBackgroundView = .init().config { $0.backgroundColor = .backgroundWhite }
         cell?.configure(name: name)
         return cell
     }
