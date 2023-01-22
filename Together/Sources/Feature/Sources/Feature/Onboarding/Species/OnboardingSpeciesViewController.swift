@@ -9,6 +9,7 @@ import UIKit
 import Combine
 
 import TogetherCore
+import TogetherFoundation
 import TogetherUI
 import ThirdParty
 
@@ -56,6 +57,8 @@ public final class OnboardingSpeciesViewController: UIViewController {
     
     private lazy var searchTableView: OnboardingSpeciesTableView = .init().config { tableView in
         tableView.separatorStyle = .none
+        tableView.backgroundColor = .backgroundWhite
+        tableView.keyboardDismissMode = .onDrag
         tableView.delegate = self
     }
     
@@ -99,8 +102,6 @@ public final class OnboardingSpeciesViewController: UIViewController {
         view
             .config{ view in
                 view.backgroundColor = .backgroundWhite
-                navigationItem.setLeftBarButtonItem7(.backButtonItem(target: self, action: #selector(onClickBackButton)))
-                navigationItem.title = "2/3"
             }
             .sublayout {
                 titleLabel
@@ -165,9 +166,9 @@ public final class OnboardingSpeciesViewController: UIViewController {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
+        setupUI()
         bindAction()
         bindState()
-        bindNavigation()
     }
     
     public override func viewDidAppear(_ animated: Bool) {
@@ -175,6 +176,11 @@ public final class OnboardingSpeciesViewController: UIViewController {
         if !isMovingToParent {
             viewStore.send(.detachChild)
         }
+    }
+    
+    private func setupUI() {
+        navigationItem.setLeftBarButtonItem7(.backButtonItem(target: self, action: #selector(onClickBackButton)))
+        navigationItem.title = "2/3"
     }
     
     private func bindAction() {
@@ -215,10 +221,17 @@ public final class OnboardingSpeciesViewController: UIViewController {
                 self?.datasource.apply(snapshot, animatingDifferences: false)
             }
             .store(in: &cancellables)
-    }
-    
-    private func bindNavigation() {
         
+        viewStore.publisher.selectedSpecies
+            .map { return !$0.isNilOrEmpty }
+            .assign(to: \.isEnabled, onWeak: nextButton)
+            .store(in: &cancellables)
+
+        view.throttleTapGesture
+            .sink { [weak self] _ in
+                self?.searchTextField.endEditing(true)
+            }
+            .store(in: &cancellables)
     }
     
     @objc

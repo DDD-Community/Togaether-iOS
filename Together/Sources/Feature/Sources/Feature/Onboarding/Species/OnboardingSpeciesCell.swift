@@ -36,6 +36,9 @@ final class OnboardingSpeciesCell: UITableViewCell, Layoutable {
     
     @LayoutBuilder var layout: some SwiftLayout.Layout {
         contentView
+            .config { cell in
+                cell.backgroundColor = .backgroundWhite
+            }
             .anchors { 
                 Anchors.height.equalTo(constant: 52)
             }

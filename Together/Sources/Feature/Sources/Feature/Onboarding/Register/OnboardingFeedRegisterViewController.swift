@@ -48,8 +48,6 @@ final class OnboardingFeedRegisterViewController: UIViewController {
         view
             .config { view in
                 view.backgroundColor = .backgroundWhite
-                navigationItem.setLeftBarButtonItem7(.backButtonItem(target: self, action: #selector(onClickBackButton)))
-                navigationItem.title = "3/3"
             }
             .sublayout {
             buttonContainerStackView
@@ -92,8 +90,14 @@ final class OnboardingFeedRegisterViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupUI()
         bindAction()
         bindState()
+    }
+    
+    private func setupUI() {
+        navigationItem.setLeftBarButtonItem7(.backButtonItem(target: self, action: #selector(onClickBackButton)))
+        navigationItem.title = "3/3"
     }
     
     private func bindAction() {
@@ -160,6 +164,8 @@ extension OnboardingFeedRegisterViewController: PHPickerViewControllerDelegate {
                     self?.viewStore.send(.feedRegister(.didSelectPhoto(image as? UIImage)))
                 }
             }
+        } else {
+            viewStore.send(.pickerDismissed)
         }
     }
 }

@@ -76,7 +76,6 @@ public final class OnboardingInfoViewController: UIViewController {
         view
             .config{ view in
                 view.backgroundColor = .backgroundWhite
-                navigationItem.title = "1/3"
             }
             .sublayout {
                 titleLabel
@@ -131,6 +130,7 @@ public final class OnboardingInfoViewController: UIViewController {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
+        setupUI()
         bindAction()
         bindState()
     }
@@ -140,6 +140,10 @@ public final class OnboardingInfoViewController: UIViewController {
         if !isMovingToParent {
             viewStore.send(.detachChild)
         }
+    }
+    
+    private func setupUI() {
+        navigationItem.title = "1/3"
     }
     
     private func bindAction() {
@@ -180,6 +184,14 @@ public final class OnboardingInfoViewController: UIViewController {
         nextButton.throttleTap
             .sink { [weak self] _ in
                 self?.viewStore.send(.didTapNextButton)
+            }
+            .store(in: &cancellables)
+        
+        view
+            .throttleTapGesture
+            .sink { [weak self] _ in
+                self?.nameFieldView.endEditing(true)
+                self?.birthFieldView.endEditing(true)
             }
             .store(in: &cancellables)
     }

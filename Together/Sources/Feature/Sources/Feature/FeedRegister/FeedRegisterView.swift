@@ -24,6 +24,18 @@ final class FeedRegisterView: UIView {
     
     private let textViewPlaceHolder: String = "우리아이 사진에 대한 이야기를\n같이 적어주세요🙌"
     
+    private let scrollView: UIScrollView = .init().config {
+        $0.showsHorizontalScrollIndicator = false
+        $0.showsVerticalScrollIndicator = false
+        $0.alwaysBounceVertical = true
+    }
+    
+    private let contentStackView: UIStackView = .init().config {
+        $0.axis = .vertical
+        $0.distribution = .fill
+        $0.alignment = .fill
+    }
+    
     private let titleLabel: UILabel = .init().config {
         $0.font = .display1
         $0.textColor = .blueGray900
@@ -37,6 +49,7 @@ final class FeedRegisterView: UIView {
     private let photoImageView: UIImageView = .init().config {
         $0.backgroundColor = .backgroundGray
         $0.isUserInteractionEnabled = true
+        $0.contentMode = .scaleAspectFit
     }
     
     private let contentTitleLabel: UILabel = .init().config {
@@ -53,42 +66,42 @@ final class FeedRegisterView: UIView {
     }
     
     @LayoutBuilder var layout: some SwiftLayout.Layout {
+        photoImageView
+            .sublayout { 
+                emptyImageView.anchors { Anchors.center() }
+            }
+            .anchors { 
+                Anchors.height.equalTo(constant: 400)
+            }
+        
         self
             .config { view in
                 view.keyboardLayoutGuide.followsUndockedKeyboard = true
                 view.backgroundColor = .backgroundWhite
             }
             .sublayout {
-                titleLabel
+                scrollView
                     .anchors { 
-                        Anchors.top.equalTo(self.safeAreaLayoutGuide.topAnchor, constant: 32)
-                        Anchors.leading.equalToSuper(constant: 24)
-                    }
-                
-                photoImageView
-                    .sublayout { 
-                        emptyImageView
-                            .anchors { 
-                                Anchors.center()
-                            }
-                    }
-                    .anchors { 
-                        Anchors.top.equalTo(titleLabel.bottomAnchor, constant: 32)
-                        Anchors.horizontal()
-                        Anchors.height.equalTo(constant: 450)
-                    }
-                
-                contentTitleLabel
-                    .anchors { 
-                        Anchors.top.equalTo(photoImageView.bottomAnchor, constant: 32)
-                        Anchors.leading.equalToSuper(constant: 24)
-                    }
-                
-                contentTextView
-                    .anchors { 
-                        Anchors.top.equalTo(contentTitleLabel.bottomAnchor, constant: 8)
+                        Anchors.top.equalTo(safeAreaLayoutGuide.topAnchor)
                         Anchors.horizontal(offset: 24)
-                        Anchors.bottom.equalTo(self.keyboardLayoutGuide.topAnchor)
+                        Anchors.bottom.equalTo(keyboardLayoutGuide.topAnchor)
+                    }
+                
+                contentStackView
+                    .config {
+                        $0.addArrangedSubview(titleLabel)
+                        $0.setCustomSpacing(32, after: titleLabel)
+                        $0.addArrangedSubview(photoImageView)
+                        $0.setCustomSpacing(32, after: photoImageView)
+                        $0.addArrangedSubview(contentTitleLabel)
+                        $0.setCustomSpacing(8, after: contentTitleLabel)
+                        $0.addArrangedSubview(contentTextView)
+                    }
+                    .anchors { 
+                        Anchors.top.equalTo(scrollView, constant: 32)
+                        Anchors.horizontal(scrollView)
+                        Anchors.bottom.equalTo(scrollView)
+                        Anchors.width.equalTo(scrollView.widthAnchor)
                     }
             }
     }
@@ -100,7 +113,6 @@ final class FeedRegisterView: UIView {
         layout.finalActive()
         bindAction()
         bindState()
-        bindNavigation()
     }
     
     required init?(coder: NSCoder) {
@@ -126,17 +138,13 @@ final class FeedRegisterView: UIView {
             .assign(to: \.isHidden, onWeak: emptyImageView)
             .store(in: &cancellables)
     }
-    
-    private func bindNavigation() {
-        
-    }
 }
 
 extension FeedRegisterView: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == textViewPlaceHolder {
             textView.text = nil
-            textView.textColor = .blueGray400
+            textView.textColor = .blueGray900
         }
     }
     

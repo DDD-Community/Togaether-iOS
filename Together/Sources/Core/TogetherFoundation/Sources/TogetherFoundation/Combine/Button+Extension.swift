@@ -89,6 +89,7 @@ extension UITapGestureRecognizer {
         private let view: UIView
         
         public init(recognizer: TapRecognizer, view: UIView) {
+            recognizer.cancelsTouchesInView = false
             self.recognizer = recognizer
             self.view = view
         }
