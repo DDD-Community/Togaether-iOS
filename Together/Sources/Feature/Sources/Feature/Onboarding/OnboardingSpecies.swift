@@ -5,17 +5,20 @@
 //  Created by 한상진 on 2023/01/12.
 //
 
+import Foundation
 import TogetherCore
 import ComposableArchitecture
 
 public struct OnboardingSpecies: ReducerProtocol {
     public struct State: Equatable {
-        let name: String
-        var species: [SpeciesSection] = .init()
+        let petName: String
+        var selectedSpecies: String?
+        var allSpecies: [SpeciesSection] = .init()
     }
     
     public enum Action: Equatable {
         case viewDidLoad
+        case didTapSpecies(IndexPath)
         case didTapSkipButton
         case didTapNextButton
         case detachChild
@@ -38,13 +41,20 @@ public struct OnboardingSpecies: ReducerProtocol {
                 }
             )
             let groupKeys = groupedDictionary.keys.sorted()
-            let species = groupKeys.map { 
+            let allSpecies = groupKeys.map { 
                 return SpeciesSection(
                     id: $0, 
                     names: groupedDictionary[$0]?.sorted() ?? .init()
                 ) 
             }
-            state.species = species
+            state.allSpecies = allSpecies
+            return .none
+            
+        case let .didTapSpecies(index):
+            guard let selectedSection = state.allSpecies[safe: index.section],
+                  let selectedSpecies = selectedSection.names[safe: index.row]
+            else { return .none }
+            state.selectedSpecies = selectedSpecies
             return .none
             
         case .didTapSkipButton, .didTapNextButton, .detachChild:

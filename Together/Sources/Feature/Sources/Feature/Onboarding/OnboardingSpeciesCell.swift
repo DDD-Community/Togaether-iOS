@@ -22,7 +22,9 @@ final class OnboardingSpeciesCell: UITableViewCell, Layoutable {
         label.textColor = .blueGray900
         label.numberOfLines = 1
     }
-    private let selectedImageView: UIImageView = .init(image: .init(named: "ic_input_success"))
+    private let selectedImageView: UIImageView = .init(image: .init(named: "ic_input_success")).config {
+        $0.isHidden = true
+    }
     private let bottomSeparator: UIView = UIView().config { view in
         view.backgroundColor = .blueGray900.withAlphaComponent(0.1)
     }
@@ -62,5 +64,43 @@ final class OnboardingSpeciesCell: UITableViewCell, Layoutable {
     
     func configure(name: String) {
         nameLabel.text = name
+    }
+}
+
+class OnboardingSpeciesHeaderView: UITableViewHeaderFooterView, Layoutable {
+    var activation: Activation?
+    
+    private let titleLabel: UILabel = .init().config {
+        $0.textColor = .primary600
+        $0.font = .headline
+    }
+    
+    @LayoutBuilder var layout: some SwiftLayout.Layout {
+        self.contentView
+            .config {
+                $0.backgroundColor = .backgroundWhite
+            }
+            .anchors { 
+                Anchors.height.equalTo(constant: 48)
+            }
+            .sublayout { 
+                titleLabel.anchors { 
+                    Anchors.leading.equalToSuper(inwardOffset: 24)
+                    Anchors.bottom.equalToSuper()
+                }
+            }
+    }
+    
+    override init(reuseIdentifier: String?) {
+        super.init(reuseIdentifier: reuseIdentifier)
+        sl.updateLayout()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func configure(name: String?) {
+        titleLabel.text = name
     }
 }

@@ -64,7 +64,7 @@ public struct Onboarding: ReducerProtocol {
             return .none
             
         case .onboardingInfo(.didTapNextButton):
-            state.onboardingSpecies = .init(name: state.onboardingInfo.name)
+            state.onboardingSpecies = .init(petName: state.onboardingInfo.name)
             return .none
             
         case .onboardingSpecies(.didTapNextButton):

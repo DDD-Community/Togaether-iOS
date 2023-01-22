@@ -54,11 +54,17 @@ public final class OnboardingSpeciesViewController: UIViewController {
         $0.backgroundColor = .borderPrimary
     }
     
-    private let searchTableView: OnboardingSpeciesTableView = .init().config { tableView in
+    private lazy var searchTableView: OnboardingSpeciesTableView = .init().config { tableView in
         tableView.separatorStyle = .none
+        tableView.delegate = self
     }
     
-    private lazy var datasource: OnboardingSpeciesDataSource = .init(tableView: searchTableView) { tableView, indexPath, name in
+    private lazy var datasource: OnboardingSpeciesDataSource = { 
+        let datasource: OnboardingSpeciesDataSource = .init(tableView: searchTableView, cellProvider: cellProvider)
+        return datasource
+    }()
+    
+    private let cellProvider: UITableViewDiffableDataSource<String, String>.CellProvider = { tableView, indexPath, name in
         let cell = tableView.dequeueReusableCell(withIdentifier: OnboardingSpeciesCell.identifier, for: indexPath) as? OnboardingSpeciesCell
         cell?.selectionStyle = .none
         cell?.configure(name: name)
@@ -190,9 +196,9 @@ public final class OnboardingSpeciesViewController: UIViewController {
     }
     
     private func bindState() {
-        titleLabel.text = "\(viewStore.name)는\n어떤 종인가요?"
+        titleLabel.text = "\(viewStore.petName)는\n어떤 종인가요?"
         
-        viewStore.publisher.species
+        viewStore.publisher.allSpecies
             .sink { [weak self] species in
                 var snapshot = SpeciesSnapshot.init()
                 species.forEach { section in
@@ -212,5 +218,21 @@ public final class OnboardingSpeciesViewController: UIViewController {
     private func onClickBackButton(_ sender: UIBarButtonItem) {
         navigationController?.popViewController(animated: true)
         viewStore.send(.detachChild)
+    }
+}
+
+extension OnboardingSpeciesViewController: UITableViewDelegate {
+    public func tableView(
+        _ tableView: UITableView, 
+        didSelectRowAt indexPath: IndexPath
+    ) {
+        viewStore.send(.didTapSpecies(indexPath))
+    }
+    
+    public func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let header = OnboardingSpeciesHeaderView()
+        let sectionName = datasource.sectionIdentifier(for: section)
+        header.configure(name: sectionName)
+        return header
     }
 }
