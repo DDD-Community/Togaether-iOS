@@ -38,7 +38,7 @@ public final class OnboardingSpeciesViewController: UIViewController {
         return label
     }()
     
-    private let searchTextField: UITextField = .init().then { 
+    private let searchTextField: UITextField = .init().config { 
         $0.attributedPlaceholder = .init(
             string: "검색어를 입력해주세요.", 
             attributes: [
@@ -47,16 +47,20 @@ public final class OnboardingSpeciesViewController: UIViewController {
             ]
         )
     }
-    private let searchButton: UIButton = .init().then {
+    private let searchButton: UIButton = .init().config {
         $0.setImage(.init(named: "ic_search"), for: .init())
     }
-    private let searchDevider: UIView = .init().then {
+    private let searchDevider: UIView = .init().config {
         $0.backgroundColor = .borderPrimary
     }
     
-    private let searchTableView: OnboardingSpeciesTableView = .init()
+    private let searchTableView: OnboardingSpeciesTableView = .init().config { tableView in
+        tableView.separatorStyle = .none
+    }
+    
     private lazy var datasource: OnboardingSpeciesDataSource = .init(tableView: searchTableView) { tableView, indexPath, name in
         let cell = tableView.dequeueReusableCell(withIdentifier: OnboardingSpeciesCell.identifier, for: indexPath) as? OnboardingSpeciesCell
+        cell?.selectionStyle = .none
         cell?.configure(name: name)
         return cell
     }
@@ -101,7 +105,7 @@ public final class OnboardingSpeciesViewController: UIViewController {
                 
                 contentStackView
                     .config { stackView in
-                        let searchBarStackView: UIStackView = .init().then {
+                        let searchBarStackView: UIStackView = .init().config {
                             $0.axis = .horizontal
                             $0.alignment = .fill
                             $0.distribution = .fill

@@ -24,7 +24,7 @@ final class FeedRegisterView: UIView {
     
     private let textViewPlaceHolder: String = "우리아이 사진에 대한 이야기를\n같이 적어주세요🙌"
     
-    private let titleLabel: UILabel = .init().then {
+    private let titleLabel: UILabel = .init().config {
         $0.font = .display1
         $0.textColor = .blueGray900
         $0.text = "사진을 등록하고\n내용을 작성해주세요."
@@ -34,18 +34,18 @@ final class FeedRegisterView: UIView {
     private let emptyImageView: UIImageView = .init(image: .init(named: "ic_regist_photo")).config {
         $0.isUserInteractionEnabled = false
     }
-    private let photoImageView: UIImageView = .init().then {
+    private let photoImageView: UIImageView = .init().config {
         $0.backgroundColor = .backgroundGray
         $0.isUserInteractionEnabled = true
     }
     
-    private let contentTitleLabel: UILabel = .init().then {
+    private let contentTitleLabel: UILabel = .init().config {
         $0.font = .subhead3
         $0.textColor = .blueGray700
         $0.text = "내용(200자)"
     }
     
-    private lazy var contentTextView: UITextView = .init().then {
+    private lazy var contentTextView: UITextView = .init().config {
         $0.font = .body2
         $0.textColor = .blueGray400
         $0.text = self.textViewPlaceHolder

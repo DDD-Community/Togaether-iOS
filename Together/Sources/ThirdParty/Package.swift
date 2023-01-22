@@ -17,7 +17,6 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/ioskrew/SwiftLayout", .upToNextMajor(from: "2.0.0")),
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture", branch: "main"),
-        .package(url: "https://github.com/devxoul/Then", branch: "master"),
     ],
     targets: [
         .target(
@@ -27,7 +26,6 @@ let package = Package(
                 .product(name: "ComposableArchitecture", package: "swift-composable-architecture"),
                 .product(name: "SwiftLayout", package: "SwiftLayout"),
                 .product(name: "SwiftLayoutUtil", package: "SwiftLayout"),
-                .product(name: "Then", package: "Then"),
             ]
         ),
     ]
