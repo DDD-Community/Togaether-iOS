@@ -48,27 +48,28 @@ final class OnboardingFeedRegisterViewController: UIViewController {
     @LayoutBuilder var layout: some SwiftLayout.Layout {
         view
             .config { view in
+                view.keyboardLayoutGuide.followsUndockedKeyboard = true
                 view.backgroundColor = .backgroundWhite
             }
             .sublayout {
-            buttonContainerStackView
-                .config { stackView in
-                    if canSkip { stackView.addArrangedSubview(skipButton) }
-                    stackView.addArrangedSubview(nextButton)
-                }
-                .anchors { 
-                    Anchors.horizontal(offset: 24)
-                    Anchors.bottom.equalTo(view.safeAreaLayoutGuide.bottomAnchor, constant: 8)
-                    Anchors.height.equalTo(constant: 52)
-                }
-            
-            feedRegisterView
-                .anchors { 
-                    Anchors.top.equalTo(view.safeAreaLayoutGuide.topAnchor)
-                    Anchors.horizontal()
-                    Anchors.bottom.equalTo(buttonContainerStackView.topAnchor)
-                }
-        }
+                buttonContainerStackView
+                    .config { stackView in
+                        if canSkip { stackView.addArrangedSubview(skipButton) }
+                        stackView.addArrangedSubview(nextButton)
+                    }
+                    .anchors { 
+                        Anchors.horizontal(offset: 24)
+                        Anchors.bottom.equalTo(view.safeAreaLayoutGuide.bottomAnchor, constant: 8)
+                        Anchors.height.equalTo(constant: 52)
+                    }
+                
+                feedRegisterView
+                    .anchors { 
+                        Anchors.top.equalTo(view.safeAreaLayoutGuide.topAnchor)
+                        Anchors.horizontal()
+                        Anchors.bottom.equalTo(buttonContainerStackView.topAnchor)
+                    }
+            }
     }
     
     init(

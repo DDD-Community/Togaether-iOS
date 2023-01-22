@@ -27,7 +27,6 @@ final class FeedRegisterView: UIView {
     private let scrollView: UIScrollView = .init().config {
         $0.showsHorizontalScrollIndicator = false
         $0.showsVerticalScrollIndicator = false
-        $0.alwaysBounceVertical = true
     }
     
     private let contentStackView: UIStackView = .init().config {
@@ -74,6 +73,11 @@ final class FeedRegisterView: UIView {
                 Anchors.height.equalTo(constant: 400)
             }
         
+        contentTextView
+            .anchors { 
+                Anchors.height.equalTo(constant: 200)
+            }
+        
         self
             .config { view in
                 view.keyboardLayoutGuide.followsUndockedKeyboard = true
@@ -86,22 +90,23 @@ final class FeedRegisterView: UIView {
                         Anchors.horizontal(offset: 24)
                         Anchors.bottom.equalTo(keyboardLayoutGuide.topAnchor)
                     }
-                
-                contentStackView
-                    .config {
-                        $0.addArrangedSubview(titleLabel)
-                        $0.setCustomSpacing(32, after: titleLabel)
-                        $0.addArrangedSubview(photoImageView)
-                        $0.setCustomSpacing(32, after: photoImageView)
-                        $0.addArrangedSubview(contentTitleLabel)
-                        $0.setCustomSpacing(8, after: contentTitleLabel)
-                        $0.addArrangedSubview(contentTextView)
-                    }
-                    .anchors { 
-                        Anchors.top.equalTo(scrollView, constant: 32)
-                        Anchors.horizontal(scrollView)
-                        Anchors.bottom.equalTo(scrollView)
-                        Anchors.width.equalTo(scrollView.widthAnchor)
+                    .sublayout { 
+                        contentStackView
+                            .config {
+                                $0.addArrangedSubview(titleLabel)
+                                $0.setCustomSpacing(32, after: titleLabel)
+                                $0.addArrangedSubview(photoImageView)
+                                $0.setCustomSpacing(32, after: photoImageView)
+                                $0.addArrangedSubview(contentTitleLabel)
+                                $0.setCustomSpacing(8, after: contentTitleLabel)
+                                $0.addArrangedSubview(contentTextView)
+                            }
+                            .anchors { 
+                                Anchors.top.equalTo(scrollView, constant: 32)
+                                Anchors.horizontal(scrollView)
+                                Anchors.bottom.equalTo(scrollView)
+                                Anchors.width.equalTo(scrollView.widthAnchor)
+                            }
                     }
             }
     }
