@@ -153,13 +153,13 @@ public final class LoginViewController: UIViewController {
             stackView.addArrangedSubview(loginButton)
         }
         
-        findContainerView.config { stackView in
-                stackView.addArrangedSubview(findIDButton)
-                stackView.setCustomSpacing(20, after: findIDButton)
-                stackView.addArrangedSubview(dividerView)
-                stackView.setCustomSpacing(20, after: dividerView)
-                stackView.addArrangedSubview(findPasswordButton)
-            }
+//        findContainerView.config { stackView in
+//            stackView.addArrangedSubview(findIDButton)
+//            stackView.setCustomSpacing(20, after: findIDButton)
+//            stackView.addArrangedSubview(dividerView)
+//            stackView.setCustomSpacing(20, after: dividerView)
+//            stackView.addArrangedSubview(findPasswordButton)
+//        }
         
         joinContainerView.config { stackView in
             stackView.addArrangedSubview(noAccountLabel)
