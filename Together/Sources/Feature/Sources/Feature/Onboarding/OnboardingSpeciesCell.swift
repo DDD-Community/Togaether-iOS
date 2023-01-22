@@ -80,9 +80,6 @@ class OnboardingSpeciesHeaderView: UITableViewHeaderFooterView, Layoutable {
             .config {
                 $0.backgroundColor = .backgroundWhite
             }
-            .anchors { 
-                Anchors.height.equalTo(constant: 48)
-            }
             .sublayout { 
                 titleLabel.anchors { 
                     Anchors.leading.equalToSuper(inwardOffset: 24)

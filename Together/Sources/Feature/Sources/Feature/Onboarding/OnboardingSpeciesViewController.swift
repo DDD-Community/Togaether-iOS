@@ -180,6 +180,13 @@ public final class OnboardingSpeciesViewController: UIViewController {
     private func bindAction() {
         viewStore.send(.viewDidLoad)
         
+        searchTextField
+            .textPublisher
+            .sink { [weak self] searchTerms in
+                self?.viewStore.send(.didChangeSearchTerms(searchTerms))
+            }
+            .store(in: &cancellables)
+        
         nextButton
             .throttleTapGesture
             .sink { [weak self] _ in
@@ -198,14 +205,14 @@ public final class OnboardingSpeciesViewController: UIViewController {
     private func bindState() {
         titleLabel.text = "\(viewStore.petName)는\n어떤 종인가요?"
         
-        viewStore.publisher.allSpecies
+        viewStore.publisher.currentSpecies
             .sink { [weak self] species in
                 var snapshot = SpeciesSnapshot.init()
                 species.forEach { section in
                     snapshot.appendSections([section.id])
                     snapshot.appendItems(section.names, toSection: section.id)
                 }
-                self?.datasource.apply(snapshot)
+                self?.datasource.apply(snapshot, animatingDifferences: false)
             }
             .store(in: &cancellables)
     }

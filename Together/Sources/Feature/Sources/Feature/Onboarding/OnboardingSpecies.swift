@@ -13,12 +13,16 @@ public struct OnboardingSpecies: ReducerProtocol {
     public struct State: Equatable {
         let petName: String
         var selectedSpecies: String?
+         
+        var allSpeciesValue: [String] = .init()
         var allSpecies: [SpeciesSection] = .init()
+        var currentSpecies: [SpeciesSection] = .init()
     }
     
     public enum Action: Equatable {
         case viewDidLoad
         case didTapSpecies(IndexPath)
+        case didChangeSearchTerms(String)
         case didTapSkipButton
         case didTapNextButton
         case detachChild
@@ -33,21 +37,9 @@ public struct OnboardingSpecies: ReducerProtocol {
     public func core(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
         case .viewDidLoad:
-            let groupedDictionary = Dictionary(
-                grouping: mockData, 
-                by: { name in 
-                    let firstAlpabet = String(name.prefix(1).decomposedStringWithCompatibilityMapping.unicodeScalars.prefix(1))
-                    return firstAlpabet
-                }
-            )
-            let groupKeys = groupedDictionary.keys.sorted()
-            let allSpecies = groupKeys.map { 
-                return SpeciesSection(
-                    id: $0, 
-                    names: groupedDictionary[$0]?.sorted() ?? .init()
-                ) 
-            }
-            state.allSpecies = allSpecies
+            state.allSpeciesValue = mockData
+            state.allSpecies = generateSection(with: mockData)
+            state.currentSpecies = state.allSpecies
             return .none
             
         case let .didTapSpecies(index):
@@ -57,14 +49,38 @@ public struct OnboardingSpecies: ReducerProtocol {
             state.selectedSpecies = selectedSpecies
             return .none
             
+        case let .didChangeSearchTerms(terms):
+            let sortedSpecies = state.allSpeciesValue.filter { $0.contains(terms) }
+            let sections = generateSection(with: sortedSpecies)
+            state.currentSpecies = terms.isEmpty ? state.allSpecies : sections 
+            return .none
+            
         case .didTapSkipButton, .didTapNextButton, .detachChild:
             return .none
         }
     }
     
+    private func generateSection(with data: [String]) -> [SpeciesSection] {
+        let groupedDictionary = Dictionary(
+            grouping: data, 
+            by: { name in 
+                let firstName = name.prefix(1)
+                let firstAlpabet = String(firstName.decomposedStringWithCompatibilityMapping.unicodeScalars.prefix(1))
+                return firstAlpabet
+            }
+        )
+        let groupKeys = groupedDictionary.keys.sorted()
+        let allSpecies = groupKeys.map { 
+            return SpeciesSection(
+                id: $0, 
+                names: groupedDictionary[$0]?.sorted() ?? .init()
+            ) 
+        }
+        return allSpecies
+    }
 }
 
-let mockData = ["고든 세터",
+let mockData: [String] = ["고든 세터",
 "꼬똥 드 툴레아",
 "골든두들",
 "골든 리트리버",
