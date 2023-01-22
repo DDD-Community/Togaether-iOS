@@ -14,8 +14,53 @@ import ThirdParty
 
 import SwiftLayout
 
-final class OnboardingSpeciesCell: UITableViewCell {
+final class OnboardingSpeciesCell: UITableViewCell, Layoutable {
+    var activation: Activation?
+    
+    private let nameLabel: UILabel = .init().config { label in
+        label.font = .body2
+        label.textColor = .blueGray900
+        label.numberOfLines = 1
+    }
+    private let selectedImageView: UIImageView = .init(image: .init(named: "ic_input_success"))
+    private let bottomSeparator: UIView = UIView().config { view in
+        view.backgroundColor = .blueGray900.withAlphaComponent(0.1)
+    }
+    
+    @LayoutBuilder var layout: some SwiftLayout.Layout {
+        contentView
+            .anchors { 
+                Anchors.height.equalTo(constant: 52)
+            }
+            .sublayout { 
+                nameLabel.anchors { 
+                    Anchors.leading.equalToSuper(inwardOffset: 24)
+                    Anchors.centerY.equalToSuper()
+                }
+                
+                selectedImageView.anchors { 
+                    Anchors.trailing.equalToSuper(inwardOffset: 24)
+                    Anchors.centerY.equalToSuper()
+                }
+                
+                bottomSeparator.anchors {
+                    Anchors.height.equalTo(constant: 1)
+                    Anchors.bottom.equalToSuper()
+                    Anchors.leading.trailing.equalToSuper(inwardOffset: 24)
+                }
+            }
+    }
+    
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        sl.updateLayout()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     func configure(name: String) {
-        self.textLabel?.text = name
+        nameLabel.text = name
     }
 }
