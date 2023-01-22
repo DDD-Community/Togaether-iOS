@@ -131,6 +131,12 @@ final class FeedRegisterView: UIView {
                 self?.viewStore.send(.didTapPhotoImageView)
             }
             .store(in: &cancellables)
+        
+        self.throttleTapGesture
+            .sink { [weak self] _ in
+                self?.contentTextView.endEditing(true)
+            }
+            .store(in: &cancellables)
     }
     
     private func bindState() {
@@ -147,6 +153,9 @@ final class FeedRegisterView: UIView {
 
 extension FeedRegisterView: UITextViewDelegate {
     func textViewDidBeginEditing(_ textView: UITextView) {
+        let bottomOffset = CGPoint(x: 0, y: scrollView.contentSize.height - scrollView.bounds.height + 200)
+        scrollView.setContentOffset(bottomOffset, animated: true)
+        
         if textView.text == textViewPlaceHolder {
             textView.text = nil
             textView.textColor = .blueGray900
