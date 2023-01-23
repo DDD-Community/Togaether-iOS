@@ -47,4 +47,7 @@ public final class Preferences {
     
     @ValueProperty(uniqueKey: "Preferences::onboardingFinished", defaultValue: false)
     public var onboardingFinished: Bool
+    
+    @ValueProperty(uniqueKey: "Preferences::credential", defaultValue: nil)
+    public var credential: String?
 }

@@ -261,12 +261,13 @@ public final class LoginViewController: UIViewController {
     }
     
     private func bindNavigation() {
-//        store
-//            .scope(state: \.optionalOnboarding, action: Login.Action.optionalOnboarding)
-//            .ifLet { store in
-//                UIApplication.shared.appKeyWindow?.rootViewController = OnboardingInfoViewController(store: store, canSkip: true)
-//            }
-//            .store(in: &cancellables)
+        store
+            .scope(state: \.optionalOnboarding, action: Login.Action.optionalOnboarding)
+            .ifLet { store in
+                let navigationController = OnboardingNavigationViewController(store: store) 
+                UIApplication.shared.appKeyWindow?.rootViewController = navigationController
+            }
+            .store(in: &cancellables)
         
         store
             .scope(state: \.optionalTerms, action: Login.Action.optionalTerms)

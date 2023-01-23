@@ -24,7 +24,7 @@ struct Root: ReducerProtocol {
     
     enum Action: Equatable {
         case viewDidAppear
-        case tokenResponse(TaskResult<String>)
+        case tokenResponse(TaskResult<TogetherCredential>)
         
         case login(Login.Action)
         case onboarding(Onboarding.Action)
@@ -44,6 +44,8 @@ struct Root: ReducerProtocol {
                 .cancellable(id: TokenCancelID.self)
                 
             case let .tokenResponse(.success(token)):
+                print("AutoLogin Success token: \(token)")
+                
                 if Preferences.shared.onboardingFinished {
                     state = .tab(.init(home: .init(), agora: .init(), today: .init(), mypage: .init()))
                 } else {
@@ -53,6 +55,7 @@ struct Root: ReducerProtocol {
                 return .none
                 
             case let .tokenResponse(.failure(error)):
+                print("AutoLogin Failure error: \(error)")
                 state = .login(.init())
                 return .none
                 

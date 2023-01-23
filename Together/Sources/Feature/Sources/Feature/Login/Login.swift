@@ -125,6 +125,8 @@ public struct Login: ReducerProtocol {
             return .none
             
         case let .loginResponse(.success(token)):
+            print("Login Success token: \(token)")
+            
             if Preferences.shared.onboardingFinished {
                 state.optionalTab = .init(home: .init(), agora: .init(), today: .init(), mypage: .init())
             } else {
@@ -134,6 +136,7 @@ public struct Login: ReducerProtocol {
             return .none
              
         case let .loginResponse(.failure(error)):
+            print("Login Failure error: \(error)")
             return .none
             
         case .optionalOnboarding:
