@@ -48,7 +48,7 @@ public struct Login: ReducerProtocol {
         case passwordValidateResponse(Bool?)
         
         case didTapLoginButton
-        case loginResponse(TaskResult<String>)
+        case loginResponse(TaskResult<TogetherCredential>)
         
         case didTapFindIDButton
         case didTapFindPasswordButton

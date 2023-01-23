@@ -24,7 +24,8 @@ actor Storage {
     func load() -> TogetherCredential? {
         let json = Preferences.shared.credential
         guard let data = json?.data(using: .utf8) else { return nil }
-        return try? decoder.decode(TogetherCredential.self, from: data)
+        let credential = try? decoder.decode(TogetherCredential.self, from: data)
+        return credential
     }
     
     func clear() {

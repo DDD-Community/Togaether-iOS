@@ -8,18 +8,17 @@ public struct TogetherAccount {
     // xAuth
     // kicout
     public var token: @Sendable () async throws -> TogetherCredential
-    public var login: @Sendable (_ email: String, _ password: String) async throws -> String
+    public var login: @Sendable (_ email: String, _ password: String) async throws -> TogetherCredential
     public var logout: @Sendable () async -> Void
 }
 
 extension TogetherAccount: DependencyKey {
-    private static let tokenStorage: Storage = .init()
-    public static let liveValue: TogetherAccount = {
-//        @Dependency(\.tokenStorage) var tokenStorage
+    public static var liveValue: TogetherAccount {
+        @Dependency(\.tokenStorage) var tokenStorage
+        @Dependency(\.togetherNetwork) var togetherNetwork
+        
         return TogetherAccount(
             token: {
-                return Network.temp() // for debug
-                
                 // 캐시된 토큰이 있고, valid해야함
                 guard let cachedToken = await tokenStorage.load() else { throw AccountError.emptyCredential }
                 guard !cachedToken.isRefreshTokenInvalid else { throw AccountError.invalidToken }
@@ -30,19 +29,21 @@ extension TogetherAccount: DependencyKey {
                 return cachedToken
             }, 
             login: { email, password in
-                try await Task.sleep(for: .seconds(0.5))
-                return "havi"
+                let newCredential = try await togetherNetwork.fetchNewToken()
+                await tokenStorage.store(credential: newCredential)
+                return newCredential
             },
             logout: {
                 try? await Task.sleep(for: .seconds(0.5))
             }
         )
-    }()
+    }
     
     private static func refresh(old credential: TogetherCredential) async throws -> TogetherCredential {
-//        @Dependency(\.tokenStorage) var tokenStorage
-        // TODO: network 객체 만들면 새 토큰 리프래쉬 하는거 구현하기~
-        let newCredential: TogetherCredential = Network.temp()
+        @Dependency(\.tokenStorage) var tokenStorage
+        @Dependency(\.togetherNetwork) var togetherNetwork
+        
+        let newCredential: TogetherCredential = try await togetherNetwork.refresh(credential)
         await tokenStorage.store(credential: newCredential)
         return newCredential
     }

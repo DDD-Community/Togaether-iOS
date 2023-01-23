@@ -49,7 +49,7 @@ public struct TogetherCredential: Codable, Sendable, Equatable {
         try container.encode(accessToken, forKey: .accessToken)
         try container.encode(accessTokenExpiresAt, forKey: .accessTokenExpiresAt)
         try container.encode(refreshToken, forKey: .refreshToken)
-        try container.encode(refreshToken, forKey: .refreshTokenExpiresAt)
+        try container.encode(refreshTokenExpiresAt, forKey: .refreshTokenExpiresAt)
     }
 }
 
