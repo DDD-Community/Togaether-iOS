@@ -46,7 +46,7 @@ struct Root: ReducerProtocol {
             case let .tokenResponse(.success(token)):
                 print("AutoLogin Success token: \(token)")
                 
-                if Preferences.shared.onboardingFinished {
+                if Preferences.shared.onboardingFinished == true {
                     state = .tab(.init(home: .init(), agora: .init(), today: .init(), mypage: .init()))
                 } else {
                     state = .onboarding(.init())

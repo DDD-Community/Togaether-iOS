@@ -13,7 +13,7 @@ private let groupIdentifier: String = "group.com.together.sandbox"
 private let groupIdentifier: String = "group.com.together"
 #endif
 
-public class UserDefaultStorage<T> {
+public class UserDefaultStorage<T: Codable> {
     let uniqueKey: String
     let defaultValue: T
     
@@ -24,7 +24,7 @@ public class UserDefaultStorage<T> {
 }
 
 @propertyWrapper
-public final class ValueProperty<T>: UserDefaultStorage<T> {
+public final class ValueProperty<T>: UserDefaultStorage<T> where T: Codable {
     public var projectedValue: ValueProperty<T> { return self }
     
     private let group: UserDefaults = .init(suiteName: groupIdentifier) ?? .init()
@@ -33,9 +33,12 @@ public final class ValueProperty<T>: UserDefaultStorage<T> {
         get {
             group.value(forKey: uniqueKey) as? T ?? defaultValue
         }
-        
         set {
-            group.set(newValue, forKey: uniqueKey)
+            if let optional = newValue as? AnyOptional, optional.isNil {
+                group.removeObject(forKey: uniqueKey)
+            } else {
+                group.setValue(newValue, forKey: uniqueKey)
+            }
         }
     }
 }
@@ -50,4 +53,12 @@ public final class Preferences {
     
     @ValueProperty(uniqueKey: "Preferences::credential", defaultValue: nil)
     public var credential: String?
+}
+
+private protocol AnyOptional {
+    var isNil: Bool { get }
+}
+
+extension Optional: AnyOptional {
+    var isNil: Bool { self == nil }
 }

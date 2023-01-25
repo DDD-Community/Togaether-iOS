@@ -63,7 +63,7 @@ public struct Login: ReducerProtocol {
     
     public init() { }
     
-    @Dependency(\.togetherAccount) var togetherAccount
+    @Dependency(\.togetherAccount.login) var login
     @Dependency(\.validator) var validator
     private enum LoginCancelID { }
     
@@ -108,7 +108,7 @@ public struct Login: ReducerProtocol {
             return .task { [email = state.email, password = state.password] in
                 await .loginResponse(
                     TaskResult { 
-                        try await togetherAccount.login(email, password) 
+                        try await login(email, password) 
                     }
                 ) 
             }
@@ -127,7 +127,7 @@ public struct Login: ReducerProtocol {
         case let .loginResponse(.success(token)):
             print("Login Success token: \(token)")
             
-            if Preferences.shared.onboardingFinished {
+            if Preferences.shared.onboardingFinished == true {
                 state.optionalTab = .init(home: .init(), agora: .init(), today: .init(), mypage: .init())
             } else {
                 state.optionalOnboarding = .init()
@@ -143,7 +143,7 @@ public struct Login: ReducerProtocol {
             return .none
             
         case .optionalTerms(.optionalJoin(.joinResponse(.success))):
-            if Preferences.shared.onboardingFinished {
+            if Preferences.shared.onboardingFinished == true {
                 state.optionalTab = .init(home: .init(), agora: .init(), today: .init(), mypage: .init())
             } else {
                 state.optionalOnboarding = .init()

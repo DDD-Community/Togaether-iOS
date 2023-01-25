@@ -7,7 +7,6 @@
 
 import Foundation
 import ThirdParty
-import Tagged
 
 public struct TogetherCredential: Codable, Sendable, Equatable {
     private var accessToken: String?
