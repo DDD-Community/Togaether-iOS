@@ -48,7 +48,7 @@ final class FeedRegisterView: UIView {
     private let photoImageView: UIImageView = .init().config {
         $0.backgroundColor = .backgroundGray
         $0.isUserInteractionEnabled = true
-        $0.contentMode = .scaleAspectFit
+        $0.contentMode = .scaleAspectFill
     }
     
     private let contentTitleLabel: UILabel = .init().config {
@@ -70,7 +70,7 @@ final class FeedRegisterView: UIView {
                 emptyImageView.anchors { Anchors.center() }
             }
             .anchors { 
-                Anchors.height.equalTo(constant: 400)
+                Anchors.height.equalTo(constant: 375)
             }
         
         contentTextView
@@ -188,4 +188,3 @@ struct FeedRegister_Previews: PreviewProvider {
     }
 }
 #endif
-
