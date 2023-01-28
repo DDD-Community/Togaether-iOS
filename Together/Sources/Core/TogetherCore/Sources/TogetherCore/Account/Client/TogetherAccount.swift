@@ -8,14 +8,14 @@ public struct TogetherAccount {
     // xAuth
     // kicout
     public var token: @Sendable () async throws -> TogetherCredential
-    public var login: @Sendable (_ email: String, _ password: String) async throws -> TogetherCredential
+    public var login: @Sendable (_ email: String, _ password: String) async throws -> LoginResponse
     public var logout: @Sendable () async -> Void
 }
 
 extension TogetherAccount: DependencyKey {
     public static var liveValue: TogetherAccount {
         @Dependency(\.tokenStorage) var tokenStorage
-        @Dependency(\.togetherNetwork) var togetherNetwork
+        @Dependency(\.accountAPI) var accountAPI
         
         return TogetherAccount(
             token: {
@@ -29,9 +29,9 @@ extension TogetherAccount: DependencyKey {
                 return cachedToken
             }, 
             login: { email, password in
-                let newCredential = try await togetherNetwork.fetchNewToken()
-                await tokenStorage.store(credential: newCredential)
-                return newCredential
+                let loginResponse: LoginResponse = try await accountAPI.login(email: email, password: password)
+                await tokenStorage.store(credential: loginResponse.credential)
+                return loginResponse
             },
             logout: {
                 try? await Task.sleep(for: .seconds(0.5))
@@ -41,9 +41,9 @@ extension TogetherAccount: DependencyKey {
     
     private static func refresh(old credential: TogetherCredential) async throws -> TogetherCredential {
         @Dependency(\.tokenStorage) var tokenStorage
-        @Dependency(\.togetherNetwork) var togetherNetwork
+        @Dependency(\.accountAPI) var accountAPI
         
-        let newCredential: TogetherCredential = try await togetherNetwork.refresh(credential)
+        let newCredential: TogetherCredential = try await accountAPI.refresh(credential)
         await tokenStorage.store(credential: newCredential)
         return newCredential
     }

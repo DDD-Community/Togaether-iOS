@@ -48,7 +48,7 @@ public struct Login: ReducerProtocol {
         case passwordValidateResponse(Bool?)
         
         case didTapLoginButton
-        case loginResponse(TaskResult<TogetherCredential>)
+        case loginResponse(TaskResult<LoginResponse>)
         
         case didTapFindIDButton
         case didTapFindPasswordButton
@@ -124,8 +124,8 @@ public struct Login: ReducerProtocol {
             state.optionalTerms = .init()
             return .none
             
-        case let .loginResponse(.success(token)):
-            print("Login Success token: \(token)")
+        case let .loginResponse(.success(response)):
+            print("Login Success token: \(response.credential)")
             
             if Preferences.shared.onboardingFinished == true {
                 state.optionalTab = .init(home: .init(), agora: .init(), today: .init(), mypage: .init())

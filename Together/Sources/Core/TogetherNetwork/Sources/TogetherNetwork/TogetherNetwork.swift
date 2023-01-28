@@ -1,7 +1,7 @@
 
 import Foundation
 
-public struct TogetherNetwork {
+public struct NetworkSession {
     
     private let session: URLSession
     private var interceptors: [NetworkInterceptor]
