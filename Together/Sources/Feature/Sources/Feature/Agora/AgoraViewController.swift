@@ -5,6 +5,7 @@
 //  Created by denny on 2023/01/18.
 //
 
+import Combine
 import ComposableArchitecture
 import SwiftLayout
 import TogetherCore
@@ -17,6 +18,8 @@ final class AgoraViewController: UIViewController, Layoutable {
 
     private let store: StoreOf<Agora>
     private let viewStore: ViewStoreOf<Agora>
+
+    private var cancellables: Set<AnyCancellable> = .init()
 
     private let titleLabel: UILabel = UILabel().config { label in
         label.numberOfLines = 2
@@ -65,6 +68,20 @@ final class AgoraViewController: UIViewController, Layoutable {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        bindNavigation()
+    }
+
+    private func bindNavigation() {
+        store
+            .scope(state: \.userPage, action: Agora.Action.userPage)
+            .ifLet { [weak self] userPage in
+                guard let self = self else { return }
+                self.navigationController?.pushViewController(
+                    UserPageViewController(store: userPage),
+                    animated: true
+                )
+            }
+            .store(in: &cancellables)
     }
 }
 
@@ -94,6 +111,11 @@ extension AgoraViewController: UICollectionViewDelegate, UICollectionViewDataSou
 
         cell.petImage = UIImage(named: "puppySample")
         cell.content = "샘플 (\(indexPath.row))타이틀입니다 샘플 타이틀입니다"
+        cell.category = "카테고리"
         return cell
+    }
+
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        viewStore.send(.didTapAgoraItem)
     }
 }

@@ -1,8 +1,8 @@
 //
-//  MyPageViewController.swift
+//  UserPageViewController.swift
 //  
 //
-//  Created by denny on 2023/01/19.
+//  Created by denny on 2023/01/31.
 //
 
 import Combine
@@ -13,28 +13,24 @@ import TogetherUI
 import ThirdParty
 import UIKit
 
-final class MyPageViewController: UIViewController, Layoutable {
+final class UserPageViewController: UIViewController, Layoutable {
     var activation: Activation?
 
-    private let store: StoreOf<MyPage>
-    private let viewStore: ViewStoreOf<MyPage>
+    private let store: StoreOf<UserPage>
+    private let viewStore: ViewStoreOf<UserPage>
 
     private var cancellables: Set<AnyCancellable> = .init()
 
-    private var createBarButton: UIBarButtonItem {
-        UIBarButtonItem(image: UIImage(named: "ic_appbar_write"), style: .plain, target: self, action: #selector(onClickCreate))
-    }
-
-    private var settingBarButton: UIBarButtonItem {
-        UIBarButtonItem(image: UIImage(named: "ic_appbar_settings"), style: .plain, target: self, action: #selector(onClickSetting))
-    }
-
-    private let headerView: ProfileHeaderView = ProfileHeaderView().config { view in
+    private lazy var headerView: UserProfileHeaderView = UserProfileHeaderView().config { view in
         view.backgroundColor = .backgroundWhite
         view.layer.shadowOffset = CGSize(width: 0, height: 6)
         view.layer.shadowRadius = 6
         view.layer.shadowOpacity = 0.5
         view.layer.shadowColor = UIColor.blueGray150.cgColor
+//        view.isFollowing = true
+        view.didTapFollowButton = {
+            print("Change isFollowing ==> \($0)")
+        }
     }
 
     private lazy var imageCollectionView: UICollectionView = {
@@ -43,11 +39,11 @@ final class MyPageViewController: UIViewController, Layoutable {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.register(MyPageCollectionViewCell.self, forCellWithReuseIdentifier: MyPageCollectionViewCell.identifier)
+        collectionView.register(UserPageCollectionViewCell.self, forCellWithReuseIdentifier: UserPageCollectionViewCell.identifier)
         return collectionView
     }()
 
-    @LayoutBuilder var layout: some Layout {
+    @LayoutBuilder var layout: some SwiftLayout.Layout {
         view.config { view in
             view.backgroundColor = .backgroundWhite
         }.sublayout {
@@ -63,7 +59,7 @@ final class MyPageViewController: UIViewController, Layoutable {
         }
     }
 
-    init(store: StoreOf<MyPage>) {
+    init(store: StoreOf<UserPage>) {
         self.store = store
         self.viewStore = ViewStore(store)
 
@@ -88,36 +84,20 @@ final class MyPageViewController: UIViewController, Layoutable {
             navBar.setBackgroundImage(UIImage(color: .blueGray0), for: .default)
         }
 
-        navigationItem.setRightBarButtonItems7([settingBarButton, createBarButton])
-        navigationItem.title = "MY"
+        navigationItem.setLeftBarButtonItem7(.backButtonItem(target: self, action: #selector(onClickBackButton)))
+
+        navigationItem.title = "유저이름 노출 필요"
+    }
+
+    @objc
+    private func onClickBackButton(_ sender: UIBarButtonItem) {
+        navigationController?.popViewController(animated: true)
+        viewStore.send(.detachChild)
     }
 
     private func bindNavigation() {
         store
-            .scope(state: \.feedRegister, action: MyPage.Action.feedRegister)
-            .ifLet { [weak self] feedRegister in
-                let feedRegisterViewController: OnboardingFeedRegisterViewController = .init(store: feedRegister, canSkip: false)
-                feedRegisterViewController.hidesBottomBarWhenPushed = true
-                self?.navigationController?.pushViewController(
-                    feedRegisterViewController, 
-                    animated: true
-                )
-            }
-            .store(in: &cancellables)
-        
-        store
-            .scope(state: \.myPageSetting, action: MyPage.Action.myPageSetting)
-            .ifLet { [weak self] setting in
-                guard let self = self else { return }
-                self.navigationController?.pushViewController(
-                    SettingViewController(store: self.store, settingStore: setting),
-                    animated: true
-                )
-            }
-            .store(in: &cancellables)
-
-        store
-            .scope(state: \.postDetail, action: MyPage.Action.postDetail)
+            .scope(state: \.postDetail, action: UserPage.Action.postDetail)
             .ifLet { [weak self] postDetail in
                 let postDetailVC = PostDetailViewController(store: postDetail)
                 self?.navigationController?.pushViewController(
@@ -127,19 +107,9 @@ final class MyPageViewController: UIViewController, Layoutable {
             }
             .store(in: &cancellables)
     }
-
-    @objc
-    private func onClickCreate(_ sender: UIBarButtonItem) {
-        viewStore.send(.didTapCreate)
-    }
-
-    @objc
-    private func onClickSetting(_ sender: UIBarButtonItem) {
-        viewStore.send(.didTapSetting)
-    }
 }
 
-extension MyPageViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+extension UserPageViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let spacing: CGFloat = 1
         let width = (UIScreen.main.bounds.width - (spacing * 2)) / 3
@@ -159,7 +129,7 @@ extension MyPageViewController: UICollectionViewDelegate, UICollectionViewDataSo
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MyPageCollectionViewCell.identifier, for: indexPath) as? MyPageCollectionViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: UserPageCollectionViewCell.identifier, for: indexPath) as? UserPageCollectionViewCell else {
             return UICollectionViewCell()
         }
 
@@ -171,3 +141,15 @@ extension MyPageViewController: UICollectionViewDelegate, UICollectionViewDataSo
         viewStore.send(.didTapPost)
     }
 }
+
+#if canImport(SwiftUI) && DEBUG
+import SwiftUI
+
+struct UserPage_Previews: PreviewProvider {
+    static var previews: some View {
+        let store: StoreOf<UserPage> = .init(initialState: .init(), reducer: UserPage())
+        return UserPageViewController(store: store)
+            .showPrieview()
+    }
+}
+#endif

@@ -23,6 +23,12 @@ final class AgoraCollectionViewCell: UICollectionViewCell, Layoutable {
         }
     }
 
+    var category: String? {
+        didSet {
+            subTitleLabel.text = category
+        }
+    }
+
     var petImage: UIImage? {
         didSet {
             petImageView.image = petImage
@@ -36,12 +42,17 @@ final class AgoraCollectionViewCell: UICollectionViewCell, Layoutable {
             }
 
             titleContentView.anchors {
-                Anchors.height.equalTo(constant: 40)
+                Anchors.height.equalTo(constant: 60)
                 Anchors.leading.trailing.bottom.equalToSuper()
             }.sublayout {
-                titleLabel.anchors {
+                subTitleLabel.anchors {
+                    Anchors.top.equalToSuper(inwardOffset: 9)
                     Anchors.leading.trailing.equalToSuper(inwardOffset: 14)
-                    Anchors.centerY.equalToSuper()
+                }
+                titleLabel.anchors {
+//                    Anchors.top.equalTo(subTitleLabel, attribute: .bottom, constant: 8)
+                    Anchors.leading.trailing.equalToSuper(inwardOffset: 14)
+                    Anchors.bottom.equalToSuper(inwardOffset: 11)
                 }
             }
         }
@@ -50,6 +61,12 @@ final class AgoraCollectionViewCell: UICollectionViewCell, Layoutable {
     private let titleContentView: UIView = UIView().config { view in
         view.backgroundColor = .backgroundWhite
     }
+    private let subTitleLabel: UILabel = UILabel().config { label in
+        label.font = .caption
+        label.textColor = .blueGray400
+        label.numberOfLines = 1
+    }
+
     private let titleLabel: UILabel = UILabel().config { label in
         label.font = .subhead2
         label.textColor = .blueGray900
