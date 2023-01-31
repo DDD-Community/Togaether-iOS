@@ -58,5 +58,21 @@ public extension UIView {
         visualEffectView.frame = self.frame
         self.addSubview(visualEffectView)
     }
+
+    func fadeIn(duration: TimeInterval = 1.0, completion: ((Bool) -> Void)?) {
+        UIView.animate(withDuration: duration, animations: {
+            self.alpha = 1.0
+        }) { param in
+            completion?(param)
+        }
+    }
+
+    func fadeOut(duration: TimeInterval = 1.0, completion: ((Bool) -> Void)?) {
+        UIView.animate(withDuration: duration, animations: {
+            self.alpha = 0.0
+        }) { param in
+            completion?(param)
+        }
+    }
     
 }

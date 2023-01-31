@@ -29,6 +29,8 @@
 		40E9B4DA2931D7B100AC9AF0 /* TogetherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E9B4D92931D7B100AC9AF0 /* TogetherTests.swift */; };
 		40E9B4E42931D7B100AC9AF0 /* TogetherUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E9B4E32931D7B100AC9AF0 /* TogetherUITests.swift */; };
 		40E9B4E62931D7B100AC9AF0 /* TogetherUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E9B4E52931D7B100AC9AF0 /* TogetherUITestsLaunchTests.swift */; };
+		B06515C9298912F80057822B /* togather_main.json in Resources */ = {isa = PBXBuildFile; fileRef = B06515C8298912F80057822B /* togather_main.json */; };
+		B06515CA298912F80057822B /* togather_main.json in Resources */ = {isa = PBXBuildFile; fileRef = B06515C8298912F80057822B /* togather_main.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -77,6 +79,7 @@
 		40E9B4DF2931D7B100AC9AF0 /* TogetherUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TogetherUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		40E9B4E32931D7B100AC9AF0 /* TogetherUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TogetherUITests.swift; sourceTree = "<group>"; };
 		40E9B4E52931D7B100AC9AF0 /* TogetherUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TogetherUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		B06515C8298912F80057822B /* togather_main.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = togather_main.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,6 +146,7 @@
 		40E9B4B62931D7AE00AC9AF0 = {
 			isa = PBXGroup;
 			children = (
+				B06515C8298912F80057822B /* togather_main.json */,
 				40E9B4C12931D7AF00AC9AF0 /* Together */,
 				40E9B4D82931D7B100AC9AF0 /* TogetherTests */,
 				40E9B4E22931D7B100AC9AF0 /* TogetherUITests */,
@@ -348,6 +352,7 @@
 				40E9B4CC2931D7B100AC9AF0 /* Assets.xcassets in Resources */,
 				4057578A295E252400FA3FB6 /* TogetherFoundation in Resources */,
 				4075CA36295F454100FA23C9 /* Pretendard-Medium.ttf in Resources */,
+				B06515C9298912F80057822B /* togather_main.json in Resources */,
 				4075CA32295F454100FA23C9 /* Pretendard-Light.ttf in Resources */,
 				40575789295E252400FA3FB6 /* TogetherNetwork in Resources */,
 				4075CA35295F454100FA23C9 /* Pretendard-ExtraLight.ttf in Resources */,
@@ -365,6 +370,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B06515CA298912F80057822B /* togather_main.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

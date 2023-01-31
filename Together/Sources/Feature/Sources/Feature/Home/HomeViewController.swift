@@ -5,14 +5,13 @@
 //  Created by 한상진 on 2022/12/30.
 //
 
-import UIKit
-
+import ComposableArchitecture
+import Lottie
+import SwiftLayout
 import TogetherCore
 import TogetherUI
 import ThirdParty
-
-import SwiftLayout
-import ComposableArchitecture
+import UIKit
 
 final class HomeViewController: UIViewController, Layoutable {
     public var activation: Activation?
@@ -35,6 +34,8 @@ final class HomeViewController: UIViewController, Layoutable {
             self.swipeView.delegate = self
         }
     }
+
+    private var animatedView: LottieAnimationView = LottieAnimationView(name: "togather_main")
 
     private lazy var guideAnimationView: UIView = UIView().config { view in
         view.backgroundColor = UIColor(red: 0/255, green: 0/255, blue: 0/255, alpha: 0.5)
@@ -71,6 +72,11 @@ final class HomeViewController: UIViewController, Layoutable {
                 Anchors.centerX.equalToSuper()
                 Anchors.centerY.equalToSuper()
             }.sublayout {
+                animatedView.anchors {
+                    Anchors.top.equalToSuper(inwardOffset: 22)
+                    Anchors.leading.trailing.equalToSuper(inwardOffset: 25)
+                    Anchors.height.equalTo(constant: 150)
+                }
                 guideLabel.anchors {
                     Anchors.centerX.equalToSuper()
                     Anchors.leading.trailing.equalToSuper(inwardOffset: 5)
@@ -133,6 +139,14 @@ final class HomeViewController: UIViewController, Layoutable {
         swipeView = TogetherSwipeView(inset: 0, frame: swipeFrame, contentView: contentView)
         viewContainer.addSubview(swipeView)
         swipeView.showTogetherCards(with: puppyModels, isDummyShow: true)
+
+        animatedView.contentMode = .scaleAspectFit
+
+        self.guideAnimationView.fadeIn(duration: 0.5) { _ in
+            self.animatedView.play { _ in
+                self.guideAnimationView.fadeOut(duration: 0.5, completion: nil)
+            }
+        }
     }
 }
 
