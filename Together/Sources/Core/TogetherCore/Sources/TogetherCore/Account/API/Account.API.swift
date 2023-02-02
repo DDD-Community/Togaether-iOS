@@ -13,7 +13,7 @@ import ThirdParty
 import ComposableArchitecture
 import XCTestDynamicOverlay
 
-public extension Account {
+extension Account {
     struct API { 
         var join: @Sendable (
             _ email: String,
@@ -27,21 +27,6 @@ public extension Account {
     }
 }
 
-public extension Account.API {
-    func join(
-        email: String,
-        password: String,
-        name:  String,
-        birth: String
-    ) async throws -> JoinResponse {
-        try await self.join(email, password, name, birth)
-    }
-    
-    func login(email: String, password: String) async throws -> LoginResponse {
-        try await self.login(email, password)
-    }
-}
-
 extension DependencyValues {
     var accountAPI: Account.API {
         get { self[Account.API.self] }
@@ -50,9 +35,8 @@ extension DependencyValues {
 }
 
 extension Account.API: DependencyKey {
-    public static let liveValue: Account.API = .init(
+    static let liveValue: Account.API = .init(
         join: { email, password, name, birth in
-            // birth.toArray "19990101" -> [1999, 1, 1]
             return try await NetworkClient.account.request(
                 convertible: "\(Host.together)/member", 
                 method: .post,
@@ -60,7 +44,7 @@ extension Account.API: DependencyKey {
                     "email": email,
                     "password": password,
                     "name": name,
-                    "birth": birth
+                    "birth": birth.toDTO
                 ],
                 encoding: ParameterJSONEncoder()
             )
@@ -93,4 +77,21 @@ extension Account.API: DependencyKey {
         fetchNewToken: unimplemented(), 
         refresh: unimplemented()
     )
+}
+
+private extension String {
+    var toDTO: [Int] {
+        let year = Int(self.subString(from: 0, to: 4)) ?? 2000
+        let month = Int(self.subString(from: 4, to: 6)) ?? 1
+        let day = Int(self.subString(from: 6, to: 8)) ?? 1
+        return [year, month, day]
+    }
+}
+
+private extension String {
+    func subString(from: Int, to: Int) -> String {
+       let startIndex = self.index(self.startIndex, offsetBy: from)
+       let endIndex = self.index(self.startIndex, offsetBy: to)
+       return String(self[startIndex..<endIndex])
+    }
 }

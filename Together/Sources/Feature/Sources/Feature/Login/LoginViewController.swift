@@ -20,47 +20,38 @@ public final class LoginViewController: UIViewController {
     private let store: StoreOf<Login>
     private let viewStore: ViewStoreOf<Login>
     private var cancellables: Set<AnyCancellable> = .init()
+    private var alertController: UIAlertController?
     
-    private let contentStackView: UIStackView = {
-        let stackView: UIStackView = .init()
+    private let contentStackView: UIStackView = .init().config { stackView in
         stackView.axis = .vertical
         stackView.distribution = .fill
         stackView.alignment = .fill
-        return stackView
-    }()
+    }
     
-    private let iconView: UIView = {
-        let view: UIView = .init()
+    private let iconView: UIView = .init().config { view in
         view.backgroundColor = .backgroundGray
-        return view
-    }()
+    }
     
-    private let iconImageView: UIImageView = {
-        let imageView: UIImageView = .init(image: .init(named: "img_login", in: .main, with: nil))
-        return imageView
-    }()
+    private let iconImageView: UIImageView = .init(image: .init(named: "img_login", in: .main, with: nil))
     
     private let emailFieldView: TogetherInputFieldView = .init(
         title: "이메일(아이디)", 
-        placeholder: "예) example@togather.co.kr"
-    ) 
-    private let passwordFieldView: TogetherInputFieldView = {
-        let fieldView: TogetherInputFieldView = .init(
-            title: "비밀번호", 
-            placeholder: "0자리 ~ 00자리의 영어, 숫자 혹은 특수문자"
-        ) 
-        fieldView.inputTextField.isSecureTextEntry = true
-        return fieldView
-    }()
+        placeholder: "예) example@togather.co.kr",
+        keyboardType: .emailAddress
+    )
+    private let passwordFieldView: TogetherInputFieldView = .init(
+        title: "비밀번호", 
+        placeholder: "0자리 ~ 00자리의 영어, 숫자 혹은 특수문자"
+    ).config { view in
+        view.inputTextField.isSecureTextEntry = true
+    }
     private let loginButton: TogetherRegularButton = .init(title: "로그인") 
     
-    private let findContainerView: UIStackView = {
-        let stackView: UIStackView = .init()
+    private let findContainerView: UIStackView = .init().config { stackView in
         stackView.axis = .horizontal
         stackView.distribution = .fill
         stackView.alignment = .center
-        return stackView
-    }()
+    }
     
     private let findIDButton: UIButton = {
         let button: UIButton = .init(frame: .zero)
@@ -214,6 +205,27 @@ public final class LoginViewController: UIViewController {
         viewStore.publisher.isLoginAvailable
             .assign(to: \.isEnabled, onWeak: loginButton)
             .store(in: &cancellables)
+        
+        viewStore.publisher.isLoginInflight
+            .map { return !$0 }
+            .assign(to: \.isEnabled, onWeak: loginButton)
+            .store(in: &cancellables)
+        
+        viewStore.publisher.alert
+            .sink { [weak self] alert in
+                if let alert = alert {
+                    let alertController = UIAlertController(state: alert) {
+                        self?.viewStore.send($0)
+                    }
+                    self?.present(alertController, animated: true, completion: nil)
+                    self?.alertController = alertController
+                } else {
+                    self?.alertController?.dismiss(animated: true, completion: nil)
+                    self?.alertController = nil
+                }
+            }
+            .store(in: &cancellables)
+        
     }
     
     private func bindAction() {
@@ -256,6 +268,14 @@ public final class LoginViewController: UIViewController {
             .publisher(for: .touchUpInside)
             .sink { [weak self] _ in
                 self?.viewStore.send(.didTapJoinButton)
+            }
+            .store(in: &cancellables)
+        
+        view
+            .throttleTapGesture
+            .sink { [weak self] _ in
+                self?.emailFieldView.endEditing(true)
+                self?.passwordFieldView.endEditing(true)
             }
             .store(in: &cancellables)
     }

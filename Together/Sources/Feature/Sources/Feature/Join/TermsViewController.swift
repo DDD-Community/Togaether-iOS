@@ -47,11 +47,11 @@ final class TermsViewController: UIViewController {
             .sublayout {
                 titleContainerView
                     .config { view in
-                        view.backgroundColor = .backgroundGray
+                        view.backgroundColor = .backgroundWhite
                     }
                     .anchors { 
                         Anchors.horizontal()
-                        Anchors.top.equalToSuper()
+                        Anchors.top.equalTo(view.topAnchor)
                         Anchors.height.equalTo(constant: 280)
                     }
                     .sublayout { 
@@ -110,6 +110,7 @@ final class TermsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        configureNavigation()
         bindAction()
         bindState()
         bindNavigation()
@@ -120,6 +121,19 @@ final class TermsViewController: UIViewController {
         if !isMovingToParent {
             viewStore.send(.detachChild)
         }
+    }
+    
+    private func configureNavigation() {
+        if let navBar = navigationController?.navigationBar as? TogetherNavigationBar {
+            navBar.setBackgroundImage(UIImage(color: .blueGray0), for: .default)
+        }
+        navigationItem.setLeftBarButtonItem7(.backButtonItem(target: self, action: #selector(onClickBackButton)))
+    }
+    
+    @objc
+    private func onClickBackButton(_ sender: UIBarButtonItem) {
+        navigationController?.popViewController(animated: true)
+        viewStore.send(.detachChild)
     }
     
     private func bindAction() {

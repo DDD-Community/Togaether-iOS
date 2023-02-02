@@ -10,6 +10,8 @@ import TogetherNetwork
 
 struct HeaderInterceptor: NetworkInterceptor {
     func adapt(urlRequest: URLRequest, options: NetworkRequestOptions) async throws -> URLRequest {
+        var urlRequest = urlRequest
+        urlRequest.setHeaders(Self.headers)
         return urlRequest
     }
     

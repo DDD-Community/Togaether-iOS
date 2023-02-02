@@ -5,11 +5,31 @@ import ComposableArchitecture
 import XCTestDynamicOverlay
 
 public struct TogetherAccount {
-    // xAuth
-    // kicout
     public var token: @Sendable () async throws -> TogetherCredential
     public var login: @Sendable (_ email: String, _ password: String) async throws -> LoginResponse
     public var logout: @Sendable () async -> Void
+    public var join: @Sendable (
+        _ email: String,
+        _ password: String,
+        _ name:  String,
+        _ birth: String
+    ) async throws  -> JoinResponse
+    // kicout
+}
+
+public extension TogetherAccount {
+    func join(
+        email: String,
+        password: String,
+        name:  String,
+        birth: String
+    ) async throws -> JoinResponse {
+        try await self.join(email, password, name, birth)
+    }
+    
+    func login(email: String, password: String) async throws -> LoginResponse {
+        try await self.login(email, password)
+    }
 }
 
 extension TogetherAccount: DependencyKey {
@@ -29,12 +49,17 @@ extension TogetherAccount: DependencyKey {
                 return cachedToken
             }, 
             login: { email, password in
-                let loginResponse: LoginResponse = try await accountAPI.login(email: email, password: password)
+                let loginResponse: LoginResponse = try await accountAPI.login(email, password)
                 await tokenStorage.store(credential: loginResponse.credential)
                 return loginResponse
             },
             logout: {
                 try? await Task.sleep(for: .seconds(0.5))
+            },
+            join: { email, password, name, birth in
+                let joinResponse: JoinResponse = try await accountAPI.join(email, password, name, birth)
+                // do some more work
+                return joinResponse
             }
         )
     }
@@ -53,7 +78,8 @@ extension TogetherAccount {
     public static let testValue: TogetherAccount = .init(
         token: unimplemented("\(Self.self).token"), 
         login: unimplemented("\(Self.self).login"),
-        logout: unimplemented("\(Self.self).logout")
+        logout: unimplemented("\(Self.self).logout"), 
+        join: unimplemented("\(Self.self).join")
     )
 }
 

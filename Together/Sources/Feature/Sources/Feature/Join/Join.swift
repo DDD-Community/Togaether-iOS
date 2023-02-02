@@ -55,10 +55,13 @@ public struct Join: ReducerProtocol {
         case phoneNumberValidateResponse(Bool?)
         
         case confirmButtonClicked
-        case joinResponse(TaskResult<String>)
+        case joinResponse(TaskResult<JoinResponse>)
+        
+        case detachChild
     }
     
     @Dependency(\.validator) var validator
+    @Dependency(\.togetherAccount.join) var join
     
     public init() { }
     
@@ -123,10 +126,15 @@ public struct Join: ReducerProtocol {
             return .none
             
         case .confirmButtonClicked:
-            return .task { 
+            return .task { [state] in
                 await .joinResponse(
                     TaskResult{
-                        try await test() 
+                        try await join(
+                            state.email, 
+                            state.password, 
+                            state.name, 
+                            state.birth
+                        )
                     }
                 )
             }
@@ -139,11 +147,10 @@ public struct Join: ReducerProtocol {
             // 화면에 대한 에러 핸들링
             print(error)
             return .none
+            
+        case .detachChild:
+            return .none
         }
     }
     
-}
-
-func test() async throws -> String {
-    return ""
 }

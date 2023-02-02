@@ -22,6 +22,8 @@ public struct Login: ReducerProtocol {
         var isPasswordValid: Bool?
         
         var isLoginAvailable: Bool { isEmailValid == true && isPasswordValid == true }
+        var isLoginInflight: Bool = false
+        var alert: AlertState<Action>?
         
         var optionalOnboarding: Onboarding.State?
         var optionalTerms: Terms.State?
@@ -49,6 +51,7 @@ public struct Login: ReducerProtocol {
         
         case didTapLoginButton
         case loginResponse(TaskResult<LoginResponse>)
+        case alertDismissed
         
         case didTapFindIDButton
         case didTapFindPasswordButton
@@ -105,9 +108,12 @@ public struct Login: ReducerProtocol {
             return .none
             
         case .didTapLoginButton:
+            state.isLoginInflight = true
+            state.alert = nil
             return .task { [email = state.email, password = state.password] in
                 await .loginResponse(
                     TaskResult { 
+                        throw NSError(domain: "1", code: 1)
                         try await login(email, password) 
                     }
                 ) 
@@ -127,6 +133,8 @@ public struct Login: ReducerProtocol {
         case let .loginResponse(.success(response)):
             print("Login Success token: \(response.credential)")
             
+            state.isLoginInflight = false
+            
             if Preferences.shared.onboardingFinished == true {
                 state.optionalTab = .init(home: .init(), agora: .init(), today: .init(), mypage: .init())
             } else {
@@ -137,18 +145,31 @@ public struct Login: ReducerProtocol {
              
         case let .loginResponse(.failure(error)):
             print("Login Failure error: \(error)")
+            state.isLoginInflight = false
+            state.alert = .init(
+                title: { 
+                    TextState("로그인 실패")
+                }, 
+                actions: { 
+                    ButtonState(action: .alertDismissed) {
+                        TextState("취소")
+                    }
+                    ButtonState(action: .didTapLoginButton) {
+                        TextState("다시시도")
+                    }
+                }
+            )
+            return .none
+            
+        case .alertDismissed:
+            state.alert = nil
             return .none
             
         case .optionalOnboarding:
             return .none
             
         case .optionalTerms(.optionalJoin(.joinResponse(.success))):
-            if Preferences.shared.onboardingFinished == true {
-                state.optionalTab = .init(home: .init(), agora: .init(), today: .init(), mypage: .init())
-            } else {
-                state.optionalOnboarding = .init()
-            }
-            return .none
+            return .task { return .didTapLoginButton }
             
         case .optionalTerms:
             return .none

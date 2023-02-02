@@ -45,12 +45,32 @@ final class JoinViewController: UIViewController {
         label.numberOfLines = 2
         return label
     }()
-    private let emailFieldView: TogetherInputFieldView = .init(title: "이메일(아이디)", placeholder: "예) example@togather.co.kr") 
-    private let passwordFieldView: TogetherInputFieldView = .init(title: "비밀번호", placeholder: "0자리 ~ 00자리의 영어, 숫자 혹은 특수문자")
-    private let passwordConfirmFieldView: TogetherInputFieldView = .init(title: "비밀번호 확인", placeholder: "비밀번호를 한 번 더 입력해주세요.") 
-    private let nameFieldView: TogetherInputFieldView = .init(title: "이름", placeholder: "00자 이내로 입력해주세요.") 
-    private let birthFieldView: TogetherInputFieldView = .init(title: "생년월일", placeholder: "yyyy - mm - dd") 
-    private let phoneNumberFieldView: TogetherInputFieldView = .init(title: "휴대폰 번호", placeholder: "예) 01012345678")
+    private let emailFieldView: TogetherInputFieldView = .init(
+        title: "이메일(아이디)", 
+        placeholder: "예) example@togather.co.kr",
+        keyboardType: .emailAddress
+    ) 
+    private let passwordFieldView: TogetherInputFieldView = .init(
+        title: "비밀번호", 
+        placeholder: "0자리 ~ 00자리의 영어, 숫자 혹은 특수문자"
+    ).config { view in
+        view.inputTextField.isSecureTextEntry = true
+    }
+    private let passwordConfirmFieldView: TogetherInputFieldView = .init(
+        title: "비밀번호 확인", 
+        placeholder: "비밀번호를 한 번 더 입력해주세요."
+    ).config { view in
+        view.inputTextField.isSecureTextEntry = true
+    }
+    private let nameFieldView: TogetherInputFieldView = .init(
+        title: "이름", 
+        placeholder: "00자 이내로 입력해주세요."
+    ) 
+    private let birthFieldView: TogetherInputFieldView = .init(
+        title: "생년월일", 
+        placeholder: "yyyy - mm - dd",
+        keyboardType: .numberPad
+    ) 
     
     private let confirmButton: TogetherRegularButton = .init(title: "완료")
     
@@ -91,8 +111,6 @@ final class JoinViewController: UIViewController {
                         stackView.setCustomSpacing(20, after: nameFieldView)
                         stackView.addArrangedSubview(birthFieldView)
                         stackView.setCustomSpacing(20, after: birthFieldView)
-                        stackView.addArrangedSubview(phoneNumberFieldView)
-                        stackView.setCustomSpacing(20, after: phoneNumberFieldView)
                         
                         stackView.addArrangedSubview(confirmButton)
                     }
@@ -116,6 +134,7 @@ final class JoinViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        configureNavigation()
         bindState()
         bindAction()
     }
@@ -126,6 +145,20 @@ final class JoinViewController: UIViewController {
 //        if !self.isMovingToParent {
 //          viewStore.send(.setNavigation(isActive: false))
 //        }
+    }
+    
+    private func configureNavigation() {
+        if let navBar = navigationController?.navigationBar as? TogetherNavigationBar {
+            navBar.setBackgroundImage(UIImage(color: .blueGray0), for: .default)
+        }
+
+        navigationItem.setLeftBarButtonItem7(.backButtonItem(target: self, action: #selector(onClickBackButton)))
+    }
+    
+    @objc
+    private func onClickBackButton(_ sender: UIBarButtonItem) {
+        navigationController?.popViewController(animated: true)
+        viewStore.send(.detachChild)
     }
     
     private func bindState() {
@@ -143,10 +176,6 @@ final class JoinViewController: UIViewController {
         
         viewStore.publisher.isBirthValid
             .assign(to: \.isValid, onWeak: birthFieldView)
-            .store(in: &cancellables)
-        
-        viewStore.publisher.isPhoneNumberValid
-            .assign(to: \.isValid, onWeak: phoneNumberFieldView)
             .store(in: &cancellables)
         
         viewStore.publisher.isJoinAvailable
@@ -190,17 +219,21 @@ final class JoinViewController: UIViewController {
             }
             .store(in: &cancellables)
         
-        phoneNumberFieldView.inputTextField
-            .textPublisher
-            .sink { [weak self] phoneNumber in
-                self?.viewStore.send(.didChangePhoneNumber(phoneNumber))
-            }
-            .store(in: &cancellables)
-        
         confirmButton
             .publisher(for: .touchUpInside)
             .sink { [weak self] _ in
                 self?.viewStore.send(.confirmButtonClicked)
+            }
+            .store(in: &cancellables)
+        
+        view
+            .throttleTapGesture
+            .sink { [weak self] _ in
+                self?.emailFieldView.endEditing(true)
+                self?.passwordFieldView.endEditing(true)
+                self?.passwordConfirmFieldView.endEditing(true)
+                self?.nameFieldView.endEditing(true)
+                self?.birthFieldView.endEditing(true)
             }
             .store(in: &cancellables)
     }

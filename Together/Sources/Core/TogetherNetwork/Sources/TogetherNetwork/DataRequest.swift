@@ -13,6 +13,14 @@ public class DataRequest: Request {
         do {
             let initialRequest = try convertible.asURLRequest()
             let urlRequest = try await adapt(initialRequest)
+            
+            #if DEBUG
+            print("url", urlRequest.url)
+            print("method", urlRequest.httpMethod)
+            print("allHTTPHeaderFields", urlRequest.allHTTPHeaderFields)
+            print("httpBody", urlRequest.httpBody)
+            #endif
+            
             let response = try await dataTask(with: urlRequest)
             return response
         } catch {
