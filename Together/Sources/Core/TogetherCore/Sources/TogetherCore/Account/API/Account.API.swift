@@ -15,6 +15,12 @@ import XCTestDynamicOverlay
 
 public extension Account {
     struct API { 
+        var join: @Sendable (
+            _ email: String,
+            _ password: String,
+            _ name:  String,
+            _ birth: String
+        ) async throws -> JoinResponse
         var login: @Sendable (_ email: String, _ password: String) async throws -> LoginResponse
         var fetchNewToken: @Sendable () async throws -> TogetherCredential
         var refresh: @Sendable (_ old: TogetherCredential) async throws -> TogetherCredential
@@ -22,6 +28,15 @@ public extension Account {
 }
 
 public extension Account.API {
+    func join(
+        email: String,
+        password: String,
+        name:  String,
+        birth: String
+    ) async throws -> JoinResponse {
+        try await self.join(email, password, name, birth)
+    }
+    
     func login(email: String, password: String) async throws -> LoginResponse {
         try await self.login(email, password)
     }
@@ -36,6 +51,21 @@ extension DependencyValues {
 
 extension Account.API: DependencyKey {
     public static let liveValue: Account.API = .init(
+        join: { email, password, name, birth in
+            // birth.toArray "19990101" -> [1999, 1, 1]
+            return try await NetworkClient.account.request(
+                convertible: "http://localhost:8080/member", 
+                method: .post,
+                parameters: [
+                    "email": email,
+                    "password": password,
+                    "name": name,
+                    "birth": birth
+                ],
+                encoding: ParameterJSONEncoder()
+            )
+            .responseAsync()
+        },
         login: { email, password in
             return try await NetworkClient.account.request(
                 convertible: "http://localhost:8080/sign-in/member", 
@@ -48,14 +78,17 @@ extension Account.API: DependencyKey {
             )
             .responseAsync()
         },
-        fetchNewToken: { 
-            preconditionFailure("새 토큰만 가져오는 로직 없음")
+        fetchNewToken: {
+            // "새 토큰만 가져오는 로직 없음"
+            throw AccountError.invalidToken
         },
         refresh: { credential in
-            preconditionFailure("리프레쉬 타는 로직 없음")
+            // "리프레쉬 타는 로직 없음"
+            throw AccountError.invalidToken
         }
     )
     public static let testValue: Account.API = .init(
+        join: unimplemented(), 
         login: unimplemented(),
         fetchNewToken: unimplemented(), 
         refresh: unimplemented()
