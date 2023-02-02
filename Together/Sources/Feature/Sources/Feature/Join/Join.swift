@@ -31,8 +31,7 @@ public struct Join: ReducerProtocol {
             isEmailValid == true &&
             isPasswordValid == true &&
             isPasswordConfirmValid == true &&
-            isBirthValid == true &&
-            isPhoneNumberValid == true
+            isBirthValid == true
         }
     }
     
@@ -139,13 +138,13 @@ public struct Join: ReducerProtocol {
                 )
             }
             
-        case .joinResponse(.success):
-            // 로그인에서 처리
+        case let .joinResponse(.success(joinResponse)):
+            print("join success \(joinResponse)")
             return .none
             
         case let .joinResponse(.failure(error)):
             // 화면에 대한 에러 핸들링
-            print(error)
+            print("join fail \(error)")
             return .none
             
         case .detachChild:

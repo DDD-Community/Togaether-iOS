@@ -113,7 +113,6 @@ public struct Login: ReducerProtocol {
             return .task { [email = state.email, password = state.password] in
                 await .loginResponse(
                     TaskResult { 
-                        throw NSError(domain: "1", code: 1)
                         try await login(email, password) 
                     }
                 ) 
@@ -169,7 +168,19 @@ public struct Login: ReducerProtocol {
             return .none
             
         case .optionalTerms(.optionalJoin(.joinResponse(.success))):
-            return .task { return .didTapLoginButton }
+            state.optionalTerms = nil
+            state.alert = .init(
+                title: { 
+                    TextState("회원가입 성공 :)")
+                }, actions: { 
+                    ButtonState(action: .alertDismissed) { 
+                        TextState("확인")
+                    }
+                }, message: { 
+                    TextState("로그인을 진행해주세요.")
+                }
+            )
+            return .none
             
         case .optionalTerms:
             return .none

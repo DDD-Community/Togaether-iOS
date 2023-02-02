@@ -10,8 +10,8 @@ import Foundation
 public struct JoinResponse: Decodable, Equatable, Sendable {
     let id: Int
     let name: String
-    let birth: [Int]
-    let profileURL: URL
+    let birth: String
+    let profileURL: URL?
     
     private enum CodingKeys: String, CodingKey {
         case id

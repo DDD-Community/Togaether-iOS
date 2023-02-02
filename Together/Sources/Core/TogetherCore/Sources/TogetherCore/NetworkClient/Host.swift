@@ -16,5 +16,5 @@ enum Host {
         #endif
     }
     
-    static let together: String = "https://\(prefix)bnjjng.iptime.org:8080"
+    static let together: String = "http://\(prefix)bnjjng.iptime.org:8080"
 }

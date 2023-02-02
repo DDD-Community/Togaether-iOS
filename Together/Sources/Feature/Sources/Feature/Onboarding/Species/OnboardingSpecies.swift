@@ -43,7 +43,7 @@ public struct OnboardingSpecies: ReducerProtocol {
             return .none
             
         case let .didTapSpecies(index):
-            guard let selectedSection = state.allSpecies[safe: index.section],
+            guard let selectedSection = state.currentSpecies[safe: index.section],
                   let selectedSpecies = selectedSection.names[safe: index.row]
             else { return .none }
             state.selectedSpecies = selectedSpecies

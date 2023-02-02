@@ -15,9 +15,9 @@ public struct TogetherCredential: Codable, Sendable, Equatable {
     private let refreshTokenExpiresAt: Date
     
     private enum CodingKeys: String, CodingKey {
-        case accessToken
+        case accessToken = "access_token"
         case accessTokenExpiresAt
-        case refreshToken
+        case refreshToken = "refresh_token"
         case refreshTokenExpiresAt
     }
     
@@ -36,10 +36,14 @@ public struct TogetherCredential: Codable, Sendable, Equatable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
+        // 토큰 갱신 == 무조건 1년으로 되어있음 ㅜㅜ
         accessToken = try? container.decode(String.self, forKey: .accessToken)
-        accessTokenExpiresAt = try container.decode(Date.self, forKey: .accessTokenExpiresAt)
+//        accessTokenExpiresAt = try container.decode(Date.self, forKey: .accessTokenExpiresAt)
+        accessTokenExpiresAt = Date().adding(year: 1)
+        
         refreshToken = try? container.decode(String.self, forKey: .refreshToken)
-        refreshTokenExpiresAt = try container.decode(Date.self, forKey: .refreshTokenExpiresAt)
+//        refreshTokenExpiresAt = try container.decode(Date.self, forKey: .refreshTokenExpiresAt)
+        refreshTokenExpiresAt = Date().adding(year: 1)
     }
     
     public func encode(to encoder: Encoder) throws {
@@ -92,5 +96,27 @@ public extension TogetherCredential {
     private var isRefreshTokenExpired: Bool { Date() > refreshTokenExpiresAt }
     
     /// Refresh Token이 만료되거나 없는 경우
-    var isRefreshTokenInvalid: Bool { refreshToken == nil || refreshToken == "" || isRefreshTokenExpired }
+    var isRefreshTokenInvalid: Bool { refreshToken == nil || refreshToken == "" || isRefreshTokenExpired  }
+}
+
+private extension Date {
+    func adding(
+        _ calendar: Calendar = .current, 
+        year: Int = 0,
+        month: Int = 0,
+        day: Int = 0
+    ) -> Date {
+        let currentYear = calendar.component(.year, from: self)
+        let currentMonth = calendar.component(.month, from: self)
+        let currentDay = calendar.component(.day, from: self)
+        
+        let components = DateComponents(
+            calendar: calendar,
+            year: currentYear + year,
+            month: currentMonth + month,
+            day: currentDay + day
+        )
+        
+        return calendar.date(from: components)!
+    }
 }

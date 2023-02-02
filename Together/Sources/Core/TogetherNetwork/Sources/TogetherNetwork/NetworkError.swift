@@ -8,7 +8,7 @@
 import Foundation
 
 public enum NetworkError: Error, Sendable {
-    case decodedFailed
+    case decodingFailed
     case dataIsNil
     case haveToOverride
     

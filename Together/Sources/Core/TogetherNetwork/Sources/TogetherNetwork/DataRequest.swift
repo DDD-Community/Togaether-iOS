@@ -127,10 +127,11 @@ public class Request {
     
     internal func decode<SuccessType: Decodable>(_ decoder: JSONDecoder, response: NetworkResponse) throws -> SuccessType{
         if let data = response.data {
+            print("receive raw data\n\(String(data: data, encoding: .utf8) ?? "")")
             if let success = try? decoder.decode(SuccessType.self, from: data) {
                 return success
             } else {
-                throw NetworkError.decodedFailed
+                throw NetworkError.decodingFailed
             }
         } else {
             throw NetworkError.dataIsNil

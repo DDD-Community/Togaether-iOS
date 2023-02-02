@@ -212,6 +212,7 @@ public final class LoginViewController: UIViewController {
             .store(in: &cancellables)
         
         viewStore.publisher.alert
+            .delay(for: .seconds(0.3), scheduler: DispatchQueue.main)
             .sink { [weak self] alert in
                 if let alert = alert {
                     let alertController = UIAlertController(state: alert) {
@@ -291,12 +292,17 @@ public final class LoginViewController: UIViewController {
         
         store
             .scope(state: \.optionalTerms, action: Login.Action.optionalTerms)
-            .ifLet { [weak self] store in
-                self?.navigationController?.pushViewController(
-                    TermsViewController(store: store), 
-                    animated: true
-                )
-            }
+            .ifLet(
+                then: { [weak self] store in
+                    self?.navigationController?.pushViewController(
+                        TermsViewController(store: store), 
+                        animated: true
+                    )
+                }, 
+                else: { [weak self] in
+                    self?.navigationController?.popToRootViewController(animated: true)
+                }
+            )
             .store(in: &cancellables)
         
         store
