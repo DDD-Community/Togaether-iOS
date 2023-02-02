@@ -53,6 +53,10 @@ public struct TogetherCredential: Codable, Sendable, Equatable {
 }
 
 public extension TogetherCredential {
+    var xAuth: String {
+        return self.accessToken ?? ""
+    }
+    
     var toJson: String? {
         let encoder = JSONEncoder()
         encoder.dateEncodingStrategy = .millisecondsSince1970

@@ -38,7 +38,7 @@ extension Header {
         Header(name: "Authorization", value: value)
     }
     public static func xAuthorization(_ value: String) -> Header {
-        Header(name: "X-Authorization", value: value)
+        Header(name: "Authorization: Bearer ", value: value)
     }
     public static func contentType(_ value: String) -> Header {
         Header(name: "Content-Type", value: value)
