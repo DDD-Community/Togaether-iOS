@@ -54,7 +54,7 @@ extension Account.API: DependencyKey {
         join: { email, password, name, birth in
             // birth.toArray "19990101" -> [1999, 1, 1]
             return try await NetworkClient.account.request(
-                convertible: "http://localhost:8080/member", 
+                convertible: "\(Host.together)/member", 
                 method: .post,
                 parameters: [
                     "email": email,
@@ -68,7 +68,7 @@ extension Account.API: DependencyKey {
         },
         login: { email, password in
             return try await NetworkClient.account.request(
-                convertible: "http://localhost:8080/sign-in/member", 
+                convertible: "\(Host.together)/sign-in/member", 
                 method: .post,
                 parameters: [
                     "email": email,

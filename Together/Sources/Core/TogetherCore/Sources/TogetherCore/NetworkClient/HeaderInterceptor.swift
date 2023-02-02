@@ -23,3 +23,11 @@ struct HeaderInterceptor: NetworkInterceptor {
         return (urlRequest, .doNotRetry(with: error))
     }
 }
+
+extension HeaderInterceptor {
+    static var headers: Headers = {
+        var headers: Headers = .init()
+        headers.add(.contentType("application/json"))
+        return headers
+    }()
+}
