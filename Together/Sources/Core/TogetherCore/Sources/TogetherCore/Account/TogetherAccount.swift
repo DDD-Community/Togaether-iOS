@@ -54,7 +54,7 @@ extension TogetherAccount: DependencyKey {
                 return loginResponse
             },
             logout: {
-                try? await Task.sleep(for: .seconds(0.5))
+                return await tokenStorage.clear()
             },
             join: { email, password, name, birth in
                 let joinResponse: JoinResponse = try await accountAPI.join(email, password, name, birth)

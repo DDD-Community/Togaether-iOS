@@ -51,6 +51,8 @@ public struct Setting: ReducerProtocol {
         case didTapLogout
     }
     
+    @Dependency(\.togetherAccount) var togetherAccount
+    
     public init() { }
     
     public var body: some ReducerProtocolOf<Self> {
@@ -96,8 +98,9 @@ public struct Setting: ReducerProtocol {
             print("Version")
             return .none
         case .didTapLogout:
-            print("Logout")
-            return .none
+            return .fireAndForget {
+                await togetherAccount.logout()
+            }
         }
     }
     
