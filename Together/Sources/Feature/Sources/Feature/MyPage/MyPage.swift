@@ -15,8 +15,14 @@ public struct MyPage: ReducerProtocol {
 //        var onboarding: Onboarding.State?
         var postDetail: PostDetail.State?
 
-        public init(myPageSetting: Setting.State? = nil) {
+        public init(
+            myPageSetting: Setting.State? = nil,
+            feedRegister: OnboardingFeedRegister.State? = nil,
+            postDetail: PostDetail.State? = nil
+        ) {
             self.myPageSetting = myPageSetting
+            self.feedRegister = feedRegister
+            self.postDetail = postDetail
         }
     }
 

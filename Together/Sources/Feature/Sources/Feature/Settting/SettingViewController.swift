@@ -30,6 +30,7 @@ final class SettingViewController: UIViewController, Layoutable {
     private let tempViewStore: ViewStoreOf<Setting>
 
     private var cancellables: Set<AnyCancellable> = .init()
+    private var alertController: UIAlertController?
 
     var settingDataSource: DataSource!
 
@@ -118,6 +119,31 @@ final class SettingViewController: UIViewController, Layoutable {
     }
 
     private func bindNavigation() {
+        tempViewStore.publisher.alert
+            .sink { [weak self] alert in
+                if let alert = alert {
+                    let alertController = UIAlertController(state: alert) {
+                        self?.tempViewStore.send($0)
+                    }
+                    self?.present(alertController, animated: true, completion: nil)
+                    self?.alertController = alertController
+                } else {
+                    self?.alertController?.dismiss(animated: true, completion: nil)
+                    self?.alertController = nil
+                }
+            }
+            .store(in: &cancellables)
+        
+        tempViewStore.publisher.isLoggedOut
+            .sink { loggedOut in
+                guard loggedOut else { return }
+                let store: StoreOf<Login> = .init(initialState: .init(), reducer: Login())
+                let loginViewController = LoginViewController(store: store)
+                let navigationController = TogetherNavigation(rootViewController: loginViewController)
+                UIApplication.shared.appKeyWindow?.rootViewController = navigationController
+            }
+            .store(in: &cancellables)
+        
         tempStore
             .scope(state: \.settingPetInfo, action: Setting.Action.settingPetInfo)
             .ifLet { [weak self] petInfo in
@@ -169,6 +195,8 @@ extension SettingViewController: UITableViewDelegate {
             tempViewStore.send(.didTapVersion)
         case .logout:
             tempViewStore.send(.didTapLogout)
+        case .withdraw:
+            tempViewStore.send(.didTapWithdraw)
         }
     }
 }

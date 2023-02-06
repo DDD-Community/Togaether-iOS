@@ -158,10 +158,26 @@ final class TermsViewController: UIViewController {
             }
             .store(in: &cancellables)
         
+        termsAndConditionToggleView
+            .showButton
+            .throttleTap
+            .sink { [weak self] _ in
+                self?.viewStore.send(.didTapShowTermsButton)
+            }
+            .store(in: &cancellables)
+        
         personalInformationToggleView
             .throttleTapGesture
             .sink { [weak self] _ in
                 self?.viewStore.send(.didTapPersionalInformation)
+            }
+            .store(in: &cancellables)
+        
+        personalInformationToggleView
+            .showButton
+            .throttleTap
+            .sink { [weak self] _ in
+                self?.viewStore.send(.didTapShowPersonalInformationButton)
             }
             .store(in: &cancellables)
         
@@ -201,6 +217,14 @@ final class TermsViewController: UIViewController {
             .ifLet { [weak self] store in
                 let join = JoinViewController(store: store)
                 self?.navigationController?.pushViewController(join, animated: true)
+            }
+            .store(in: &cancellables)
+        
+        store
+            .scope(state: \.policy, action: Terms.Action.policy)
+            .ifLet { [weak self] store in
+                let policy = PolicyViewController(store: store)
+                self?.navigationController?.pushViewController(policy, animated: true)
             }
             .store(in: &cancellables)
     }

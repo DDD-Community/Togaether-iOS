@@ -74,6 +74,8 @@ final class JoinViewController: UIViewController {
     
     private let confirmButton: TogetherRegularButton = .init(title: "완료")
     
+    private var alertController: UIAlertController?
+    
     @LayoutBuilder var layout: some SwiftLayout.Layout {
         view
             .config { view in
@@ -180,6 +182,22 @@ final class JoinViewController: UIViewController {
         
         viewStore.publisher.isJoinAvailable
             .assign(to: \.isEnabled, onWeak: confirmButton)
+            .store(in: &cancellables)
+        
+        viewStore.publisher.alert
+            .delay(for: .seconds(0.3), scheduler: DispatchQueue.main)
+            .sink { [weak self] alert in
+                if let alert = alert {
+                    let alertController = UIAlertController(state: alert) {
+                        self?.viewStore.send($0)
+                    }
+                    self?.present(alertController, animated: true, completion: nil)
+                    self?.alertController = alertController
+                } else {
+                    self?.alertController?.dismiss(animated: true, completion: nil)
+                    self?.alertController = nil
+                }
+            }
             .store(in: &cancellables)
     }
     

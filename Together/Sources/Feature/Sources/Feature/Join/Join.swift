@@ -33,6 +33,8 @@ public struct Join: ReducerProtocol {
             isPasswordConfirmValid == true &&
             isBirthValid == true
         }
+        
+        var alert: AlertState<Action>?
     }
     
     public enum Action: Equatable {
@@ -55,6 +57,7 @@ public struct Join: ReducerProtocol {
         
         case confirmButtonClicked
         case joinResponse(TaskResult<JoinResponse>)
+        case alertDismissed
         
         case detachChild
     }
@@ -143,8 +146,24 @@ public struct Join: ReducerProtocol {
             return .none
             
         case let .joinResponse(.failure(error)):
-            // 화면에 대한 에러 핸들링
             print("join fail \(error)")
+            state.alert = .init(
+                title: { 
+                    TextState("회원가입 실패")
+                }, 
+                actions: { 
+                    ButtonState(action: .alertDismissed) {
+                        TextState("취소")
+                    }
+                    ButtonState(action: .confirmButtonClicked) {
+                        TextState("다시시도")
+                    }
+                }
+            )
+            return .none
+            
+        case .alertDismissed:
+            state.alert = nil
             return .none
             
         case .detachChild:

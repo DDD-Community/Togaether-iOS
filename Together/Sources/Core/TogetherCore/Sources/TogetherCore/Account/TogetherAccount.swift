@@ -8,6 +8,7 @@ public struct TogetherAccount {
     public var token: @Sendable () async throws -> TogetherCredential
     public var login: @Sendable (_ email: String, _ password: String) async throws -> LoginResponse
     public var logout: @Sendable () async -> Void
+    public var withdraw: @Sendable () async throws -> Void
     public var join: @Sendable (
         _ email: String,
         _ password: String,
@@ -56,6 +57,9 @@ extension TogetherAccount: DependencyKey {
             logout: {
                 return await tokenStorage.clear()
             },
+            withdraw: {
+                return try await accountAPI.withdraw()
+            },
             join: { email, password, name, birth in
                 let joinResponse: JoinResponse = try await accountAPI.join(email, password, name, birth)
                 // do some more work
@@ -78,7 +82,8 @@ extension TogetherAccount {
     public static let testValue: TogetherAccount = .init(
         token: unimplemented("\(Self.self).token"), 
         login: unimplemented("\(Self.self).login"),
-        logout: unimplemented("\(Self.self).logout"), 
+        logout: unimplemented("\(Self.self).logout"),
+        withdraw: unimplemented("\(Self.self).withdraw"),
         join: unimplemented("\(Self.self).join")
     )
 }

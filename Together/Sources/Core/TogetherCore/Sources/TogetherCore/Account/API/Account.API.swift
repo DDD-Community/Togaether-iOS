@@ -24,6 +24,7 @@ extension Account {
         var login: @Sendable (_ email: String, _ password: String) async throws -> LoginResponse
         var fetchNewToken: @Sendable () async throws -> TogetherCredential
         var refresh: @Sendable (_ old: TogetherCredential) async throws -> TogetherCredential
+        var withdraw: @Sendable () async throws -> Void
     }
 }
 
@@ -69,13 +70,22 @@ extension Account.API: DependencyKey {
         refresh: { credential in
             // "리프레쉬 타는 로직 없음"
             throw AccountError.invalidToken
+        },
+        withdraw: {
+            return try await NetworkClient.together.request(
+                convertible: "\(Host.together)/member/withdraw", 
+                method: .post,
+                encoding: ParameterURLEncoder()
+            )
+            .responseAsync()
         }
     )
     public static let testValue: Account.API = .init(
         join: unimplemented(), 
         login: unimplemented(),
         fetchNewToken: unimplemented(), 
-        refresh: unimplemented()
+        refresh: unimplemented(),
+        withdraw: unimplemented()
     )
 }
 

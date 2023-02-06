@@ -24,6 +24,7 @@ public struct Terms: ReducerProtocol {
         }
         
         var optionalJoin: Join.State?
+        var policy: Policy.State?
     }
     
     public enum Action: Equatable {
@@ -32,9 +33,13 @@ public struct Terms: ReducerProtocol {
         case didTapTermsAndCondition
         case didTapPersionalInformation
         
+        case didTapShowTermsButton
+        case didTapShowPersonalInformationButton
+        
         case didTapNext
         
         case optionalJoin(Join.Action)
+        case policy(Policy.Action)
         case detachChild
     }
     
@@ -44,6 +49,9 @@ public struct Terms: ReducerProtocol {
         Reduce(core)
             .ifLet(\.optionalJoin, action: /Action.optionalJoin) { 
                 Join()
+            }
+            .ifLet(\.policy, action: /Action.policy) { 
+                Policy()
             }
     }
     
@@ -71,6 +79,18 @@ public struct Terms: ReducerProtocol {
             
         case .didTapPersionalInformation:
             state.collectPersonalInformationAgreed = !state.collectPersonalInformationAgreed
+            return .none
+            
+        case .didTapShowTermsButton:
+            state.policy = .init(.terms)
+            return .none
+            
+        case .didTapShowPersonalInformationButton:
+            state.policy = .init(.personalInfo)
+            return .none
+            
+        case .policy(.backButtonTapped):
+            state.policy = nil
             return .none
             
         case .didTapNext:
