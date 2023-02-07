@@ -10,6 +10,8 @@ import TogetherCore
 
 public struct MyPage: ReducerProtocol {
     public struct State: Equatable {
+        var alert: AlertState<Action>?
+
         var myPageSetting: Setting.State?
         var feedRegister: OnboardingFeedRegister.State?
 //        var onboarding: Onboarding.State?
@@ -27,6 +29,10 @@ public struct MyPage: ReducerProtocol {
     }
 
     public enum Action: Equatable {
+        case fetchMyPetList
+        case myPetListResponse(TaskResult<MyPetResponse>)
+        case alertDismissed
+
         case myPageSetting(Setting.Action)
         case feedRegister(OnboardingFeedRegister.Action)
         case postDetail(PostDetail.Action)
@@ -38,6 +44,9 @@ public struct MyPage: ReducerProtocol {
     }
 
     public init() { }
+
+    @Dependency(\.memberAPI.myPets) var myPetList
+    private enum MyPetsCancelID { }
 
     public var body: some ReducerProtocolOf<Self> {
         Reduce(core)
@@ -60,6 +69,40 @@ public struct MyPage: ReducerProtocol {
 
     public func core(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
+        case .fetchMyPetList:
+            state.alert = nil
+
+            return .task {
+                await .myPetListResponse(
+                    TaskResult {
+                        try await myPetList()
+                    }
+                )
+            }
+            .cancellable(id: MyPetsCancelID.self)
+
+        case let .myPetListResponse(.success(response)):
+            print("My Pet List Success TotalCount: \(response.pets.count)")
+            return .none
+
+        case let .myPetListResponse(.failure(error)):
+            print("My Pet List Failure error: \(error)")
+            state.alert = .init(
+                title: {
+                    TextState("My Pet List API 실패")
+                },
+                actions: {
+                    ButtonState(action: .alertDismissed) {
+                        TextState("확인")
+                    }
+                }
+            )
+            return .none
+
+        case .alertDismissed:
+            state.alert = nil
+            return .none
+
         case .myPageSetting(.detachChild):
             state.myPageSetting = nil
             return .none

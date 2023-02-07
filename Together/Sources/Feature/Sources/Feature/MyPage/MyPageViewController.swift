@@ -90,6 +90,9 @@ final class MyPageViewController: UIViewController, Layoutable {
 
         navigationItem.setRightBarButtonItems7([settingBarButton, createBarButton])
         navigationItem.title = "MY"
+
+        // MARK: API Test
+        viewStore.send(.fetchMyPetList)
     }
 
     private func bindNavigation() {
