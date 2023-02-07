@@ -6,8 +6,10 @@
 //
 
 import ComposableArchitecture
+import MarkdownView
 import SwiftLayout
 import TogetherCore
+import TogetherFoundation
 import TogetherUI
 import ThirdParty
 import UIKit
@@ -19,11 +21,15 @@ final class PersonalInfoViewController: UIViewController, Layoutable {
     private let viewStore: ViewStoreOf<Setting>
     private let tempViewStore: ViewStoreOf<PersonalInfo>
 
+    private let markdownView: MarkdownView = MarkdownView()
+
+    private var contentText: String = ""
+
     @LayoutBuilder var layout: some Layout {
         view.config { view in
             view.backgroundColor = .backgroundWhite
         }.sublayout {
-            UIView().anchors {
+            markdownView.anchors {
                 Anchors.allSides()
             }
         }
@@ -34,6 +40,10 @@ final class PersonalInfoViewController: UIViewController, Layoutable {
         self.viewStore = ViewStore(store)
         self.tempViewStore = ViewStore(personalInfoStore)
         super.init(nibName: nil, bundle: nil)
+
+        contentText = TextReader.loadContentIntoString(name: "PersonalInfo")
+        markdownView.load(markdown: contentText)
+
         sl.updateLayout()
     }
 

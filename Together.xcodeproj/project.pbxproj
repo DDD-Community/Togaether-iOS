@@ -29,6 +29,7 @@
 		40E9B4DA2931D7B100AC9AF0 /* TogetherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E9B4D92931D7B100AC9AF0 /* TogetherTests.swift */; };
 		40E9B4E42931D7B100AC9AF0 /* TogetherUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E9B4E32931D7B100AC9AF0 /* TogetherUITests.swift */; };
 		40E9B4E62931D7B100AC9AF0 /* TogetherUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40E9B4E52931D7B100AC9AF0 /* TogetherUITestsLaunchTests.swift */; };
+		B0AB1D47299210210039B0CC /* PersonalInfo.txt in Resources */ = {isa = PBXBuildFile; fileRef = B0AB1D46299210210039B0CC /* PersonalInfo.txt */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,6 +79,8 @@
 		40E9B4DF2931D7B100AC9AF0 /* TogetherUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TogetherUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		40E9B4E32931D7B100AC9AF0 /* TogetherUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TogetherUITests.swift; sourceTree = "<group>"; };
 		40E9B4E52931D7B100AC9AF0 /* TogetherUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TogetherUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		B0AB1D452992100D0039B0CC /* Agreement.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Agreement.txt; sourceTree = "<group>"; };
+		B0AB1D46299210210039B0CC /* PersonalInfo.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = PersonalInfo.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,14 +116,6 @@
 				401D17CD2954A8E3003F9270 /* RootViewController.swift */,
 			);
 			path = Root;
-			sourceTree = "<group>";
-		};
-		403FFEDA298BE15C00566B49 /* Json */ = {
-			isa = PBXGroup;
-			children = (
-				403FFED9298BE15900566B49 /* togather_main.json */,
-			);
-			path = Json;
 			sourceTree = "<group>";
 		};
 		4075CA02295F443700FA23C9 /* Font */ = {
@@ -173,6 +168,7 @@
 		40E9B4C12931D7AF00AC9AF0 /* Together */ = {
 			isa = PBXGroup;
 			children = (
+				403FFED9298BE15900566B49 /* togather_main.json */,
 				40E9B4FF2931ECC100AC9AF0 /* Sources */,
 				40E9B4FE2931ECA900AC9AF0 /* Resources */,
 			);
@@ -209,11 +205,12 @@
 		40E9B4FE2931ECA900AC9AF0 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				403FFEDA298BE15C00566B49 /* Json */,
 				4075CA02295F443700FA23C9 /* Font */,
 				40E9B4D02931D7B100AC9AF0 /* Info.plist */,
 				40E9B4CB2931D7B100AC9AF0 /* Assets.xcassets */,
 				40E9B4CD2931D7B100AC9AF0 /* LaunchScreen.storyboard */,
+				B0AB1D452992100D0039B0CC /* Agreement.txt */,
+				B0AB1D46299210210039B0CC /* PersonalInfo.txt */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -361,6 +358,7 @@
 				4075CA32295F454100FA23C9 /* Pretendard-Light.ttf in Resources */,
 				40575789295E252400FA3FB6 /* TogetherNetwork in Resources */,
 				4075CA35295F454100FA23C9 /* Pretendard-ExtraLight.ttf in Resources */,
+				B0AB1D47299210210039B0CC /* PersonalInfo.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
