@@ -19,7 +19,7 @@ public struct Setting: ReducerProtocol {
     }
     
     public struct State: Equatable {
-        var settingPetInfo: PetInfo.State?
+        var onboarding: Onboarding.State?
         var settingAgreement: Policy.State?
         var settingPersonalInfo: Policy.State?
         var alert: AlertState<Action>? = nil
@@ -32,7 +32,7 @@ public struct Setting: ReducerProtocol {
     
     public enum Action: Equatable {
         // MARK: 설정 내부 화면
-        case settingPetInfo(PetInfo.Action)
+        case onboarding(Onboarding.Action)
         case settingAgreement(Policy.Action)
         case settingPersonalInfo(Policy.Action)
         
@@ -59,8 +59,8 @@ public struct Setting: ReducerProtocol {
     
     public var body: some ReducerProtocolOf<Self> {
         Reduce(core)
-            .ifLet(\.settingPetInfo, action: /Action.settingPetInfo) {
-                PetInfo()
+            .ifLet(\.onboarding, action: /Action.onboarding) {
+                Onboarding()
             }
             .ifLet(\.settingAgreement, action: /Action.settingAgreement) {
                 Policy()
@@ -72,9 +72,14 @@ public struct Setting: ReducerProtocol {
 
     public func core(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
-        case .settingPetInfo(.detachChild):
-            state.settingPetInfo = nil
+        case .onboarding(.delegate(.routeToTab)),
+                .onboarding(.delegate(.onboardingDismissed)):
+            state.onboarding = nil
             return .none
+            
+        case .onboarding:
+            return .none
+            
         case .settingAgreement(.backButtonTapped):
             state.settingAgreement = nil
             return .none
@@ -89,7 +94,7 @@ public struct Setting: ReducerProtocol {
             return .none
             
         case .didTapPetInfo:
-            state.settingPetInfo = .init()
+            state.onboarding = .init()
             return .none
             
         case .didTapAgreement:

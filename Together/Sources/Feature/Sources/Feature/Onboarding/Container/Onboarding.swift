@@ -14,17 +14,14 @@ public struct Onboarding: ReducerProtocol {
         var onboardingInfo: OnboardingInfo.State
         var onboardingSpecies: OnboardingSpecies.State?
         var onboardingRegister: OnboardingFeedRegister.State?
-        var tabBar: TabBar.State?
         public init(
             onboardingInfo: OnboardingInfo.State = .init(),
             onboardingSpecies: OnboardingSpecies.State? = nil,
-            onboardingRegister: OnboardingFeedRegister.State? = nil,
-            tabBar: TabBar.State? = nil
+            onboardingRegister: OnboardingFeedRegister.State? = nil
         ) {
             self.onboardingInfo = onboardingInfo
             self.onboardingSpecies = onboardingSpecies
             self.onboardingRegister = onboardingRegister
-            self.tabBar = tabBar
         }
     }
     
@@ -32,7 +29,12 @@ public struct Onboarding: ReducerProtocol {
         case onboardingInfo(OnboardingInfo.Action)
         case onboardingSpecies(OnboardingSpecies.Action)
         case onboardingRegister(OnboardingFeedRegister.Action)
-        case tabBar(TabBar.Action)
+        case delegate(DelegateAction)
+    }
+    
+    public enum DelegateAction: Equatable {
+        case routeToTab
+        case onboardingDismissed
     }
     
     public init() { }
@@ -49,19 +51,16 @@ public struct Onboarding: ReducerProtocol {
             .ifLet(\.onboardingRegister, action: /Action.onboardingRegister) {
                 OnboardingFeedRegister()
             }
-            .ifLet(\.tabBar, action: /Action.tabBar) { 
-                TabBar()
-            }
     }
     
     public func core(into state: inout State, action: Action) -> EffectTask<Action> {
         switch action {
         case .onboardingInfo(.didTapSkipButton), 
                 .onboardingSpecies(.didTapSkipButton),
-                .onboardingRegister(.didTapSkipButton):
+                .onboardingRegister(.didTapSkipButton),
+                .onboardingRegister(.didTapNextButton):
             Preferences.shared.onboardingFinished = true
-            state.tabBar = .init(home: .init(), agora: .init(), today: .init(), mypage: .init())
-            return .none
+            return .task { return .delegate(.routeToTab) }
             
         case .onboardingInfo(.didTapNextButton):
             state.onboardingSpecies = .init(petName: state.onboardingInfo.name)
@@ -69,10 +68,6 @@ public struct Onboarding: ReducerProtocol {
             
         case .onboardingSpecies(.didTapNextButton):
             state.onboardingRegister = .init(feedRegister: .init(), navigationTitle: "3/3")
-            return .none
-            
-        case .onboardingRegister(.didTapNextButton):
-            state.tabBar = .init(home: .init(), agora: .init(), today: .init(), mypage: .init())
             return .none
             
         case .onboardingInfo(.detachChild):
@@ -86,7 +81,10 @@ public struct Onboarding: ReducerProtocol {
         case .onboardingRegister(.detachChild):
             return .none
             
-        case .onboardingInfo, .onboardingSpecies, .onboardingRegister, .tabBar:
+        case .onboardingInfo, .onboardingSpecies, .onboardingRegister:
+            return .none
+            
+        case .delegate:
             return .none
         }
     }

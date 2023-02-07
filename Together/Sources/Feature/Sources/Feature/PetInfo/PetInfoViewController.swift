@@ -60,6 +60,5 @@ final class PetInfoViewController: UIViewController, Layoutable {
     @objc
     private func onClickBackButton(_ sender: UIBarButtonItem) {
         navigationController?.popViewController(animated: true)
-        viewStore.send(.settingPetInfo(.detachChild))
     }
 }

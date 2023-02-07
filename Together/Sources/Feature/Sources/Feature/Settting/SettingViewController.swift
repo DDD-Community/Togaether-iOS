@@ -145,15 +145,14 @@ final class SettingViewController: UIViewController, Layoutable {
             .store(in: &cancellables)
         
         tempStore
-            .scope(state: \.settingPetInfo, action: Setting.Action.settingPetInfo)
-            .ifLet { [weak self] petInfo in
+            .scope(state: \.onboarding, action: Setting.Action.onboarding)
+            .ifLet(then: { [weak self] store in
                 guard let self = self else { return }
-                self.navigationController?.pushViewController(
-                    PetInfoViewController(store: self.tempStore,
-                                         petInfoStore: petInfo),
-                    animated: true
-                )
-            }
+                let navi = OnboardingNavigationViewController(store: store)
+                self.present(navi, animated: true)
+            }, else: { [weak self] in
+                self?.dismiss(animated: true)
+            })
             .store(in: &cancellables)
 
         tempStore

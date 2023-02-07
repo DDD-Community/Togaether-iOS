@@ -34,6 +34,7 @@ public final class OnboardingNavigationViewController: UINavigationController {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
+        presentationController?.delegate = self
     }
     
     private func bindNavigation() {
@@ -59,13 +60,15 @@ public final class OnboardingNavigationViewController: UINavigationController {
                 self?.pushViewController(viewController, animated: true)
             }
             .store(in: &cancellables)
-        
-        store
-            .scope(state: \.tabBar, action: Onboarding.Action.tabBar)
-            .ifLet { store in
-                UIApplication.shared.appKeyWindow?.rootViewController = TabBarController(store: store)
-            }
-            .store(in: &cancellables)
     }
 }
 
+extension OnboardingNavigationViewController: UIAdaptivePresentationControllerDelegate {
+    public func presentationControllerShouldDismiss(_ presentationController: UIPresentationController) -> Bool {
+        return true
+    }
+    
+    public func presentationControllerDidDismiss(_ presentationController: UIPresentationController) {
+        viewStore.send(.delegate(.onboardingDismissed))
+    }
+}
