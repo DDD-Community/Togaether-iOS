@@ -29,6 +29,14 @@ public struct NetworkClient {
             headerInterceptor
         ]
     )
+
+    public static let pet: NetworkSession = .init(
+        session: .shared,
+        interceptors: [
+            errorInterceptor,
+            headerInterceptor
+        ]
+    )
     
     init() { }
 }
