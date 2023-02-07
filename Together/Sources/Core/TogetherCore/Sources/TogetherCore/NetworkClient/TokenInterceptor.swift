@@ -11,7 +11,8 @@ import ComposableArchitecture
 
 struct TokenInterceptor: NetworkInterceptor {
     func adapt(urlRequest: URLRequest, options: NetworkRequestOptions) async throws -> URLRequest {
-        return urlRequest
+        let request = try await addToken(to: urlRequest, for: options)
+        return request
     }
     
     func retry(
@@ -30,7 +31,7 @@ extension TokenInterceptor {
         @Dependency(\.togetherAccount) var togetherAccount 
         var urlRequest = urlRequest
         let credential = try await togetherAccount.token()
-        urlRequest.setHeader(.xAuthorization(credential.xAuth))
+        urlRequest.setHeader(.authorization("Bearer \(credential.xAuth)"))
         return urlRequest
     }
 }

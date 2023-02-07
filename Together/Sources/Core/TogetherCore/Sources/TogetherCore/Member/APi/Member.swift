@@ -33,9 +33,7 @@ extension Member: DependencyKey {
         return try await NetworkClient.together.request(
             convertible: "\(Host.together)/member/my-pets",
             method: .get,
-            encoding: ParameterURLEncoder(),
-            headers: ["Content-Type": "application/json",
-                      "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0QHRlc3QuY29tIiwiaXNzIjoiVE9HQUVUSEVSIiwiYXVkIjoiVVNFUiIsInJvbGVzIjpbIk5PUk1BTCJdLCJpYXQiOjE2NzU3NDM2ODIsImV4cCI6MTY3NTc0NzI4Mn0.6-ViJNRydqDK0Iu5C5lBW9N2dyMwJgQ3iw_-rclXEus"]
+            encoding: ParameterURLEncoder()
         )
         .responseAsync()
     }
