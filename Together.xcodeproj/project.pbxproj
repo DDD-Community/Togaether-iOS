@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		401D17CC2954A8DF003F9270 /* Root.swift in Sources */ = {isa = PBXBuildFile; fileRef = 401D17CB2954A8DF003F9270 /* Root.swift */; };
 		401D17CE2954A8E3003F9270 /* RootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 401D17CD2954A8E3003F9270 /* RootViewController.swift */; };
+		402A7A1329921D8B006A6538 /* Agreement.txt in Resources */ = {isa = PBXBuildFile; fileRef = B0AB1D452992100D0039B0CC /* Agreement.txt */; };
 		40575784295E24DE00FA3FB6 /* Feature in Resources */ = {isa = PBXBuildFile; fileRef = 40575783295E24DE00FA3FB6 /* Feature */; };
 		40575786295E24EA00FA3FB6 /* Feature in Frameworks */ = {isa = PBXBuildFile; productRef = 40575785295E24EA00FA3FB6 /* Feature */; };
 		40575789295E252400FA3FB6 /* TogetherNetwork in Resources */ = {isa = PBXBuildFile; fileRef = 40575787295E252400FA3FB6 /* TogetherNetwork */; };
@@ -347,6 +348,7 @@
 				4075CA33295F454100FA23C9 /* Pretendard-ExtraBold.ttf in Resources */,
 				4075CA31295F454100FA23C9 /* Pretendard-Black.ttf in Resources */,
 				4075CA34295F454100FA23C9 /* Pretendard-SemiBold.ttf in Resources */,
+				402A7A1329921D8B006A6538 /* Agreement.txt in Resources */,
 				40E9B4CF2931D7B100AC9AF0 /* LaunchScreen.storyboard in Resources */,
 				4075CA37295F454100FA23C9 /* Pretendard-Regular.ttf in Resources */,
 				4075CA38295F454100FA23C9 /* Pretendard-Bold.ttf in Resources */,

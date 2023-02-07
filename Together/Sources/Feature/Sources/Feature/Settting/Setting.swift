@@ -20,18 +20,10 @@ public struct Setting: ReducerProtocol {
     
     public struct State: Equatable {
         var settingPetInfo: PetInfo.State?
-        var settingAgreement: Agreement.State?
-        var settingPersonalInfo: PersonalInfo.State?
+        var settingAgreement: Policy.State?
+        var settingPersonalInfo: Policy.State?
         var alert: AlertState<Action>? = nil
         var isLoggedOut: Bool = false
-
-        public init(settingPetInfo: PetInfo.State? = nil,
-                    settingAgreement: Agreement.State? = nil,
-                    settingPersonalInfo: PersonalInfo.State? = nil) {
-            self.settingPetInfo = settingPetInfo
-            self.settingAgreement = settingAgreement
-            self.settingPersonalInfo = settingPersonalInfo
-        }
 
         let settingItems: [SettingItem] = [
             .petInfo, .agreement, .personalInfo, .version, .logout, .withdraw
@@ -41,8 +33,8 @@ public struct Setting: ReducerProtocol {
     public enum Action: Equatable {
         // MARK: 설정 내부 화면
         case settingPetInfo(PetInfo.Action)
-        case settingAgreement(Agreement.Action)
-        case settingPersonalInfo(PersonalInfo.Action)
+        case settingAgreement(Policy.Action)
+        case settingPersonalInfo(Policy.Action)
         
         // MARK: 설정 화면 이벤트 처리
         case defaultAction
@@ -71,10 +63,10 @@ public struct Setting: ReducerProtocol {
                 PetInfo()
             }
             .ifLet(\.settingAgreement, action: /Action.settingAgreement) {
-                Agreement()
+                Policy()
             }
             .ifLet(\.settingPersonalInfo, action: /Action.settingPersonalInfo) {
-                PersonalInfo()
+                Policy()
             }
     }
 
@@ -83,10 +75,10 @@ public struct Setting: ReducerProtocol {
         case .settingPetInfo(.detachChild):
             state.settingPetInfo = nil
             return .none
-        case .settingAgreement(.detachChild):
+        case .settingAgreement(.backButtonTapped):
             state.settingAgreement = nil
             return .none
-        case .settingPersonalInfo(.detachChild):
+        case .settingPersonalInfo(.backButtonTapped):
             state.settingPersonalInfo = nil
             return .none
         case .detachChild:
@@ -95,15 +87,19 @@ public struct Setting: ReducerProtocol {
 
         case .defaultAction:
             return .none
+            
         case .didTapPetInfo:
             state.settingPetInfo = .init()
             return .none
+            
         case .didTapAgreement:
-            state.settingAgreement = .init()
+            state.settingAgreement = .init(.terms)
             return .none
+            
         case .didTapPersonalInfo:
-            state.settingPersonalInfo = .init()
+            state.settingPersonalInfo = .init(.personalInfo)
             return .none
+            
         case .didTapVersion:
             print("Version")
             return .none

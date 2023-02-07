@@ -13,6 +13,7 @@ import TogetherUI
 import ThirdParty
 
 import SwiftLayout
+import MarkdownView
 import ComposableArchitecture
 
 final class PolicyViewController: UIViewController {
@@ -21,14 +22,7 @@ final class PolicyViewController: UIViewController {
     private let viewStore: ViewStoreOf<Policy>
     private var cancellables: Set<AnyCancellable> = .init()
     
-    private let scrollView: UIScrollView = .init().config {
-        $0.isScrollEnabled = true
-        $0.showsVerticalScrollIndicator = true
-    }
-    
-    private let content: UITextView = .init().config {
-        $0.textAlignment = .center
-    }
+    private let markdownView: MarkdownView = MarkdownView()
     
     @LayoutBuilder var layout: some SwiftLayout.Layout {
         view
@@ -36,19 +30,15 @@ final class PolicyViewController: UIViewController {
                 $0.backgroundColor = .backgroundWhite
             }
             .sublayout {
-                scrollView
-                    .anchors { 
-                        Anchors.allSides()
+                markdownView
+                    .config {
+                        $0.backgroundColor = .backgroundWhite
+                        
                     }
-                    .sublayout { 
-                        content
-                            .config {
-                                $0.text = viewStore.state.content
-                            }
-                            .anchors { 
-                                Anchors.allSides()
-                                Anchors.width.equalToSuper()
-                            }
+                    .anchors { 
+                        Anchors.top.equalTo(view.safeAreaLayoutGuide.topAnchor, constant: 24)
+                        Anchors.bottom.equalTo(view.safeAreaLayoutGuide.bottomAnchor, constant: 24)
+                        Anchors.horizontal(offset: 24)
                     }
             }
     }
@@ -68,6 +58,7 @@ final class PolicyViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureNavigation()
+        bindState()
     }
     
     private func configureNavigation() {
@@ -82,5 +73,13 @@ final class PolicyViewController: UIViewController {
     private func onClickBackButton() {
         navigationController?.popViewController(animated: true)
         viewStore.send(.backButtonTapped)
+    }
+    
+    private func bindState() {
+        viewStore.publisher.content
+            .sink { [weak self] contentText in
+                self?.markdownView.load(markdown: contentText)
+            }
+            .store(in: &cancellables)
     }
 }

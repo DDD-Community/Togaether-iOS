@@ -161,7 +161,7 @@ final class SettingViewController: UIViewController, Layoutable {
             .ifLet { [weak self] agreement in
                 guard let self = self else { return }
                 self.navigationController?.pushViewController(
-                    AgreementViewController(store: self.tempStore, agreementStore: agreement),
+                    PolicyViewController(store: agreement),
                     animated: true
                 )
             }
@@ -172,8 +172,7 @@ final class SettingViewController: UIViewController, Layoutable {
             .ifLet { [weak self] personalInfo in
                 guard let self = self else { return }
                 self.navigationController?.pushViewController(
-                    PersonalInfoViewController(store: self.tempStore,
-                                               personalInfoStore: personalInfo),
+                    PolicyViewController(store: personalInfo),
                     animated: true
                 )
             }

@@ -12,7 +12,7 @@ public class TextReader {
 
     public static func loadContentIntoString(name: String) -> String {
         do {
-            guard let fileUrl = Bundle.main.url(forResource: name, withExtension: "txt") else { fatalError() }
+            guard let fileUrl = Bundle.main.url(forResource: name, withExtension: "txt") else { return "" }
             let text = try String(contentsOf: fileUrl, encoding: String.Encoding.utf8)
             return text
         } catch {
