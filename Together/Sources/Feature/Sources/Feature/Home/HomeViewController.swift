@@ -147,6 +147,9 @@ final class HomeViewController: UIViewController, Layoutable {
                 self.guideAnimationView.fadeOut(duration: 0.5, completion: nil)
             }
         }
+
+        // MARK: Fetch Pet List
+        viewStore.send(.fetchPetList)
     }
 }
 
