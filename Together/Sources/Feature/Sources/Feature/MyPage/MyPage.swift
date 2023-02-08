@@ -17,6 +17,8 @@ public struct MyPage: ReducerProtocol {
 //        var onboarding: Onboarding.State?
         var postDetail: PostDetail.State?
 
+        @BindingState var myPets: [PetResponse]?
+
         public init(
             myPageSetting: Setting.State? = nil,
             feedRegister: OnboardingFeedRegister.State? = nil,
@@ -83,6 +85,7 @@ public struct MyPage: ReducerProtocol {
 
         case let .myPetListResponse(.success(response)):
             print("My Pet List Success TotalCount: \(response.pets.count)")
+            state.myPets = response.pets
             return .none
 
         case let .myPetListResponse(.failure(error)):

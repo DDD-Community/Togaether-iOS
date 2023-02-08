@@ -22,6 +22,14 @@ final class MyPageViewController: UIViewController, Layoutable {
     private var cancellables: Set<AnyCancellable> = .init()
     private var alertController: UIAlertController?
 
+    private var myPetList: [PetResponse]? {
+        didSet {
+            imageCollectionView.isHidden = !(myPetList?.count ?? 0 > 0)
+            emptyContainerView.isHidden = myPetList?.count ?? 0 > 0
+            imageCollectionView.reloadData()
+        }
+    }
+
     private var createBarButton: UIBarButtonItem {
         UIBarButtonItem(image: UIImage(named: "ic_appbar_write"), style: .plain, target: self, action: #selector(onClickCreate))
     }
@@ -48,6 +56,11 @@ final class MyPageViewController: UIViewController, Layoutable {
         return collectionView
     }()
 
+    private let emptyContainerView: UIView = UIView()
+    private let emptyImageView: UIImageView = UIImageView(image: UIImage(named: "img_empty")).config { imageView in
+        imageView.contentMode = .scaleAspectFit
+    }
+
     @LayoutBuilder var layout: some Layout {
         view.config { view in
             view.backgroundColor = .backgroundWhite
@@ -60,6 +73,17 @@ final class MyPageViewController: UIViewController, Layoutable {
                 Anchors.top.equalTo(headerView, attribute: .bottom, constant: 0)
                 Anchors.leading.trailing.equalToSuper()
                 Anchors.bottom.equalTo(view.safeAreaLayoutGuide.bottomAnchor)
+            }
+            emptyContainerView.anchors {
+                Anchors.top.equalTo(headerView, attribute: .bottom, constant: 0)
+                Anchors.leading.trailing.equalToSuper()
+                Anchors.bottom.equalTo(view.safeAreaLayoutGuide.bottomAnchor)
+            }.sublayout {
+                emptyImageView.anchors {
+                    Anchors.centerX.equalToSuper()
+                    Anchors.centerY.equalToSuper()
+                    Anchors.size(width: 220, height: 120)
+                }
             }
         }
     }
@@ -139,6 +163,10 @@ final class MyPageViewController: UIViewController, Layoutable {
     }
 
     private func bindState() {
+        viewStore.publisher.myPets.sink(receiveValue: { [weak self] myPetList in
+            self?.myPetList = myPetList
+        }).store(in: &cancellables)
+
         viewStore.publisher.alert
             .delay(for: .seconds(0.3), scheduler: DispatchQueue.main)
             .sink { [weak self] alert in
@@ -183,7 +211,7 @@ extension MyPageViewController: UICollectionViewDelegate, UICollectionViewDataSo
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 30 // TODO: 임시 값
+        return myPetList?.count ?? 0
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -191,7 +219,7 @@ extension MyPageViewController: UICollectionViewDelegate, UICollectionViewDataSo
             return UICollectionViewCell()
         }
 
-        cell.image = UIImage(named: "Sample1") // TODO: Sample
+        cell.pet = myPetList?[indexPath.row]
         return cell
     }
 

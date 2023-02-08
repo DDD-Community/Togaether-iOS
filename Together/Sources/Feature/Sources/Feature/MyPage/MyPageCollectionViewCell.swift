@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftLayout
+import TogetherCore
 import TogetherUI
 import UIKit
 
@@ -20,6 +21,13 @@ final class MyPageCollectionViewCell: UICollectionViewCell, Layoutable {
     public var image: UIImage? {
         didSet {
             imageView.image = image
+        }
+    }
+
+    public var pet: PetResponse? {
+        didSet {
+            guard let urlString = pet?.mainImage else { return }
+            print(urlString)
         }
     }
 
