@@ -39,7 +39,7 @@ public struct Pet {
     ) async throws -> DefaultResponse
 
     public var petInfoModify: @Sendable (
-        _ petId: Int
+        _ petId: Int,
         _ name: String,
         _ species: String,
         _ petCharacter: String,
@@ -112,7 +112,7 @@ extension Pet: DependencyKey {
             return try await NetworkClient.together.request(
                 convertible: "\(Host.together)/pet",
                 method: .post,
-                parameter: [
+                parameters: [
                     "name": name,
                     "species": species,
                     "pet_character": petCharacter,
@@ -128,7 +128,7 @@ extension Pet: DependencyKey {
             return try await NetworkClient.together.request(
                 convertible: "\(Host.together)/pet/\(petId)",
                 method: .post,
-                parameter: [
+                parameters: [
                     "name": name,
                     "species": species,
                     "pet_character": petCharacter,
