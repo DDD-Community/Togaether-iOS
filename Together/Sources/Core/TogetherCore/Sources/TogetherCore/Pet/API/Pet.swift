@@ -19,11 +19,41 @@ public struct Pet {
         _ currentPage: Int,
         _ petOrderBy: String
     ) async throws -> PetListResponse
+
+    public var petContents: @Sendable (
+        _ petId: Int
+    ) async throws -> PetContentResponse
+
+    public var petFollow: @Sendable (
+        _ petId: Int
+    ) async throws -> DefaultResponse
+
+    public var petInfoRegister: @Sendable (
+        _ name: String,
+        _ species: String,
+        _ petCharacter: String,
+        _ gender: String,
+        _ birth: String,
+        _ description: String,
+        _ etc: String
+    ) async throws -> DefaultResponse
 }
 
 public extension Pet {
     func list(pageSize: Int, currentPage: Int, petOrderBy: String) async throws -> PetListResponse {
         try await self.list(pageSize, currentPage, petOrderBy)
+    }
+
+    func petContentList(petId: Int) async throws -> PetContentResponse {
+        try await self.petContents(petId)
+    }
+
+    func petFollow(petId: Int) async throws -> DefaultResponse {
+        try await self.petFollow(petId)
+    }
+
+    func petRegister(name: String, species: String, petCharacter: String, gender: String, birth: String, description: String, etc: String) async throws -> DefaultResponse {
+        try await self.petRegister(name, species, petCharacter, gender, birth, description, etc)
     }
 }
 
@@ -35,21 +65,56 @@ extension DependencyValues {
 }
 
 extension Pet: DependencyKey {
-    public static let liveValue: Pet = .init { pageSize, currentPage, petOrderBy in
-        return try await NetworkClient.together.request(
-            convertible: "\(Host.together)/pet/list",
-            method: .get,
-            parameters: [
-                "page_size": pageSize,
-                "current_page": currentPage,
-                "pet_order_by": petOrderBy
-            ],
-            encoding: ParameterURLEncoder()
-        )
-        .responseAsync()
-    }
+    public static let liveValue: Pet = Pet(
+        list: { pageSize, currentPage, petOrderBy in
+            return try await NetworkClient.together.request(
+                convertible: "\(Host.together)/pet/list",
+                method: .get,
+                parameters: [
+                    "page_size": pageSize,
+                    "current_page": currentPage,
+                    "pet_order_by": petOrderBy
+                ],
+                encoding: ParameterURLEncoder()
+            )
+            .responseAsync()
+        },
+        petContents: { petId in
+            return try await NetworkClient.together.request(
+                convertible: "\(Host.together)/pet/\(petId)/contents",
+                method: .get,
+                encoding: ParameterURLEncoder()
+            ).responseAsync()
+        },
+        petFollow: { petId in
+            return try await NetworkClient.together.request(
+                convertible: "\(Host.together)/pet/\(petId)/follow",
+                method: .put,
+                encoding: ParameterURLEncoder()
+            ).responseAsync()
+        },
+        petInfoRegister: { name, species, petCharacter, gender, birth, description, etc in
+            return try await NetworkClient.together.request(
+                convertible: "\(Host.together)/pet",
+                method: .post,
+                parameter: [
+                    "name": name,
+                    "species": species,
+                    "pet_character": petCharacter,
+                    "gender": gender,
+                    "birth": birth,
+                    "description": description,
+                    "etc": etc
+                ],
+                encoding: ParameterJSONEncoder()
+            ).responseAsync()
+        }
+    )
 
     public static let testValue: Pet = .init(
-        list: unimplemented()
+        list: unimplemented(),
+        petContents: unimplemented(),
+        petFollow: unimplemented(),
+        petInfoRegister: unimplemented()
     )
 }
