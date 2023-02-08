@@ -80,7 +80,7 @@ public struct OnboardingSpecies: ReducerProtocol {
     }
 }
 
-let mockData: [String] = ["고든 세터",
+public let mockData: [String] = ["고든 세터",
 "꼬똥 드 툴레아",
 "골든두들",
 "골든 리트리버",

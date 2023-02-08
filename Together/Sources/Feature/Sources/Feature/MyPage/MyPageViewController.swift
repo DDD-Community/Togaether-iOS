@@ -20,6 +20,7 @@ final class MyPageViewController: UIViewController, Layoutable {
     private let viewStore: ViewStoreOf<MyPage>
 
     private var cancellables: Set<AnyCancellable> = .init()
+    private var alertController: UIAlertController?
 
     private var createBarButton: UIBarButtonItem {
         UIBarButtonItem(image: UIImage(named: "ic_appbar_write"), style: .plain, target: self, action: #selector(onClickCreate))
@@ -69,6 +70,7 @@ final class MyPageViewController: UIViewController, Layoutable {
 
         super.init(nibName: nil, bundle: nil)
         self.bindNavigation()
+        self.bindState()
         sl.updateLayout()
     }
 
@@ -81,6 +83,14 @@ final class MyPageViewController: UIViewController, Layoutable {
         navigationController?.setNavigationBarHidden(false, animated: true)
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        // MARK: API Test
+        print("View Did Appear --> fetch API List")
+        viewStore.send(.fetchMyPetList)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -90,9 +100,6 @@ final class MyPageViewController: UIViewController, Layoutable {
 
         navigationItem.setRightBarButtonItems7([settingBarButton, createBarButton])
         navigationItem.title = "MY"
-
-        // MARK: API Test
-        viewStore.send(.fetchMyPetList)
     }
 
     private func bindNavigation() {
@@ -127,6 +134,24 @@ final class MyPageViewController: UIViewController, Layoutable {
                     postDetailVC,
                     animated: true
                 )
+            }
+            .store(in: &cancellables)
+    }
+
+    private func bindState() {
+        viewStore.publisher.alert
+            .delay(for: .seconds(0.3), scheduler: DispatchQueue.main)
+            .sink { [weak self] alert in
+                if let alert = alert {
+                    let alertController = UIAlertController(state: alert) {
+                        self?.viewStore.send($0)
+                    }
+                    self?.present(alertController, animated: true, completion: nil)
+                    self?.alertController = alertController
+                } else {
+                    self?.alertController?.dismiss(animated: true, completion: nil)
+                    self?.alertController = nil
+                }
             }
             .store(in: &cancellables)
     }

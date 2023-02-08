@@ -41,12 +41,17 @@ extension TogetherAccount: DependencyKey {
         return TogetherAccount(
             token: {
                 // 캐시된 토큰이 있고, valid해야함
+                print("Token")
                 guard let cachedToken = await tokenStorage.load() else { throw AccountError.emptyCredential }
+
+                print("RefreshToken Check")
                 guard !cachedToken.isRefreshTokenInvalid else { throw AccountError.invalidToken }
-                
+
+                print("AccessToken Check")
                 // 만약 엑세스토큰 만료 생기면 추가해야함
                 guard !cachedToken.isAccessTokenInvalid else { return try await refresh(old: cachedToken) }
-                
+
+                print("Cached Token")
                 return cachedToken
             }, 
             login: { email, password in

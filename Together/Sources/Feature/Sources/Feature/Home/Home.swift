@@ -12,6 +12,8 @@ public struct Home: ReducerProtocol {
         var currentPage: Int = 0
         var petOrderBy: String = "FOLLOWER_COUNT_DESC"
 
+        @BindingState var petList: [PetResponse]?
+
         var alert: AlertState<Action>?
 
         public init() { }
@@ -46,6 +48,8 @@ public struct Home: ReducerProtocol {
 
         case let .petListResponse(.success(response)):
             print("Pet List Success TotalCount: \(response.totalCount)")
+            state.currentPage = response.currentPage
+            state.pageSize = response.totalPages
             return .none
 
         case let .petListResponse(.failure(error)):
