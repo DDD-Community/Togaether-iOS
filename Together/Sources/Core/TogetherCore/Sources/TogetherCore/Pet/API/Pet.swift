@@ -37,6 +37,17 @@ public struct Pet {
         _ description: String,
         _ etc: String
     ) async throws -> DefaultResponse
+
+    public var petInfoModify: @Sendable (
+        _ petId: Int
+        _ name: String,
+        _ species: String,
+        _ petCharacter: String,
+        _ gender: String,
+        _ birth: String,
+        _ description: String,
+        _ etc: String
+    ) async throws -> DefaultResponse
 }
 
 public extension Pet {
@@ -52,8 +63,12 @@ public extension Pet {
         try await self.petFollow(petId)
     }
 
-    func petRegister(name: String, species: String, petCharacter: String, gender: String, birth: String, description: String, etc: String) async throws -> DefaultResponse {
-        try await self.petRegister(name, species, petCharacter, gender, birth, description, etc)
+    func petInfoRegister(name: String, species: String, petCharacter: String, gender: String, birth: String, description: String, etc: String) async throws -> DefaultResponse {
+        try await self.petInfoRegister(name, species, petCharacter, gender, birth, description, etc)
+    }
+
+    func petInfoModify(petId: Int, name: String, species: String, petCharacter: String, gender: String, birth: String, description: String, etc: String) async throws -> DefaultResponse {
+        try await self.petInfoModify(petId, name, species, petCharacter, gender, birth, description, etc)
     }
 }
 
@@ -108,6 +123,22 @@ extension Pet: DependencyKey {
                 ],
                 encoding: ParameterJSONEncoder()
             ).responseAsync()
+        },
+        petInfoModify: { petId, name, species, petCharacter, gender, birth, description, etc in
+            return try await NetworkClient.together.request(
+                convertible: "\(Host.together)/pet/\(petId)",
+                method: .post,
+                parameter: [
+                    "name": name,
+                    "species": species,
+                    "pet_character": petCharacter,
+                    "gender": gender,
+                    "birth": birth,
+                    "description": description,
+                    "etc": etc
+                ],
+                encoding: ParameterJSONEncoder()
+            ).responseAsync()
         }
     )
 
@@ -115,6 +146,7 @@ extension Pet: DependencyKey {
         list: unimplemented(),
         petContents: unimplemented(),
         petFollow: unimplemented(),
-        petInfoRegister: unimplemented()
+        petInfoRegister: unimplemented(),
+        petInfoModify: unimplemented()
     )
 }
