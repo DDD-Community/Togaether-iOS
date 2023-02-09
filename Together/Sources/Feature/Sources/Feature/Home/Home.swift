@@ -8,9 +8,8 @@ import TogetherCore
 
 public struct Home: ReducerProtocol {
     public struct State: Equatable {
-        var pageSize: Int = 0
-        var currentPage: Int = 0
-        var petOrderBy: String = "FOLLOWER_COUNT_DESC"
+        var pageSize: Int = 100
+        var currentPage: Int = 1
 
         @BindingState var petList: [PetResponse]?
 
@@ -36,11 +35,10 @@ public struct Home: ReducerProtocol {
             state.alert = nil
 
             return .task { [pageSize = state.pageSize,
-                            currentPage = state.currentPage,
-                            petOrderBy = state.petOrderBy] in
+                            currentPage = state.currentPage] in
                 await .petListResponse(
                     TaskResult {
-                        try await petList(pageSize, currentPage, petOrderBy)
+                        try await petList(pageSize, currentPage, nil)
                     }
                 )
             }

@@ -17,7 +17,7 @@ public struct Pet {
     public var list: @Sendable (
         _ pageSize: Int,
         _ currentPage: Int,
-        _ petOrderBy: String
+        _ petOrderBy: String?
     ) async throws -> PetListResponse
 
     public var petContents: @Sendable (
@@ -51,7 +51,7 @@ public struct Pet {
 }
 
 public extension Pet {
-    func list(pageSize: Int, currentPage: Int, petOrderBy: String) async throws -> PetListResponse {
+    func list(pageSize: Int, currentPage: Int, petOrderBy: String? = nil) async throws -> PetListResponse {
         try await self.list(pageSize, currentPage, petOrderBy)
     }
 
@@ -82,14 +82,17 @@ extension DependencyValues {
 extension Pet: DependencyKey {
     public static let liveValue: Pet = Pet(
         list: { pageSize, currentPage, petOrderBy in
+            let parameters: [String: Any]
+            if petOrderBy != nil {
+                parameters = ["page_size": pageSize, "current_page": currentPage, "pet_order_by": petOrderBy ?? "FOLLOWER_COUNT_DESC"]
+            } else {
+                parameters = ["page_size": pageSize, "current_page": currentPage]
+            }
+
             return try await NetworkClient.together.request(
                 convertible: "\(Host.together)/pet/list",
                 method: .get,
-                parameters: [
-                    "page_size": pageSize,
-                    "current_page": currentPage,
-                    "pet_order_by": petOrderBy
-                ],
+                parameters: parameters,
                 encoding: ParameterURLEncoder()
             )
             .responseAsync()

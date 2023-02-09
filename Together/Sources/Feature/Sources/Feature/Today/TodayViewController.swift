@@ -5,6 +5,7 @@
 //  Created by denny on 2023/01/18.
 //
 
+import Combine
 import ComposableArchitecture
 import SwiftLayout
 import TogetherCore
@@ -14,6 +15,15 @@ import UIKit
 
 final class TodayViewController: UIViewController, Layoutable {
     var activation: Activation?
+
+    private var cancellables: Set<AnyCancellable> = .init()
+    private var alertController: UIAlertController?
+    private var petList: [PetResponse]? {
+        didSet {
+            guard let list = petList else { return }
+            print("Today list: \(list)")
+        }
+    }
 
     private let store: StoreOf<Today>
     private let viewStore: ViewStoreOf<Today>
@@ -64,8 +74,37 @@ final class TodayViewController: UIViewController, Layoutable {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        bindState()
+    }
 
-        sl.updateLayout()
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        // MARK: Fetch Pet List
+        viewStore.send(.fetchPetList)
+    }
+
+    private func bindState() {
+        viewStore.publisher.petList.sink(receiveValue: { [weak self] petList in
+            self?.petList = petList
+        }).store(in: &cancellables)
+
+        viewStore.publisher.alert
+            .delay(for: .seconds(0.3), scheduler: DispatchQueue.main)
+            .sink { [weak self] alert in
+                if let alert = alert {
+                    let alertController = UIAlertController(state: alert) { action in
+                        guard let action else { return }
+                        self?.viewStore.send(action)
+                    }
+                    self?.present(alertController, animated: true, completion: nil)
+                    self?.alertController = alertController
+                } else {
+                    self?.alertController?.dismiss(animated: true, completion: nil)
+                    self?.alertController = nil
+                }
+            }
+            .store(in: &cancellables)
     }
 }
 

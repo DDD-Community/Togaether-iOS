@@ -16,6 +16,14 @@ import UIKit
 final class AgoraViewController: UIViewController, Layoutable {
     var activation: Activation?
 
+    private var alertController: UIAlertController?
+    private var petList: [PetResponse]? {
+        didSet {
+            guard let list = petList else { return }
+            print("Agora list: \(list)")
+        }
+    }
+
     private let store: StoreOf<Agora>
     private let viewStore: ViewStoreOf<Agora>
 
@@ -69,6 +77,37 @@ final class AgoraViewController: UIViewController, Layoutable {
     override func viewDidLoad() {
         super.viewDidLoad()
         bindNavigation()
+        bindState()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        // MARK: Fetch Pet List
+        viewStore.send(.fetchPetList)
+    }
+
+    private func bindState() {
+        viewStore.publisher.petList.sink(receiveValue: { [weak self] petList in
+            self?.petList = petList
+        }).store(in: &cancellables)
+
+        viewStore.publisher.alert
+            .delay(for: .seconds(0.3), scheduler: DispatchQueue.main)
+            .sink { [weak self] alert in
+                if let alert = alert {
+                    let alertController = UIAlertController(state: alert) { action in
+                        guard let action else { return }
+                        self?.viewStore.send(action)
+                    }
+                    self?.present(alertController, animated: true, completion: nil)
+                    self?.alertController = alertController
+                } else {
+                    self?.alertController?.dismiss(animated: true, completion: nil)
+                    self?.alertController = nil
+                }
+            }
+            .store(in: &cancellables)
     }
 
     private func bindNavigation() {
