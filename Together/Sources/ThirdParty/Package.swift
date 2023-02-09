@@ -16,7 +16,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/ioskrew/SwiftLayout", .upToNextMajor(from: "2.0.0")),
-        .package(url: "https://github.com/pointfreeco/swift-composable-architecture", branch: "main"),
+        .package(url: "https://github.com/pointfreeco/swift-composable-architecture", .upToNextMajor(from: "0.9.0")),
         .package(url: "https://github.com/airbnb/lottie-ios", from: "4.1.2"),
         .package(url: "https://github.com/keitaoouchi/MarkdownView.git", from: "1.7.1")
     ],
