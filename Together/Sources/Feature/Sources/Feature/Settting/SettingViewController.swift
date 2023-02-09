@@ -122,8 +122,9 @@ final class SettingViewController: UIViewController, Layoutable {
         tempViewStore.publisher.alert
             .sink { [weak self] alert in
                 if let alert = alert {
-                    let alertController = UIAlertController(state: alert) {
-                        self?.tempViewStore.send($0)
+                    let alertController = UIAlertController(state: alert) { action in
+                        guard let action else { return }
+                        self?.tempViewStore.send(action)
                     }
                     self?.present(alertController, animated: true, completion: nil)
                     self?.alertController = alertController

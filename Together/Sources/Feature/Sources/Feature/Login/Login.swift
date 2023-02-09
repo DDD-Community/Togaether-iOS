@@ -165,6 +165,7 @@ public struct Login: ReducerProtocol {
             return .none
             
         case .optionalOnboarding(.delegate(.routeToTab)):
+            state.optionalOnboarding = nil
             state.optionalTab = .init(home: .init(), agora: .init(), today: .init(), mypage: .init())
             return .none
             

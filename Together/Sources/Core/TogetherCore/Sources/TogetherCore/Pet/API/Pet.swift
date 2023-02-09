@@ -142,11 +142,11 @@ extension Pet: DependencyKey {
         }
     )
 
-    public static let testValue: Pet = .init(
+    public static let testValue: Pet = Pet(
         list: unimplemented(),
         petContents: unimplemented(),
         petFollow: unimplemented(),
-        petInfoRegister: unimplemented(),
-        petInfoModify: unimplemented()
+        petInfoRegister: { _,_,_,_,_,_,_  in fatalError() },
+        petInfoModify: { _,_,_,_,_,_,_,_  in fatalError() }
     )
 }

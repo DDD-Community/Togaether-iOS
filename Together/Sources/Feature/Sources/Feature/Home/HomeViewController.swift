@@ -177,8 +177,9 @@ final class HomeViewController: UIViewController, Layoutable {
             .delay(for: .seconds(0.3), scheduler: DispatchQueue.main)
             .sink { [weak self] alert in
                 if let alert = alert {
-                    let alertController = UIAlertController(state: alert) {
-                        self?.viewStore.send($0)
+                    let alertController = UIAlertController(state: alert) { action in
+                        guard let action else { return }
+                        self?.viewStore.send(action)
                     }
                     self?.present(alertController, animated: true, completion: nil)
                     self?.alertController = alertController

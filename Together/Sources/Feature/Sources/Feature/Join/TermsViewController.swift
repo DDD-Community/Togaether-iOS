@@ -47,7 +47,7 @@ final class TermsViewController: UIViewController {
             .sublayout {
                 titleContainerView
                     .config { view in
-                        view.backgroundColor = .backgroundWhite
+                        view.backgroundColor = .backgroundGray
                     }
                     .anchors { 
                         Anchors.horizontal()
