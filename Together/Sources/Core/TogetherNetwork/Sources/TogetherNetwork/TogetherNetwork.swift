@@ -121,6 +121,13 @@ public struct MultiPartValue {
     var fileName: String
     var mime: String
     var data: Data?
+    
+    public init(name: String, fileName: String, mime: String, data: Data? = nil) {
+        self.name = name
+        self.fileName = fileName
+        self.mime = mime
+        self.data = data
+    }
 }
 
 fileprivate extension Data {

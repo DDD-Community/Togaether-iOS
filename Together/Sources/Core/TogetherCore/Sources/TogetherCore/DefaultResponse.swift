@@ -7,4 +7,6 @@
 
 import Foundation
 
-public struct DefaultResponse: Decodable, Equatable, Sendable { }
+public struct DefaultResponse: Decodable, Equatable, Sendable { 
+    public init() { }
+}

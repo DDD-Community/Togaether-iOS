@@ -89,6 +89,17 @@ public class UploadRequest: Request {
             return .init(data: nil, response: nil, error: error)
         }
     }
+    
+    @MainActor
+    public func responseAsync<Success: Decodable>(decoder: JSONDecoder = NetworkDecoder()) async throws -> Success {
+        let result: Result<Success, Error> = await self.perform(decoder)
+        switch result {
+        case .success(let success):
+            return success
+        case .failure(let error):
+            throw error
+        }
+    }
 }
 
 public class Request {

@@ -62,6 +62,10 @@ struct Root: ReducerProtocol {
             case .login:
                 return .none
                 
+            case .onboarding(.delegate(.routeToTab)):
+                state = .tab(.init(home: .init(), agora: .init(), today: .init(), mypage: .init()))
+                return .none
+                
             case .onboarding:
                 return .none
                 

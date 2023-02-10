@@ -58,7 +58,7 @@ public struct Onboarding: ReducerProtocol {
         case .onboardingInfo(.didTapSkipButton), 
                 .onboardingSpecies(.didTapSkipButton),
                 .onboardingRegister(.didTapSkipButton),
-                .onboardingRegister(.didTapNextButton):
+                .onboardingRegister(.registerComplete):
             Preferences.shared.onboardingFinished = true
             return .task { return .delegate(.routeToTab) }
             

@@ -48,6 +48,17 @@ public struct Pet {
         _ description: String,
         _ etc: String
     ) async throws -> DefaultResponse
+    
+    public var register: @Sendable(
+        _ image: Data,
+        _ name: String,
+        _ species: String,
+        _ petCharacter: String,
+        _ gender: String,
+        _ birth: String,
+        _ description: String,
+        _ etc: String
+    ) async throws -> DefaultResponse
 }
 
 public extension Pet {
@@ -69,6 +80,19 @@ public extension Pet {
 
     func petInfoModify(petId: Int, name: String, species: String, petCharacter: String, gender: String, birth: String, description: String, etc: String) async throws -> DefaultResponse {
         try await self.petInfoModify(petId, name, species, petCharacter, gender, birth, description, etc)
+    }
+    
+    func register(
+        data: Data,
+        name: String,
+        species: String,
+        petCharacter: String,
+        gender: String,
+        birth: String,
+        description: String,
+        etc: String
+    ) async throws -> DefaultResponse {
+        try await self.register(data, name, species, petCharacter, gender, birth, description, etc)
     }
 }
 
@@ -142,6 +166,14 @@ extension Pet: DependencyKey {
                 ],
                 encoding: ParameterJSONEncoder()
             ).responseAsync()
+        },
+        register: { data, name, species, petCharacter, gender, birth, description, etc in
+            let value = MultiPartValue(name: "main_image", fileName: "@Retriever.png", mime: "image/png", data: data)
+            return try await NetworkClient.together.upload(
+                convertible: "\(Host.together)/pet/with-image", 
+                values: [value]
+            )
+            .responseAsync()
         }
     )
 
@@ -150,6 +182,9 @@ extension Pet: DependencyKey {
         petContents: unimplemented(),
         petFollow: unimplemented(),
         petInfoRegister: { _,_,_,_,_,_,_  in fatalError() },
-        petInfoModify: { _,_,_,_,_,_,_,_  in fatalError() }
+        petInfoModify: { _,_,_,_,_,_,_,_  in fatalError() }, 
+        register: { image,name,species,petCharacter,gender,birth,description,etc in 
+            fatalError()
+        }
     )
 }

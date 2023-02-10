@@ -22,6 +22,7 @@ final class OnboardingFeedRegisterViewController: UIViewController {
     private let viewStore: ViewStoreOf<OnboardingFeedRegister>
     private var cancellables: Set<AnyCancellable> = .init()
     private let canSkip: Bool
+    private var alertController: UIAlertController?
     
     private let feedRegisterView: FeedRegisterView
     private let skipButton: TogetherRegularButton = {
@@ -140,6 +141,22 @@ final class OnboardingFeedRegisterViewController: UIViewController {
             .assign(to: \.isEnabled, onWeak: nextButton)
             .store(in: &cancellables)
 
+        viewStore.publisher.alert
+            .delay(for: .seconds(0.3), scheduler: DispatchQueue.main)
+            .sink { [weak self] alert in
+                if let alert = alert {
+                    let alertController = UIAlertController(state: alert) { action in
+                        guard let action else { return }
+                        self?.viewStore.send(action)
+                    }
+                    self?.present(alertController, animated: true, completion: nil)
+                    self?.alertController = alertController
+                } else {
+                    self?.alertController?.dismiss(animated: true, completion: nil)
+                    self?.alertController = nil
+                }
+            }
+            .store(in: &cancellables)
     }
     
     @objc
