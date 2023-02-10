@@ -60,6 +60,37 @@ public class DataRequest: Request {
     }
 }
 
+public class UploadRequest: Request {
+    public var data: Data?
+    
+    public convenience init(
+        using session: URLSession, 
+        convertible: URLRequestConvertible,
+        data: Data?,
+        interceptors: [NetworkInterceptor]
+    ) {
+        self.init(using: session, convertible: convertible, interceptors: interceptors)
+        self.data = data
+    }
+    
+    override func response() async -> NetworkResponse {
+        do {
+            let initialRequest = try convertible.asURLRequest()
+            let urlRequest = try await adapt(initialRequest)
+            let response: NetworkResponse = try await withCheckedThrowingContinuation { continuation in
+                task = session.uploadTask(with: urlRequest, from: data) { data, response, error in
+                    continuation.resume(returning: NetworkResponse(data: data, response: response, error: error))
+                }
+                self.task?.resume()
+            }
+            return response
+        }
+        catch {
+            return .init(data: nil, response: nil, error: error)
+        }
+    }
+}
+
 public class Request {
     
     var session: URLSession
