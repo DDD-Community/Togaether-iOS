@@ -8,7 +8,7 @@ import TogetherCore
 
 public struct Home: ReducerProtocol {
     public struct State: Equatable {
-        var pageSize: Int = 100
+        var pageSize: Int = 10
         var currentPage: Int = 1
 
         @BindingState var petList: [PetResponse]?
@@ -45,9 +45,9 @@ public struct Home: ReducerProtocol {
             .cancellable(id: PetListCancelID.self)
 
         case let .petListResponse(.success(response)):
-            print("Pet List Success TotalCount: \(response.totalCount)")
             state.currentPage = response.currentPage
             state.pageSize = response.totalPages
+            state.petList = response.petList
             return .none
 
         case let .petListResponse(.failure(error)):

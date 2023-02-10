@@ -5,18 +5,26 @@
 //  Created by denny on 2023/01/02.
 //
 
+import ComposableArchitecture
+import Kingfisher
 import SwiftLayout
+import TogetherCore
 import TogetherFoundation
+import TogetherNetwork
 import TogetherUI
 import UIKit
 
 public class PuppyContentView: UIView, Layoutable {
+    @Dependency(\.togetherAccount) var togetherAccount
+    
     public var activation: Activation?
     public var likeHandler: (() -> Void)?
 
     public var model: PuppyModel? {
         didSet {
-            imageView.image = model?.image
+            Task(priority: .medium) {
+                try await showMainImage(url: model?.image)
+            }
             categoryView.text = model?.category
             genderView.text = model?.gender
             nameLabel.text = model?.name
@@ -31,6 +39,18 @@ public class PuppyContentView: UIView, Layoutable {
     private var overlayImageView : UIImageView = UIImageView().config { imageView in
         imageView.alpha = 0
         imageView.image = UIImage(color: UIColor(red: 0, green: 0, blue: 0, alpha: 0.7))
+    }
+
+    private func showMainImage(url: String?) async throws {
+        guard let urlString = url else { return }
+        let credential = try await togetherAccount.token()
+        let imageDownloadRequest = AnyModifier { request in
+            var requestBody = request
+            requestBody.setValue("Bearer \(credential.xAuth)", forHTTPHeaderField: "Authorization")
+            return requestBody
+        }
+
+        imageView.kf.setImage(with: URL(string: urlString), options: [.requestModifier(imageDownloadRequest)])
     }
 
     private let contentView: UIView = UIView()

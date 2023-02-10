@@ -90,7 +90,7 @@ extension Pet: DependencyKey {
             }
 
             return try await NetworkClient.together.request(
-                convertible: "\(Host.together)/pet/list",
+                convertible: "\(Host.together)/pet/list2",
                 method: .get,
                 parameters: parameters,
                 encoding: ParameterURLEncoder()

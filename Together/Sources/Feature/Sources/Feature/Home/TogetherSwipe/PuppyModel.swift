@@ -10,7 +10,7 @@ import TogetherFoundation
 import UIKit
 
 public struct PuppyModel {
-    var image: UIImage?
+    var image: String?
     let name: String
     let category: String
     let gender: String

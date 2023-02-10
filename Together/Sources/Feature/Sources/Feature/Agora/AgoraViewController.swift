@@ -21,6 +21,7 @@ final class AgoraViewController: UIViewController, Layoutable {
         didSet {
             guard let list = petList else { return }
             print("Agora list: \(list)")
+            agoraCollectionView.reloadData()
         }
     }
 
@@ -88,9 +89,10 @@ final class AgoraViewController: UIViewController, Layoutable {
     }
 
     private func bindState() {
-        viewStore.publisher.petList.sink(receiveValue: { [weak self] petList in
+        viewStore.publisher.petList.sink { [weak self] petList in
             self?.petList = petList
-        }).store(in: &cancellables)
+        }
+        .store(in: &cancellables)
 
         viewStore.publisher.alert
             .delay(for: .seconds(0.3), scheduler: DispatchQueue.main)
@@ -140,17 +142,18 @@ extension AgoraViewController: UICollectionViewDelegate, UICollectionViewDataSou
     }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 30 // TODO: 임시 값
+        return petList?.count ?? 0
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AgoraCollectionViewCell.identifier, for: indexPath) as? AgoraCollectionViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AgoraCollectionViewCell.identifier, for: indexPath) as? AgoraCollectionViewCell, let item = petList?[indexPath.row] else {
             return UICollectionViewCell()
         }
 
         cell.petImage = UIImage(named: "puppySample")
-        cell.content = "샘플 (\(indexPath.row))타이틀입니다 샘플 타이틀입니다"
-        cell.category = "카테고리"
+        cell.category = item.petCharacter
+        cell.content = item.description
+
         return cell
     }
 

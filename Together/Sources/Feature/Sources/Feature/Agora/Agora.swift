@@ -10,7 +10,7 @@ import TogetherCore
 
 public struct Agora: ReducerProtocol {
     public struct State: Equatable {
-        var pageSize: Int = 100
+        var pageSize: Int = 10
         var currentPage: Int = 1
         var petOrderBy: String = "FOLLOWER_COUNT_DESC"
 
@@ -60,11 +60,9 @@ public struct Agora: ReducerProtocol {
             .cancellable(id: PetListCancelID.self)
 
         case let .petListResponse(.success(response)):
-            print("Pet List Success totalPages: \(response.totalPages)")
-            print("Pet List Success currentPage: \(response.currentPage)")
-
             state.currentPage = response.currentPage
             state.pageSize = response.totalPages
+            state.petList = response.petList
             return .none
 
         case let .petListResponse(.failure(error)):

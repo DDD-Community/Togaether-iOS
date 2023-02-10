@@ -18,7 +18,8 @@ let package = Package(
         .package(url: "https://github.com/ioskrew/SwiftLayout", .upToNextMajor(from: "2.0.0")),
         .package(url: "https://github.com/pointfreeco/swift-composable-architecture", .upToNextMajor(from: "0.9.0")),
         .package(url: "https://github.com/airbnb/lottie-ios", from: "4.1.2"),
-        .package(url: "https://github.com/keitaoouchi/MarkdownView.git", from: "1.7.1")
+        .package(url: "https://github.com/keitaoouchi/MarkdownView.git", from: "1.7.1"),
+        .package(url: "https://github.com/onevcat/Kingfisher.git", .upToNextMajor(from: "7.0.0"))
     ],
     targets: [
         .target(
@@ -29,6 +30,7 @@ let package = Package(
                 .product(name: "SwiftLayoutUtil", package: "SwiftLayout"),
                 .product(name: "Lottie", package: "lottie-ios"),
                 .product(name: "MarkdownView", package: "MarkdownView"),
+                .product(name: "Kingfisher", package: "Kingfisher"),
             ]
         ),
     ]

@@ -22,6 +22,7 @@ final class TodayViewController: UIViewController, Layoutable {
         didSet {
             guard let list = petList else { return }
             print("Today list: \(list)")
+            todayTableView.reloadData()
         }
     }
 
@@ -85,9 +86,10 @@ final class TodayViewController: UIViewController, Layoutable {
     }
 
     private func bindState() {
-        viewStore.publisher.petList.sink(receiveValue: { [weak self] petList in
+        viewStore.publisher.petList.sink { [weak self] petList in
             self?.petList = petList
-        }).store(in: &cancellables)
+        }
+        .store(in: &cancellables)
 
         viewStore.publisher.alert
             .delay(for: .seconds(0.3), scheduler: DispatchQueue.main)
@@ -110,7 +112,7 @@ final class TodayViewController: UIViewController, Layoutable {
 
 extension TodayViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 20 // TODO: Temp Value
+        return petList?.count ?? 0
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -118,14 +120,15 @@ extension TodayViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: TodayCell.identifier, for: indexPath) as? TodayCell else {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: TodayCell.identifier, for: indexPath) as? TodayCell,
+                let item = petList?[indexPath.row] else {
             return UITableViewCell()
         }
 
         cell.selectionStyle = .none
         cell.rank = indexPath.row
-        cell.followerCount = 9999 // TODO: TEMP Value
-        cell.model = PuppyModel(name: "TEST NAME \(indexPath.row)", category: "골든 리트리버", gender: "수컷", description: "열자내용열자내용임다")
+        cell.model = PuppyModel(name: item.name, category: item.species, gender: item.gender, description: item.description)
+        cell.followerCount = item.followerCount
 
         return cell
     }
