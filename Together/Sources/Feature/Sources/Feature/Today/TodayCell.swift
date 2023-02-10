@@ -5,12 +5,18 @@
 //  Created by denny on 2023/02/08.
 //
 
+import ComposableArchitecture
+import Kingfisher
 import SwiftLayout
 import TogetherCore
+import TogetherFoundation
+import TogetherNetwork
 import TogetherUI
 import UIKit
 
 final class TodayCell: UITableViewCell, Layoutable {
+    @Dependency(\.togetherAccount) var togetherAccount
+    
     var activation: Activation?
 
     static var identifier: String {
@@ -31,6 +37,19 @@ final class TodayCell: UITableViewCell, Layoutable {
             categoryView.text = model?.category
             genderView.text = model?.gender
             descriptionLabel.text = model?.description
+
+            guard let urlString = model?.image else { return }
+
+            Task(priority: .medium) {
+                let credential = try await togetherAccount.token()
+                let imageDownloadRequest = AnyModifier { request in
+                    var requestBody = request
+                    requestBody.setValue("Bearer \(credential.xAuth)", forHTTPHeaderField: "Authorization")
+                    return requestBody
+                }
+
+                petImageView.kf.setImage(with: URL(string: urlString), options: [.requestModifier(imageDownloadRequest)])
+            }
         }
     }
 

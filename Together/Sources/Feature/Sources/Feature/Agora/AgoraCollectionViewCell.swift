@@ -5,12 +5,18 @@
 //  Created by denny on 2023/01/18.
 //
 
-import Foundation
-import TogetherUI
+import ComposableArchitecture
+import Kingfisher
 import SwiftLayout
+import TogetherCore
+import TogetherFoundation
+import TogetherNetwork
+import TogetherUI
 import UIKit
 
 final class AgoraCollectionViewCell: UICollectionViewCell, Layoutable {
+    @Dependency(\.togetherAccount) var togetherAccount
+    
     var activation: Activation?
 
     static var identifier: String {
@@ -29,9 +35,20 @@ final class AgoraCollectionViewCell: UICollectionViewCell, Layoutable {
         }
     }
 
-    var petImage: UIImage? {
+    var petImageUrl: String? {
         didSet {
-            petImageView.image = petImage
+            guard let urlString = petImageUrl else { return }
+
+            Task(priority: .medium) {
+                let credential = try await togetherAccount.token()
+                let imageDownloadRequest = AnyModifier { request in
+                    var requestBody = request
+                    requestBody.setValue("Bearer \(credential.xAuth)", forHTTPHeaderField: "Authorization")
+                    return requestBody
+                }
+
+                petImageView.kf.setImage(with: URL(string: urlString), options: [.requestModifier(imageDownloadRequest)])
+            }
         }
     }
 
