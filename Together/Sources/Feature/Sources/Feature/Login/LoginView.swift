@@ -9,9 +9,10 @@ import SwiftUI
 import TogetherCore
 import ThirdParty
 import ComposableArchitecture
+import TogetherUI
 
 public struct LoginView: UIViewControllerRepresentable {
-    public typealias UIViewControllerType = LoginViewController
+    public typealias UIViewControllerType = TogetherNavigation
     
     private let store: StoreOf<Login>
     
@@ -19,11 +20,13 @@ public struct LoginView: UIViewControllerRepresentable {
         self.store = store
     }
     
-    public func makeUIViewController(context: Self.Context) -> LoginViewController {
-        return .init(store: store)
+    public func makeUIViewController(context: Self.Context) -> TogetherNavigation {
+        let loginViewController = LoginViewController(store: store)
+        let navigationController = TogetherNavigation(rootViewController: loginViewController)
+        return navigationController
     }
     
-    public func updateUIViewController(_ uiViewController: LoginViewController, context: Context) {
+    public func updateUIViewController(_ uiViewController: TogetherNavigation, context: Context) {
         
     }
 }
