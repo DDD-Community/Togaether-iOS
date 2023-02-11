@@ -146,12 +146,12 @@ extension AgoraViewController: UICollectionViewDelegate, UICollectionViewDataSou
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AgoraCollectionViewCell.identifier, for: indexPath) as? AgoraCollectionViewCell, let item = petList?[indexPath.row] else {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AgoraCollectionViewCell.identifier, for: indexPath) as? AgoraCollectionViewCell, let item = petList?[indexPath.row], let character = CharacterProvider.shared.getCharacters()?.filter { $0.codeName == item.petCharacter }.first else {
             return UICollectionViewCell()
         }
 
         cell.petImageUrl = "\(Host.together)\(item.mainImage)"
-        cell.category = item.petCharacter
+        cell.category = character.koreanName
         cell.content = item.description
 
         return cell
