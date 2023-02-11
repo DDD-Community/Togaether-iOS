@@ -122,14 +122,14 @@ extension TodayViewController: UITableViewDelegate, UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: TodayCell.identifier, for: indexPath) as? TodayCell,
-                let item = petList?[indexPath.row] else {
+              let item = petList?[indexPath.row], let species = SpeciesProvider.shared.getSpecies()?.filter { $0.codeName == item.species }.first else {
             return UITableViewCell()
         }
 
         cell.selectionStyle = .none
         cell.rank = indexPath.row
         
-        cell.model = PuppyModel(image: "\(Host.together)\(item.mainImage)", name: item.name, category: item.species, gender: item.gender, description: item.description)
+        cell.model = PuppyModel(image: "\(Host.together)\(item.mainImage)", name: item.name, category: species.koreanName, gender: item.gender == "MALE" ? "수컷" : "암컷", description: item.description)
         cell.followerCount = item.followerCount
 
         return cell

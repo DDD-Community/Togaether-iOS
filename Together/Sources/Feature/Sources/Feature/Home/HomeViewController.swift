@@ -192,8 +192,12 @@ final class HomeViewController: UIViewController, Layoutable {
     }
 
     private func showTinderAndGuideView(petList: [PetResponse]) {
+        guard let species = SpeciesProvider.shared.getSpecies() else { return }
+
         let puppyModels: [PuppyModel] = petList.map {
-            PuppyModel(image: "\(Host.together)\($0.mainImage)", name: $0.name, category: $0.species, gender: $0.gender, description: $0.description)
+            let codeName = $0.species
+            let speciesItem = species.filter { $0.codeName == codeName }.first?.koreanName ?? "null"
+            return PuppyModel(image: "\(Host.together)\($0.mainImage)", name: $0.name, category: speciesItem, gender: $0.gender == "MALE" ? "수컷" : "암컷", description: $0.description)
         }
 
         swipeView.showTogetherCards(with: puppyModels, isDummyShow: true)
