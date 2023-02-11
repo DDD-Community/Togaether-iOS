@@ -74,14 +74,15 @@ public struct MyPage: ReducerProtocol {
         case .fetchMyPetList:
             state.alert = nil
 
-            return .task {
-                await .myPetListResponse(
-                    TaskResult {
-                        try await myPetList()
-                    }
-                )
-            }
-            .cancellable(id: MyPetsCancelID.self)
+            return .none
+//            return .task {
+//                await .myPetListResponse(
+//                    TaskResult {
+//                        try await myPetList()
+//                    }
+//                )
+//            }
+//            .cancellable(id: MyPetsCancelID.self)
 
         case let .myPetListResponse(.success(response)):
             print("My Pet List Success TotalCount: \(response.pets.count)")

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SwiftUI
 
 import TogetherCore
 import TogetherFoundation
@@ -25,7 +26,8 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
         let rootStore: StoreOf<Root> = .init(initialState: .root, reducer: Root())
-        window?.rootViewController = RootViewController(store: rootStore)
+        window?.rootViewController = UIHostingController(rootView: RootView(store: rootStore))
+//        window?.rootViewController = RootViewController(store: rootStore)
         window?.makeKeyAndVisible()
     }
 }

@@ -22,10 +22,11 @@ struct Root: ReducerProtocol {
         case tab(TabBar.State)
     }
     
-    enum Action: Equatable {
+    indirect enum Action: Equatable {
         case viewDidAppear
         case tokenResponse(TaskResult<TogetherCredential>)
         
+        case root(Action)
         case login(Login.Action)
         case onboarding(Onboarding.Action)
         case tab(TabBar.Action)
@@ -59,17 +60,34 @@ struct Root: ReducerProtocol {
                 state = .login(.init())
                 return .none
                 
-            case .login:
+            case .login(.loginResponse(.success)):
+                
+                if Preferences.shared.onboardingFinished == true {
+                    state = .tab(.init(home: .init(), agora: .init(), today: .init(), mypage: .init()))
+                } else {
+                    state = .onboarding(.init())
+                }
+                
                 return .none
                 
             case .onboarding(.delegate(.routeToTab)):
                 state = .tab(.init(home: .init(), agora: .init(), today: .init(), mypage: .init()))
                 return .none
                 
+            case .login:
+                return .none
+                
             case .onboarding:
                 return .none
                 
+            case .tab(.mypage(.myPageSetting(.routeToRoot))):
+                state = .login(.init())
+                return .none
+                
             case .tab:
+                return .none
+                
+            case .root:
                 return .none
             }
         }

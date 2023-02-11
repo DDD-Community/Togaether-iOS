@@ -99,10 +99,10 @@ final class HomeViewController: UIViewController, Layoutable {
                 Anchors.leading.equalToSuper(inwardOffset: 25)
             }
 
-            notificationButton.anchors {
-                Anchors.top.equalTo(view.safeAreaLayoutGuide.topAnchor, inwardOffset: 26)
-                Anchors.trailing.equalToSuper(inwardOffset: 22)
-            }
+//            notificationButton.anchors {
+//                Anchors.top.equalTo(view.safeAreaLayoutGuide.topAnchor, inwardOffset: 26)
+//                Anchors.trailing.equalToSuper(inwardOffset: 22)
+//            }
         }
     }
 

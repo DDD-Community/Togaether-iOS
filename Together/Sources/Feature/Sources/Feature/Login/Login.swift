@@ -25,9 +25,9 @@ public struct Login: ReducerProtocol {
         var isLoginInflight: Bool = false
         var alert: AlertState<Action>?
         
-        var optionalOnboarding: Onboarding.State?
+//        var optionalOnboarding: Onboarding.State?
         var optionalTerms: Terms.State?
-        var optionalTab: TabBar.State?
+//        var optionalTab: TabBar.State?
         
         public init(
             email: String = "",
@@ -57,9 +57,9 @@ public struct Login: ReducerProtocol {
         case didTapFindPasswordButton
         case didTapJoinButton
         
-        case optionalOnboarding(Onboarding.Action)
+//        case optionalOnboarding(Onboarding.Action)
         case optionalTerms(Terms.Action)
-        case optionalTab(TabBar.Action)
+//        case optionalTab(TabBar.Action)
         
         case detachChild
     }
@@ -72,15 +72,15 @@ public struct Login: ReducerProtocol {
     
     public var body: some ReducerProtocolOf<Self> {
         Reduce(core)
-            .ifLet(\.optionalOnboarding, action: /Action.optionalOnboarding) { 
-                Onboarding()
-            }
+//            .ifLet(\.optionalOnboarding, action: /Action.optionalOnboarding) { 
+//                Onboarding()
+//            }
             .ifLet(\.optionalTerms, action: /Action.optionalTerms) {
                 Terms()
             }
-            .ifLet(\.optionalTab, action: /Action.optionalTab) { 
-                TabBar()
-            }
+//            .ifLet(\.optionalTab, action: /Action.optionalTab) { 
+//                TabBar()
+//            }
     }
     
     public func core(into state: inout State, action: Action) -> EffectTask<Action> {
@@ -134,11 +134,11 @@ public struct Login: ReducerProtocol {
             
             state.isLoginInflight = false
             
-            if Preferences.shared.onboardingFinished == true {
-                state.optionalTab = .init(home: .init(), agora: .init(), today: .init(), mypage: .init())
-            } else {
-                state.optionalOnboarding = .init()
-            }
+//            if Preferences.shared.onboardingFinished == true {
+//                state.optionalTab = .init(home: .init(), agora: .init(), today: .init(), mypage: .init())
+//            } else {
+//                state.optionalOnboarding = .init()
+//            }
             
             return .none
              
@@ -164,13 +164,13 @@ public struct Login: ReducerProtocol {
             state.alert = nil
             return .none
             
-        case .optionalOnboarding(.delegate(.routeToTab)):
-            state.optionalOnboarding = nil
-            state.optionalTab = .init(home: .init(), agora: .init(), today: .init(), mypage: .init())
-            return .none
-            
-        case .optionalOnboarding:
-            return .none
+//        case .optionalOnboarding(.delegate(.routeToTab)):
+//            state.optionalOnboarding = nil
+//            state.optionalTab = .init(home: .init(), agora: .init(), today: .init(), mypage: .init())
+//            return .none
+//            
+//        case .optionalOnboarding:
+//            return .none
             
         case .optionalTerms(.optionalJoin(.joinResponse(.success))):
             state.optionalTerms = nil
@@ -190,13 +190,13 @@ public struct Login: ReducerProtocol {
         case .optionalTerms:
             return .none
             
-        case .optionalTab:
-            return .none
+//        case .optionalTab:
+//            return .none
             
         case .detachChild:
-            state.optionalTab = nil
+//            state.optionalTab = nil
             state.optionalTerms = nil
-            state.optionalOnboarding = nil
+//            state.optionalOnboarding = nil
             return .none
         }
     }

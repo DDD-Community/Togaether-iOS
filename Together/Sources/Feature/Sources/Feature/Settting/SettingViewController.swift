@@ -135,15 +135,15 @@ final class SettingViewController: UIViewController, Layoutable {
             }
             .store(in: &cancellables)
         
-        tempViewStore.publisher.isLoggedOut
-            .sink { loggedOut in
-                guard loggedOut else { return }
-                let store: StoreOf<Login> = .init(initialState: .init(), reducer: Login())
-                let loginViewController = LoginViewController(store: store)
-                let navigationController = TogetherNavigation(rootViewController: loginViewController)
-                UIApplication.shared.appKeyWindow?.rootViewController = navigationController
-            }
-            .store(in: &cancellables)
+//        tempViewStore.publisher.isLoggedOut
+//            .sink { loggedOut in
+//                guard loggedOut else { return }
+//                let store: StoreOf<Login> = .init(initialState: .init(), reducer: Login())
+//                let loginViewController = LoginViewController(store: store)
+//                let navigationController = TogetherNavigation(rootViewController: loginViewController)
+//                UIApplication.shared.appKeyWindow?.rootViewController = navigationController
+//            }
+//            .store(in: &cancellables)
         
         tempStore
             .scope(state: \.onboarding, action: Setting.Action.onboarding)
