@@ -150,7 +150,7 @@ extension AgoraViewController: UICollectionViewDelegate, UICollectionViewDataSou
             return UICollectionViewCell()
         }
 
-        cell.petImageUrl = item.mainImage
+        cell.petImageUrl = "\(Host.together)\(item.mainImage)"
         cell.category = item.petCharacter
         cell.content = item.description
 

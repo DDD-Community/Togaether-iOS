@@ -122,7 +122,7 @@ extension TabBar.Tab {
         case .today: return .init(
             title: nil,
             image: UIImage(named: "ic_gnb_today_nor"),
-            selectedImage: UIImage(named: "ic_gnb_today_nor") // TODO: Image Change (nor > sel)
+            selectedImage: UIImage(named: "ic_gnb_today_sel")
         )
         case .mypage: return .init(
             title: nil,

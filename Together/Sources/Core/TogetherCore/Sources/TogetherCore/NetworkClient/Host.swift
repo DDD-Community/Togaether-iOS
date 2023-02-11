@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum Host {
+public enum Host {
     private static var prefix: String {
         #if DEBUG
         return "" // sandbox-
@@ -16,5 +16,5 @@ enum Host {
         #endif
     }
     
-    static let together: String = "http://\(prefix)bnjjng.iptime.org:8080"
+    public static let together: String = "http://\(prefix)bnjjng.iptime.org:8080"
 }

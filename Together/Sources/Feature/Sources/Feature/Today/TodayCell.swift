@@ -78,26 +78,32 @@ final class TodayCell: UITableViewCell, Layoutable {
                     Anchors.leading.equalToSuper(inwardOffset: 14)
                     Anchors.size(width: 40, height: 40)
                 }
-                tagStackView.anchors {
-                    Anchors.leading.trailing.equalToSuper(inwardOffset: 18)
-                    Anchors.top.equalTo(petImageView, attribute: .bottom, constant: 18)
+                contentContainerView.anchors{
+                    Anchors.leading.trailing.equalToSuper()
+                    Anchors.top.equalTo(petImageView, attribute: .bottom)
+                    Anchors.bottom.equalToSuper()
                 }.sublayout {
-                    categoryView
-                    genderView
-                    UIView()
-                }
-                followerLabel.anchors {
-                    Anchors.trailing.equalToSuper(inwardOffset: 18)
-                    Anchors.centerY.equalTo(tagStackView, attribute: .centerY)
-                }
-                descriptionLabel.anchors {
-                    Anchors.top.equalTo(tagStackView, attribute: .bottom, constant: 6)
-                    Anchors.leading.trailing.equalToSuper(inwardOffset: 18)
-                }
-                followButton.anchors {
-                    Anchors.top.equalTo(descriptionLabel, attribute: .bottom, constant: 24)
-                    Anchors.leading.trailing.equalToSuper(inwardOffset: 18)
-                    Anchors.bottom.equalToSuper(inwardOffset: 20)
+                    tagStackView.anchors {
+                        Anchors.leading.trailing.equalToSuper(inwardOffset: 18)
+                        Anchors.top.equalTo(petImageView, attribute: .bottom, constant: 18)
+                    }.sublayout {
+                        categoryView
+                        genderView
+                        UIView()
+                    }
+                    followerLabel.anchors {
+                        Anchors.trailing.equalToSuper(inwardOffset: 18)
+                        Anchors.centerY.equalTo(tagStackView, attribute: .centerY)
+                    }
+                    descriptionLabel.anchors {
+                        Anchors.top.equalTo(tagStackView, attribute: .bottom, constant: 6)
+                        Anchors.leading.trailing.equalToSuper(inwardOffset: 18)
+                    }
+                    followButton.anchors {
+                        Anchors.top.equalTo(descriptionLabel, attribute: .bottom, constant: 24)
+                        Anchors.leading.trailing.equalToSuper(inwardOffset: 18)
+                        Anchors.bottom.equalToSuper(inwardOffset: 20)
+                    }
                 }
             }
         }
@@ -161,13 +167,16 @@ final class TodayCell: UITableViewCell, Layoutable {
     }
 
     private let petImageView: UIImageView = UIImageView().config { imageView in
-        imageView.contentMode = .scaleAspectFit
-        imageView.image = UIImage(named: "Sample1") // TODO: 수정해야함
+        imageView.contentMode = .scaleAspectFill
     }
 
+    private let contentContainerView: UIView = UIView().config { view in
+        view.backgroundColor = .white
+    }
     private let tagStackView: UIStackView = UIStackView().config { stackView in
         stackView.axis = .horizontal
         stackView.spacing = 8
+        stackView.backgroundColor = .white
     }
 
     private let categoryView: TodayCategoryView = TodayCategoryView()

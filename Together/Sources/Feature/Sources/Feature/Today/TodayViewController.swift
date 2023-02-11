@@ -9,6 +9,7 @@ import Combine
 import ComposableArchitecture
 import SwiftLayout
 import TogetherCore
+import TogetherNetwork
 import TogetherUI
 import ThirdParty
 import UIKit
@@ -127,7 +128,8 @@ extension TodayViewController: UITableViewDelegate, UITableViewDataSource {
 
         cell.selectionStyle = .none
         cell.rank = indexPath.row
-        cell.model = PuppyModel(image: item.mainImage, name: item.name, category: item.species, gender: item.gender, description: item.description)
+        
+        cell.model = PuppyModel(image: "\(Host.together)\(item.mainImage)", name: item.name, category: item.species, gender: item.gender, description: item.description)
         cell.followerCount = item.followerCount
 
         return cell

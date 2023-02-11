@@ -193,7 +193,7 @@ final class HomeViewController: UIViewController, Layoutable {
 
     private func showTinderAndGuideView(petList: [PetResponse]) {
         let puppyModels: [PuppyModel] = petList.map {
-            PuppyModel(image: $0.mainImage, name: $0.name, category: $0.species, gender: $0.gender, description: $0.description)
+            PuppyModel(image: "\(Host.together)\($0.mainImage)", name: $0.name, category: $0.species, gender: $0.gender, description: $0.description)
         }
 
         swipeView.showTogetherCards(with: puppyModels, isDummyShow: true)
